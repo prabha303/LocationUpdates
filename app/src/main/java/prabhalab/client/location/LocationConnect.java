@@ -1,4 +1,4 @@
-package demo.client.provider.location.fused.fusedlocationproviderclientexample;
+package prabhalab.client.location;
 
 import android.Manifest;
 import android.content.Context;
@@ -24,7 +24,7 @@ public class LocationConnect implements LocationListener, GoogleApiClient.Connec
     private static final String TAG = LocationConnect.class.getSimpleName();
     private Context context1;
     public static GoogleApiClient mGoogleApiClient;
-    UpdateInterService mServiceManager;
+    prabhalab.client.location.UpdateInterService mServiceManager;
     private static Location location;
     private static long timestamp;
 
@@ -38,7 +38,7 @@ public class LocationConnect implements LocationListener, GoogleApiClient.Connec
         }
     }
 
-    public LocationConnect(Context context, UpdateInterService mServiceManager) {
+    public LocationConnect(Context context, prabhalab.client.location.UpdateInterService mServiceManager) {
         try {
             this.context1 = context;
             this.mServiceManager = mServiceManager;

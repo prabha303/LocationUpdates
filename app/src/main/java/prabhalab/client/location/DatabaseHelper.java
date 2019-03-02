@@ -1,4 +1,4 @@
-package demo.client.provider.location.fused.fusedlocationproviderclientexample;
+package prabhalab.client.location;
 
 import android.content.Context;
 import android.database.Cursor;

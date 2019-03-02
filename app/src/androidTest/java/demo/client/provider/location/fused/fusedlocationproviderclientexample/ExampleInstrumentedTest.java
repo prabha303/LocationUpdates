@@ -1,4 +1,4 @@
-package demo.client.provider.location.fused.fusedlocationproviderclientexample;
+package prabhalab.client.location;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("demo.client.provider.location.fused.fusedlocationproviderclientexample", appContext.getPackageName());
+        assertEquals("prabhalab.client.location", appContext.getPackageName());
     }
 }

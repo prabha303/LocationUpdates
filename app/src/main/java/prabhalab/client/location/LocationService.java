@@ -1,4 +1,4 @@
-package demo.client.provider.location.fused.fusedlocationproviderclientexample;
+package prabhalab.client.location;
 
 import android.app.Activity;
 import android.app.Service;
@@ -12,6 +12,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
  */
 
 public class LocationService extends Service implements UpdateInterService {
+
     private Activity context;
     private UpdateInterService updateInterService;
     private static final String TAG = LocationService.class.getSimpleName();

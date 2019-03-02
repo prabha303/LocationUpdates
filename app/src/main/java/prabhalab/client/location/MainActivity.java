@@ -1,4 +1,4 @@
-package demo.client.provider.location.fused.fusedlocationproviderclientexample;
+package prabhalab.client.location;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
