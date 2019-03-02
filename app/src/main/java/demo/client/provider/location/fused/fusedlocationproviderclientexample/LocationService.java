@@ -1,36 +1,12 @@
 package demo.client.provider.location.fused.fusedlocationproviderclientexample;
 
-
-import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.IBinder;
-import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
-
-
 /**
  * Created by PrabhagaranR on 01-03-19.
  */
@@ -97,7 +73,6 @@ public class LocationService extends Service implements UpdateInterService {
 
     @Override
      public void doUpdateLocation(Location location) {
-
         try{
             if(location != null) {
                 // New location has now been determined
@@ -110,6 +85,8 @@ public class LocationService extends Service implements UpdateInterService {
                     Log.d("location.getAccu - 30", ""+location.getAccuracy());
                 }
                 updateInterService.doUpdateLocation(location);
+
+                JrWayDao.insertUserDetails(context,null);
             }
 
         }catch (Exception e)
@@ -118,6 +95,5 @@ public class LocationService extends Service implements UpdateInterService {
         }
 
     }
-
 }
 

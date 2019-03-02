@@ -86,8 +86,8 @@ public class LocationConnect implements LocationListener, GoogleApiClient.Connec
             long ONTRIP_MIN_INTERVAL_fast1 = 1000 * 10;
             LocationRequest locationRequest = new LocationRequest();
             locationRequest.setSmallestDisplacement(0);
-            locationRequest.setFastestInterval(1000); //  DEFALT_INTERVAL Receive location update every 20 sec
-            locationRequest.setInterval(1000); // DEFALT_INTERVAL Receive location update every 20 sec
+            locationRequest.setFastestInterval(ONTRIP_MINTime); //  DEFALT_INTERVAL Receive location update every 10 sec
+            locationRequest.setInterval(ONTRIP_MIN_INTERVAL_fast1); // DEFALT_INTERVAL Receive location update every 10 sec
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             if (ActivityCompat.checkSelfPermission(context1, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context1, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -104,7 +104,6 @@ public class LocationConnect implements LocationListener, GoogleApiClient.Connec
         {
             e.printStackTrace();
         }
-
     }
     @Override
     public void onConnectionSuspended(int i)
