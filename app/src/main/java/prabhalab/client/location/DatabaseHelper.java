@@ -15,43 +15,42 @@ import java.io.File;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    // Database Name...
-    public static final String DATABASE_NAME = "location.db";
-    public static final String LocationDetails = "location_details";
+
+
+    static final String DB_NAME = "my_location.db";
 
     //DataBase Version..
-    public static final int DATABASE_VERSION = 23;
-
-    public interface ColumnKey {
-        // Table name...
+    public static final int DATABASE_VERSION = 3;
 
 
+    public static final String TABLE_NAME = "location_detail";
+
+    public static final String location_id = "location_id";
+    public static final String latlng = "latlng";
+    public static final String address = "address";
+    public static final String update_date = "update_date";
+    public static final String modified_date = "modified_date";
+    public static final String timeMillSec = "timeMillSec";
+
+    public static final String orderId = "order_id";
+    public static final String speed = "speed";
+    public static final String user_id = "user_id";
 
 
-        //String Sno = "Sno";
-        //\17Oct16. Adding column call order number. This is to maintain storejourney request order number in db.
-        String Orderno = "Orderno";
 
-
-        String locationId = "location_id";
-        String latlng = "lat_lng";
-        String address = "address";
-        String updateDate = "update_date";
-        String modifiedDate = "modified_date";
-        String timeMillSec = "timeMillSec";
-
-
-    }
 
     //User Details table create query...
     final private String locationDetails = "create table if not exists "
-            + LocationDetails
-            + " ( id integer primary key , "
-            + ColumnKey.latlng + " text, "
-            + ColumnKey.address + " text, "
-            + ColumnKey.updateDate + " text, "
-            + ColumnKey.modifiedDate + " text, "
-            + ColumnKey.timeMillSec + " text); ";
+            + TABLE_NAME
+            + " ( location_id integer primary key , "
+            + latlng + " text, "
+            + address + " text, "
+            + update_date + " text, "
+            + modified_date+ " text, "
+            + orderId+ " text, "
+            + speed+ " text, "
+            + user_id+ " text, "
+            + timeMillSec + " text); ";
 
 
 
@@ -71,8 +70,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Database helper class constructor...
     public DatabaseHelper(Context context) {
-        super(context, context.getExternalFilesDir(DATABASE_NAME)
-                .getAbsolutePath() + File.separator + DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, context.getExternalFilesDir(DB_NAME)
+                .getAbsolutePath() + File.separator + DB_NAME, null, DATABASE_VERSION);
     }
 
     /**
@@ -92,17 +91,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(locationDetails);
 
 
-
-
-            //getReadableDatabase();
-
-            System.out.println("DB:: OnCreate Called after!");
-
-            //\30Nov16. Checking adding Column name Orderno if not available
-            if(!isOrderNoColumnAvailable(db))
-                db.execSQL("ALTER TABLE JrTable ADD COLUMN " + ColumnKey.Orderno + " TEXT");
-            else
-                System.out.println("DB::Order number is available!");
         }
         catch (Exception e)
         {
@@ -111,28 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //if(db.getVersion() == 0 || db.getVersion()
     }
 
-    private boolean isOrderNoColumnAvailable(SQLiteDatabase db)
-    {
-        try
-        {
-            Cursor cursor = db.rawQuery("select * from "+ LocationDetails,null);
-            if(cursor != null)
-            {
-                if(cursor.getColumnIndex(ColumnKey.Orderno) != -1)
-                    return true;
-            }
-            else
-            {
-                System.out.println("DB::Cursor is null");
-            }
-            cursor.close();
-        }
-        catch (Exception e)
-        {
-            System.out.println("DB::Exception in isOrderNoColumnAvailable "+e.getMessage());
-        }
-        return  false;
-    }
+
 
     /**
      * Called when the app is updated.

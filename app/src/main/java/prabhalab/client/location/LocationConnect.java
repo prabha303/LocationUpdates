@@ -23,55 +23,15 @@ import com.google.android.gms.location.LocationServices;
 public class LocationConnect implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = LocationConnect.class.getSimpleName();
     private Context context1;
-    public static GoogleApiClient mGoogleApiClient;
+
     prabhalab.client.location.UpdateInterService mServiceManager;
-    private static Location location;
-    private static long timestamp;
 
-    public static void disconnect() {
-        try {
-            if (mGoogleApiClient != null) {
-                mGoogleApiClient.disconnect();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public LocationConnect(Context context, prabhalab.client.location.UpdateInterService mServiceManager) {
-        try {
-            this.context1 = context;
-            this.mServiceManager = mServiceManager;
-            if (mGoogleApiClient == null) {
-                mGoogleApiClient = new GoogleApiClient.Builder(context1)
-                        .addApi(LocationServices.API)
-                        .addApi(ActivityRecognition.API)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .build();
-                mGoogleApiClient.connect();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void connect() {
-        try {
-            Log.d("driverLoc_", "connecting");
-            if (mGoogleApiClient != null) {
-                mGoogleApiClient.connect();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onLocationChanged(Location loc) {
         try {
             if (loc != null) {
-                mServiceManager.doUpdateLocation(location);
+                //mServiceManager.doUpdateLocation(loc);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,8 +46,8 @@ public class LocationConnect implements LocationListener, GoogleApiClient.Connec
             long ONTRIP_MIN_INTERVAL_fast1 = 1000 * 10;
             LocationRequest locationRequest = new LocationRequest();
             locationRequest.setSmallestDisplacement(0);
-            locationRequest.setFastestInterval(ONTRIP_MINTime); //  DEFALT_INTERVAL Receive location update every 10 sec
-            locationRequest.setInterval(ONTRIP_MIN_INTERVAL_fast1); // DEFALT_INTERVAL Receive location update every 10 sec
+            locationRequest.setFastestInterval(0); //  DEFALT_INTERVAL Receive location update every 10 sec
+            locationRequest.setInterval(0); // DEFALT_INTERVAL Receive location update every 10 sec
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             if (ActivityCompat.checkSelfPermission(context1, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context1, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -99,7 +59,7 @@ public class LocationConnect implements LocationListener, GoogleApiClient.Connec
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, locationRequest, this);
+          //  LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, locationRequest, this);
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -108,13 +68,14 @@ public class LocationConnect implements LocationListener, GoogleApiClient.Connec
     @Override
     public void onConnectionSuspended(int i)
     {
-
+        Log.d("driverLoc_", "=" + i);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
     {
-
+        Log.d("driverLoc_", "=" + connectionResult.getResolution());
+        Log.d("driverLoc_", "=" + connectionResult.getErrorMessage());
     }
 
 
