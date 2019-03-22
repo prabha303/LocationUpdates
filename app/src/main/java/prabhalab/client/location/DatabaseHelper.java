@@ -10,9 +10,9 @@ import java.io.File;
 /**
  * Database helper class holds the database functionality
  * .i.e., Database creation, table creation and database version upgrade are done.
- *
- * @author Jeevanandhan
+ * Created by prabha on 05/03/2019.
  */
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 

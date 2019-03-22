@@ -119,12 +119,8 @@ public class LocationService extends Service implements UpdateInterService {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         super.onLocationResult(locationResult);
-                        // location is received
                         try {
                             mCurrentLocation = locationResult.getLastLocation();
-                            Log.d("mCurrentLocation", mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude() + " acc -" + mCurrentLocation.getAccuracy());
-                            Log.d("getAccuracy", "" + mCurrentLocation.getAccuracy());
-
                             if (mCurrentLocation != null) {
                                 doUpdateLocation(mCurrentLocation,"");
                             }
@@ -217,42 +213,50 @@ public class LocationService extends Service implements UpdateInterService {
                 String msg = "Updated_Location : " +location.getLatitude() + "," +location.getLongitude();
                 Log.d("Updated_Location - ", ""+location.getAccuracy());
                 double mAccuracy = location.getAccuracy(); // Get Accuracy
-                if (mAccuracy < 100) {   //Accuracy reached  < 100. stop the location updates
+                if (mAccuracy < 100) {  //Accuracy reached  < 100. stop the location updates
                     Log.d("Updated_Location - acc", ""+location.getAccuracy());
                     String resultMessage = "";
                     try {
-                        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                        List<Address> addresses = null;
+                        if(context != null)
+                        {
+                            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                            List<Address> addresses = null;
 
-                        try {
-                            addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1); // In this sample, get just a single address
-                        } catch (IOException ioException) {
-                            //resultMessage = MainActivity.this .getString(R.string.service_not_available);
-                            Log.e(TAG, resultMessage, ioException);
-                        }
-                        if (addresses == null || addresses.size() == 0) {
-                            if (resultMessage.isEmpty()) {
-                                //resultMessage = MainActivity.this.getString(R.string.no_address_found);
-                                // Log.e(TAG, resultMessage);
+                            try {
+                                addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1); // In this sample, get just a single address
+                            } catch (IOException ioException) {
+                                //resultMessage = MainActivity.this .getString(R.string.service_not_available);
+                                Log.e(TAG, resultMessage, ioException);
                             }
-                        } else {
-                            Address address = addresses.get(0);
-                            StringBuilder out = new StringBuilder();
-                            for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                                out.append(address.getAddressLine(i));
+                            if (addresses == null || addresses.size() == 0) {
+                                if (resultMessage.isEmpty()) {
+                                    //resultMessage = MainActivity.this.getString(R.string.no_address_found);
+                                    // Log.e(TAG, resultMessage);
+                                }
+                            } else {
+                                Address address = addresses.get(0);
+                                StringBuilder out = new StringBuilder();
+                                for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+                                    out.append(address.getAddressLine(i));
+                                }
+                                resultMessage = out.toString();
                             }
-                            resultMessage = out.toString();
                         }
                     }catch (Exception e)
                     {
                         e.printStackTrace();
                     }
                     updateInterService.doUpdateLocation(location,resultMessage);
-                    JrWayDao.insertUserDetails(context,location,resultMessage);
 
+                    if(context != null)
+                    {
+                        String start_track = SharedPref.getStringValue(context, "start_track");
+                        if(Utility.isNotEmpty(start_track) && start_track.equalsIgnoreCase("yes"))
+                        {
+                            JrWayDao.insertUserDetails(context,location,resultMessage);
+                        }
+                    }
                 }
-
-
             }
         }catch (Exception e)
         {
