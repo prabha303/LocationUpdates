@@ -5,9 +5,6 @@ _What is FusedLocationProviderClient_ : The main entry point for interacting wit
 Current application can access: `Latitude`, `Longitude` and `Timestamp` of operation. Application could transform [`Location`](https://developer.android.com/training/location/retrieve-current).
 to [Address](https://developer.android.com/reference/android/location/Address)
 
-Screenshot: ![FusedLocationProviderClient](https://raw.githubusercontent.com/dimitardanailov/FusedLocationProviderClient/master/demos/FusedLocationProviderClient.png)
-
-Demo: [Youtube: FusedLocationProviderClient demo Application](https://www.youtube.com/watch?v=ol5qhVeG-YQ)
 
 Resources: 
 - [FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient)
