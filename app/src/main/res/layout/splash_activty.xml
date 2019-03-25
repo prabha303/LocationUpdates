@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:background="#ffffff"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LayoutTheme"
+    android:layout_marginTop="@dimen/_30sdp"
+    android:layout_marginRight="@dimen/_10sdp"
+    android:layout_marginLeft="@dimen/_10sdp"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Latitude -->
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:orientation="horizontal"
+       android:padding="@dimen/_3sdp"
+       android:layout_height="wrap_content">
+
+       <prabhalab.client.location.CustomTextViewRegular
+           android:id="@+id/latitude_label"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:text="@string/latitude"
+           style="@style/CustomLabel"/>
+
+       <prabhalab.client.location.CustomTextViewRegular
+           android:id="@+id/latitude_value"
+           android:layout_width="0dp"
+           android:layout_weight="2.5"
+           android:layout_height="wrap_content"
+           android:textColor="#333333"
+           style="@style/CustomValue"/>
+
+   </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/_3sdp"
+        android:layout_height="wrap_content">
+
+        <prabhalab.client.location.CustomTextViewRegular
+            android:id="@+id/longitude_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/longitude"
+            style="@style/CustomLabel"/>
+
+        <prabhalab.client.location.CustomTextViewRegular
+            android:id="@+id/longitude_value"
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
+            android:textColor="#333333"
+            style="@style/CustomValue"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/_3sdp"
+        android:layout_height="wrap_content">
+
+        <prabhalab.client.location.CustomTextViewRegular
+            android:id="@+id/timestamp_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/timestamp"
+            style="@style/CustomLabel"/>
+
+        <prabhalab.client.location.CustomTextViewRegular
+            android:id="@+id/timestamp_value"
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
+            android:textColor="#333333"
+            style="@style/CustomValue"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/_3sdp"
+        android:layout_height="wrap_content">
+
+        <prabhalab.client.location.CustomTextViewRegular
+            android:id="@+id/address_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/address"
+            style="@style/CustomLabel"/>
+
+        <prabhalab.client.location.CustomTextViewRegular
+            android:id="@+id/address_value"
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
+            android:textColor="#333333"
+            style="@style/CustomValue"/>
+
+    </LinearLayout>
+
+
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/start_track"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_width="wrap_content"
+        android:visibility="visible"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_height="wrap_content"
+        fancy:fb_borderColor="@color/colorPrimary"
+        fancy:fb_defaultColor="@color/mbg_green"
+        android:paddingStart="50dp"
+        android:paddingEnd="60dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        fancy:fb_focusColor="#08bf5a"
+        android:foregroundGravity="center"
+        fancy:fb_iconPaddingRight= "0dp"
+        fancy:fb_iconPaddingLeft= "0dp"
+        fancy:fb_iconPosition="left"
+        fancy:fb_radius="5dp"
+        fancy:fb_text="Start Track"
+        android:layout_gravity="center"
+        android:gravity="center"
+        fancy:fb_textSize="20sp"
+        fancy:fb_textColor="#FFFFFF" />
+
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/end_track"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_width="wrap_content"
+        android:visibility="visible"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_height="wrap_content"
+        fancy:fb_borderColor="@color/colorPrimary"
+        fancy:fb_defaultColor="@color/dest_color"
+        android:paddingStart="50dp"
+        android:paddingEnd="60dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        fancy:fb_focusColor="#08bf5a"
+        android:foregroundGravity="center"
+        fancy:fb_iconPaddingRight= "0dp"
+        fancy:fb_iconPaddingLeft= "0dp"
+        fancy:fb_iconPosition="left"
+        fancy:fb_radius="5dp"
+        fancy:fb_text="End Track"
+        android:layout_gravity="center"
+        android:gravity="center"
+        fancy:fb_textSize="20sp"
+        fancy:fb_textColor="#FFFFFF" />
+
+
+
+
+    <prabhalab.client.location.CustomTextViewRegular
+        android:id="@+id/lastTripKM"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="@dimen/_12sdp"
+        android:text="" />
+
+
+    <prabhalab.client.location.CustomTextViewRegular
+        android:id="@+id/status"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="#bebebe"
+        android:textSize="@dimen/_12sdp"
+        android:text="Tracking not started.. press to start track your locations" />
+
+
+</LinearLayout>

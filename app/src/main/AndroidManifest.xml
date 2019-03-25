@@ -43,8 +43,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        android:theme="@style/Full_Screen" >
+        <activity android:name=".login.Login"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -57,6 +59,17 @@
             android:value="@integer/google_play_services_version" />
 
         <service android:name=".LocationService" android:enabled="true" android:exported="false" />
+
+
+
+
+
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+
 
     </application>
 

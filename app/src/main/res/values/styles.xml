@@ -26,6 +26,20 @@
     <style name="CustomButton">
         <item name="android:layout_marginTop">210dp</item>
     </style>
+
+
+    <style name="Full_Screen" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
+
+
+
+
     <!-- Button -->
 
 </resources>

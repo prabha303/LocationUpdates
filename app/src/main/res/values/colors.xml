@@ -5,4 +5,10 @@
     <color name="colorAccent">#FF4081</color>
     <color name="dest_color">#ff0202</color>
     <color name="mbg_green">#2cd45f</color>
+
+    <color name="colorBackground">#413e4f</color>
+    <color name="colorText">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="colorTextHint">#51d8c7</color>
+
 </resources>
