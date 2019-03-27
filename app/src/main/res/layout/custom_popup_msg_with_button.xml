@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+   <!-- <android.support.v7.widget.CardView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        card_view:cardElevation="@dimen/card_elevation"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        card_view:cardPreventCornerOverlap="false"
+        android:id="@+id/card_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="@color/white"
+        card_view:cardCornerRadius="4dp" >-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+            <prabhalab.client.location.CustomTextView
+                android:id="@+id/tilteText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
+
+                android:layout_marginRight="@dimen/_6sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:gravity="start|center"
+                android:text="BTR"
+
+                android:textColor="@color/colorBackground"
+                android:textSize="@dimen/_16sdp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/tabs_bg" />
+
+
+            <prabhalab.client.location.CustomTextViewLight
+                android:id="@+id/messageText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text=""
+                android:textColor="@color/colorBackground"
+                android:textSize="@dimen/_16sdp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/tabs_bg" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <prabhalab.client.location.CustomTextView
+                    android:id="@+id/popup_cancel_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:textSize="@dimen/_16sdp"
+                    android:text="Cancel"
+                    android:visibility="invisible"
+                    android:textAllCaps="true"
+                    android:textColor="@color/grey_color"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0.1dp"
+                    android:layout_height="35dp"
+                    android:background="@color/tabs_bg" />
+
+                <prabhalab.client.location.CustomTextView
+                    android:id="@+id/popup_yes_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_16sdp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="YES"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorBackground"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+<!--</android.support.v7.widget.CardView>-->
+</LinearLayout>

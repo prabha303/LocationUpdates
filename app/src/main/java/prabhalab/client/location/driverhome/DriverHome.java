@@ -8,10 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import prabhalab.client.location.R;
+import prabhalab.client.location.SharedPref;
+import prabhalab.client.location.Utility;
 
 
 /**
@@ -30,17 +33,22 @@ public class DriverHome extends AppCompatActivity {
         setContentView(R.layout.driver_tab);
         try
         {
-
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            viewPager = findViewById(R.id.viewpager);
             setupViewPager(viewPager);
-
-            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout = findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(viewPager);
+
+
+            String past_jobs = SharedPref.getStringValue(this,Utility.AppData.past_jobs);
+            String today_jobs =  SharedPref.getStringValue(this,Utility.AppData.today_jobs);
+            String future_jobs = SharedPref.getStringValue(this,Utility.AppData.future_jobs);
+            Log.d("past_jobs",past_jobs);
+            Log.d("today_jobs",today_jobs);
+            Log.d("future_jobs",future_jobs);
+
 
         }catch (Exception e)
         {
@@ -61,6 +69,7 @@ public class DriverHome extends AppCompatActivity {
         adapter.addFragment(new FutureJobFragment(), "Future JOb");
         viewPager.setAdapter(adapter);
     }
+
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

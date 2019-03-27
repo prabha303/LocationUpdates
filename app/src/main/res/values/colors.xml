@@ -11,4 +11,8 @@
     <color name="white">#FFFFFF</color>
     <color name="colorTextHint">#51d8c7</color>
 
+
+    <color name="tabs_bg">#EEE9E9</color>
+    <color name="grey_color">#bebebe</color>
+
 </resources>
