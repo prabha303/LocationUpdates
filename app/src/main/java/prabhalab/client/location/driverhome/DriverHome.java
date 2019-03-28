@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import prabhalab.client.location.R;
@@ -38,6 +37,7 @@ public class DriverHome extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             viewPager = findViewById(R.id.viewpager);
             setupViewPager(viewPager);
+            viewPager.setCurrentItem(1);
             tabLayout = findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(viewPager);
 
@@ -45,6 +45,8 @@ public class DriverHome extends AppCompatActivity {
             String past_jobs = SharedPref.getStringValue(this,Utility.AppData.past_jobs);
             String today_jobs =  SharedPref.getStringValue(this,Utility.AppData.today_jobs);
             String future_jobs = SharedPref.getStringValue(this,Utility.AppData.future_jobs);
+
+
             Log.d("past_jobs",past_jobs);
             Log.d("today_jobs",today_jobs);
             Log.d("future_jobs",future_jobs);

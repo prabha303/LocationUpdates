@@ -150,6 +150,12 @@ public class Utility {
         String past_jobs = "past_jobs";
         String future_jobs = "future_jobs";
         String today_jobs = "today_jobs";
+
+        String hasLoggedIn = "has_logged_in";
+        String user_id = "user_id";
+        String password = "password";
+        String FCM_ID = "fcm_id";
+
     }
 
 }

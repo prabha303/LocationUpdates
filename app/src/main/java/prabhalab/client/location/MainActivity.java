@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements UpdateInterServic
         setContentView(R.layout.activity_main);
         try
         {
-            initializeUI();
+            /*initializeUI();
             if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION_PERMISSION);
             }else
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements UpdateInterServic
                 startLocationButtonClick();
             }
 
-            Utility.getInstance().stayScreenOn(this);
+            Utility.getInstance().stayScreenOn(this);*/
         }catch (Exception e)
         {
             e.printStackTrace();

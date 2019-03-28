@@ -7,14 +7,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +37,8 @@ import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.Utility;
 import prabhalab.client.location.driverhome.DriverHome;
 
+import static prabhalab.client.location.Utility.AppData.hasLoggedIn;
+
 
 /**
  * Created by PrabhagaranR on 22-03-19.
@@ -43,60 +50,97 @@ public class Login extends AppCompatActivity {
     FancyButton login;
     TextView mLatitude,mLongitude,mTimestamp,status,mAddress,lastTripKM;
     EditText password,userId;
-
+    String fcmToken = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        try
-        {
-            if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION_PERMISSION);
-            }
+        fcmToken = FirebaseInstanceId.getInstance().getToken();
 
-            initializeUI();
-        }catch (Exception e)
+        Log.d("refreshedToken","--"+fcmToken);
+        if(Utility.isNotEmpty(fcmToken))
         {
-            e.printStackTrace();
+            SharedPref.getInstance().setSharedValue(getApplicationContext(), Utility.AppData.FCM_ID, fcmToken);
         }
+
+        login = findViewById(R.id.login);
+        userId = findViewById(R.id.userId);
+        password = findViewById(R.id.password);
+
+        showSplashImage();
+
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_LOCATION_PERMISSION:
-                // If the permission is granted, get the location,
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+    private void showSplashImage() {
+        try {
+            final LinearLayout splashLayout = findViewById(R.id.splashLayout);
+            final LinearLayoutCompat mainLayout = findViewById(R.id.mainLayout);
+            splashLayout.setVisibility(View.VISIBLE);
+            mainLayout.setVisibility(View.GONE);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // Actions to do after 3 seconds
+                    splashLayout.setVisibility(View.GONE);
+                    mainLayout.setVisibility(View.VISIBLE);
                     initializeUI();
-
-                } else {
-                    Toast.makeText(this,R.string.location_permission_denied,Toast.LENGTH_SHORT).show();
-
                 }
-                break;
+            }, 3000);
+
+        }catch (Exception e)
+        {
+            initializeUI();
+            e.printStackTrace();
         }
     }
 
     private void initializeUI() {
         try
         {
-            login = findViewById(R.id.login);
-            userId = findViewById(R.id.userId);
-            password = findViewById(R.id.password);
+
+            LinearLayout splashLayout = findViewById(R.id.splashLayout);
+            LinearLayoutCompat mainLayout = findViewById(R.id.mainLayout);
+            splashLayout.setVisibility(View.GONE);
+            mainLayout.setVisibility(View.VISIBLE);
+
+            try
+            {
+                if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION_PERMISSION);
+                }else
+                {
+
+                }
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
 
 
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    openDriverPage();
+                    if(validate(userId.getText().toString(),password.getText().toString()))
+                    {
+                        openDriverPage(userId.getText().toString(),password.getText().toString());
+                    }else
+                    {
+                        Toast.makeText(Login.this, "UserId, password should not empty", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
+            if(SharedPref.getBooleanValue(this, hasLoggedIn))
+            {
+                String user_id = SharedPref.getStringValue(this,Utility.AppData.user_id);
+                String pwd = SharedPref.getStringValue(this,Utility.AppData.password);
 
-
-
-
+                 if(Utility.isNotEmpty(user_id) && Utility.isNotEmpty(pwd))
+                 {
+                     userId.setText(user_id);
+                     password.setText(pwd);
+                     openDriverPage(user_id,pwd);
+                 }
+            }
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -119,31 +163,11 @@ public class Login extends AppCompatActivity {
         return false;
     }
 
-    private void openDriverPage()
+    private void openDriverPage(String user, String pwd)
     {
-        String user = userId.getText().toString();
-        String pwd = password.getText().toString();
-        if(validate(user,pwd))
-        {
-            new ProcessLogin(user,pwd).execute();
-        }else
-        {
-            Toast.makeText(Login.this, "UserId, password should not empty", Toast.LENGTH_SHORT).show();
-        }
 
+        new ProcessLogin(user,pwd).execute();
 
-
-
-        //String response  = APIEngine.validateUser(this,userId.getText().toString(),password.getText().toString());
-        //JSONObject jsnobject = new JSONObject(response);
-
-
-
-
-
-
-        /*Intent i = new Intent(Login.this, DriverHome.class);
-        startActivity(i);*/
     }
 
 
@@ -160,6 +184,10 @@ public class Login extends AppCompatActivity {
             String result = "";
             try
             {
+                if(!Utility.isNotEmpty(fcmToken))
+                {
+                    fcmToken = FirebaseInstanceId.getInstance().getToken();
+                }
                 String SOAP_ACTION = "http://btr-ltd.net/Webservice/ValidateUser";
                 String URL = "http://btr-ltd.net/Webservice/WebServicePartner.asmx";
                 String NAMESPACE = "http://btr-ltd.net/Webservice/";
@@ -167,7 +195,8 @@ public class Login extends AppCompatActivity {
                 SoapObject soapObject = new SoapObject(NAMESPACE, METHOD_NAME);
                 soapObject.addProperty("userName",userId);
                 soapObject.addProperty("password",password);
-                soapObject.addProperty("fcmid","ok");
+                soapObject.addProperty("fcmid",fcmToken);
+
                 SoapSerializationEnvelope envelope =  new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
                 envelope.setOutputSoapObject(soapObject);
@@ -208,6 +237,14 @@ public class Login extends AppCompatActivity {
                         SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.today_jobs, jsnobject.optString("today_jobs"));
                         SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.future_jobs, jsnobject.optString("future_jobs"));
 
+
+                        SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.user_id, userId);
+                        SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.password, password);
+
+                        SharedPref.getInstance().setSharedValue(Login.this, hasLoggedIn, true);
+
+
+
                         Intent i = new Intent(Login.this, DriverHome.class);
                         startActivity(i);
                     }
@@ -240,7 +277,7 @@ public class Login extends AppCompatActivity {
                         {
                             if(Utility.isNotEmpty(userId.getText().toString()) && Utility.isNotEmpty(password.getText().toString()))
                             {
-                                openDriverPage();
+                                openDriverPage(userId.getText().toString(),password.getText().toString());
                             }
                         }
 
@@ -257,6 +294,23 @@ public class Login extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION_PERMISSION:
+                // If the permission is granted, get the location,
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    initializeUI();
+
+                } else {
+                    Toast.makeText(this,R.string.location_permission_denied,Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+        }
+    }
 
 
 }

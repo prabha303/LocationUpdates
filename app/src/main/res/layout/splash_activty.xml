@@ -122,7 +122,7 @@
         android:layout_marginRight="@dimen/_10sdp"
         android:layout_height="wrap_content"
         fancy:fb_borderColor="@color/colorPrimary"
-        fancy:fb_defaultColor="@color/mbg_green"
+        fancy:fb_defaultColor="@color/colorPrimaryDark"
         android:paddingStart="50dp"
         android:paddingEnd="60dp"
         android:paddingTop="8dp"

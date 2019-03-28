@@ -43,7 +43,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-
+        android:fitsSystemWindows="true"
         android:theme="@style/Full_Screen" >
         <activity android:name=".login.Login"
             android:windowSoftInputMode="stateHidden" >
@@ -53,6 +53,16 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".fcm.FcmListenerService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".fcm.FBaseListenerService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="com.google.android.gms.version"
