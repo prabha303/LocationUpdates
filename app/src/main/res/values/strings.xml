@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BTR Services</string>
+    <string name="app_name">ServicePartner</string>
     <string name="latitude">Latitude:</string>
     <string name="longitude">Longitude:</string>
     <string name="timestamp">Timestamp:</string>
@@ -13,7 +13,7 @@
 
     <string name="text_accounts">All Accounts</string>
     <string name="hint_name">Name</string>
-    <string name="hint_email">Email</string>
+    <string name="hint_email">User Name</string>
     <string name="hint_password">Password</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="text_login">Login</string>
@@ -35,6 +35,8 @@
 
     <string name="login_failed">Invalide credentials</string>
 
+
+    <string name="font_fontFamily_medium">sans-serif-medium</string>
 
     <!--Text Images -->
     <string name="fa_glass">&#xf000;</string>

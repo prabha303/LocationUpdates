@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
@@ -31,11 +32,14 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 import prabhalab.client.location.APIEngine.APIEngine;
+import prabhalab.client.location.APIEngine.JsonUtil;
 import prabhalab.client.location.MainActivity;
 import prabhalab.client.location.R;
 import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.Utility;
 import prabhalab.client.location.driverhome.DriverHome;
+import prabhalab.client.location.driverhome.JobModel;
+import prabhalab.client.location.driverhome.PastJobAdapter;
 
 import static prabhalab.client.location.Utility.AppData.hasLoggedIn;
 
@@ -67,6 +71,8 @@ public class Login extends AppCompatActivity {
         userId = findViewById(R.id.userId);
         password = findViewById(R.id.password);
 
+        //login.setText(getResources().getString(R.string.fa_arrow_circle_right) + " Login");
+
         showSplashImage();
 
     }
@@ -85,7 +91,7 @@ public class Login extends AppCompatActivity {
                     mainLayout.setVisibility(View.VISIBLE);
                     initializeUI();
                 }
-            }, 3000);
+            }, 2000);
 
         }catch (Exception e)
         {
@@ -240,13 +246,78 @@ public class Login extends AppCompatActivity {
 
                         SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.user_id, userId);
                         SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.password, password);
+                        String username= "",today_date = "",yesterday_date = "",tomorrow_date = "";
+                        String jobCount= "";
+                        String  today_jobs = jsnobject.optString("today_jobs");
+                        if(Utility.isNotEmpty(""+today_jobs))
+                        {
+                            try {
+                                JSONArray jsonArray = new JSONArray(""+today_jobs);
+                                if(jsonArray.length() != 0){
+                                    for (int i =0;i<jsonArray.length();i++){
+                                        JobModel objectFromJson = JsonUtil.getObjectFromJson(jsonArray.getJSONObject(i), JobModel.class);
+                                        username = objectFromJson.getDriverName();
+                                        today_date = objectFromJson.getPickupDate();
+                                        Log.d("username","- "+username);
+                                    }
+                                    SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.today_job_count, ""+jsonArray.length());
+                                    SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.today_date, today_date);
+
+                                }else
+                                {
+                                    SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.today_job_count, "0");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.user_name, username);
+
+
+
+                        String  past_jobs = jsnobject.optString("past_jobs");
+                        if(Utility.isNotEmpty(""+past_jobs))
+                        {
+                            try {
+                                JSONArray jsonArray = new JSONArray(""+past_jobs);
+                                if(jsonArray.length() != 0){
+                                    for (int i =0;i<jsonArray.length();i++){
+                                        JobModel objectFromJson = JsonUtil.getObjectFromJson(jsonArray.getJSONObject(i), JobModel.class);
+                                        yesterday_date = objectFromJson.getPickupDate();
+                                    }
+                                    SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.yesterday_date, yesterday_date);
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        String future_jobs = jsnobject.optString("future_jobs");
+                        if(Utility.isNotEmpty(""+future_jobs))
+                        {
+                            try {
+                                JSONArray jsonArray = new JSONArray(""+future_jobs);
+                                if(jsonArray.length() != 0){
+                                    for (int i =0;i<jsonArray.length();i++){
+                                        JobModel objectFromJson = JsonUtil.getObjectFromJson(jsonArray.getJSONObject(i), JobModel.class);
+                                        tomorrow_date = objectFromJson.getPickupDate();
+                                    }
+                                    SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.tomorrow_date, tomorrow_date);
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
 
                         SharedPref.getInstance().setSharedValue(Login.this, hasLoggedIn, true);
 
-
-
                         Intent i = new Intent(Login.this, DriverHome.class);
                         startActivity(i);
+                        finish();
                     }
 
 

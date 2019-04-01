@@ -12,16 +12,16 @@
 
     <LinearLayout
         android:id="@+id/splashLayout"
-        android:visibility="visible"
+        android:visibility="gone"
         android:gravity="center"
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_width="@dimen/_200sdp"
-            android:src="@drawable/ic_btr_svg_logo"
-            android:layout_height="@dimen/_200sdp" />
+            android:layout_width="@dimen/_120sdp"
+            android:src="@mipmap/ic_btr_svg_logo"
+            android:layout_height="@dimen/_120sdp" />
 
     </LinearLayout>
 
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginEnd="@dimen/_16sdp"
         android:layout_height="match_parent"
@@ -41,7 +41,7 @@
             android:layout_height="@dimen/_100sdp"
             android:visibility="visible"
             android:layout_gravity="center_horizontal"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_btr_svg_logo" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayoutUserId"
@@ -82,15 +82,18 @@
             android:visibility="visible"
             android:layout_height="wrap_content"
             fancy:fb_borderColor="@color/colorPrimary"
-            fancy:fb_defaultColor="@color/colorPrimary"
+            fancy:fb_defaultColor="@color/colorPrimaryDark"
             android:padding="@dimen/_10sdp"
             fancy:fb_focusColor="@color/white"
             android:foregroundGravity="center"
-            fancy:fb_iconPaddingRight= "0dp"
+
             fancy:fb_iconPaddingLeft= "0dp"
+            fancy:fb_text=" Login"
+            fancy:fb_fontIconResource="@string/fa_arrow_circle_right"
+            fancy:fb_iconPaddingRight= "1dp"
             fancy:fb_iconPosition="left"
             fancy:fb_radius="5dp"
-            fancy:fb_text="LOGIN"
+
             android:layout_gravity="center"
             android:gravity="center"
             fancy:fb_textSize="@dimen/_16sdp"

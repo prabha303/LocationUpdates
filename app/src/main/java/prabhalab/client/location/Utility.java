@@ -153,9 +153,16 @@ public class Utility {
 
         String hasLoggedIn = "has_logged_in";
         String user_id = "user_id";
+        String user_name = "user_name";
+        String today_job_count = "today_job_count";
         String password = "password";
         String FCM_ID = "fcm_id";
 
+
+
+        String today_date = "today_date";
+        String yesterday_date = "yesterday_date";
+        String tomorrow_date = "tomorrow_date";
     }
 
 }

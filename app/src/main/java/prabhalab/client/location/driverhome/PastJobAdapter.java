@@ -1,24 +1,17 @@
 package prabhalab.client.location.driverhome;
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import org.json.JSONObject;
 import java.util.ArrayList;
-
 import prabhalab.client.location.MainActivity;
 import prabhalab.client.location.R;
-import prabhalab.client.location.login.Login;
+
 
 /**
  * Destination List adapter class.
@@ -40,9 +33,7 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()) .inflate(R.layout.past_job_view, parent, false);
-
         context = view.getContext();
-
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -51,11 +42,13 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.order_id.setText(pastJobModel.get(position).getBatchID());
+        holder.order_id.setText(pastJobModel.get(position).getID());
         holder.passangerName.setText(pastJobModel.get(position).getPassenger() +" - "+ pastJobModel.get(position).getPassengers());
-        holder.jobDateTime.setText(pastJobModel.get(position).getPickupDate() +":"+pastJobModel.get(position).getPickupTime());
+        holder.jobDateTime.setText(pastJobModel.get(position).getMobile());
         holder.pickupAddress.setText(pastJobModel.get(position).getPickupAddress1());
-        holder.dropAddress.setText(pastJobModel.get(position).getDestinationAddress1());
+        holder.dropAddress.setText(pastJobModel.get(position).getDropAddress());
+
+        holder.order_time.setText(pastJobModel.get(position).getPickupTime());
 
         holder.job_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +70,7 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
      */
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView passangerName,jobDateTime,pickupAddress, dropAddress,order_id;
+        TextView passangerName,jobDateTime,pickupAddress, dropAddress,order_id,order_time;
         CardView job_layout;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -88,6 +81,9 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
             dropAddress = (TextView) itemView.findViewById(R.id.dropAddress);
             order_id = (TextView) itemView.findViewById(R.id.order_id);
             job_layout = (CardView) itemView.findViewById(R.id.job_layout);
+
+            order_time =  itemView.findViewById(R.id.order_time);
+
 
         }
     }

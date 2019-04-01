@@ -33,16 +33,15 @@
                 android:background="@color/colorPrimary"
                 android:orientation="horizontal">
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="3.3"
                     android:layout_gravity="center"
                     android:gravity="left|center"
                     android:orientation="horizontal">
-                    <prabhalab.client.location.CustomTextView
+                    <prabhalab.client.location.CustomTextViewRegular
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="@dimen/_13sdp"
                         android:layout_marginRight="4dp"
                         android:layout_gravity="center"
                         android:gravity="start|center"
@@ -55,22 +54,48 @@
                         android:id="@+id/order_id"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="17sp"
+                        android:textSize="@dimen/_14sdp"
                         android:layout_gravity="center"
                         android:gravity="start|center"
                         android:textColor="@color/white"
-                        android:text=" "/>
+                        android:text="adwdas "/>
 
 
-                    <prabhalab.client.location.CustomTextViewRegular
-                        android:id="@+id/order_dates"
-                        android:layout_width="wrap_content"
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textSize="13sp"
-                        android:layout_gravity="center"
-                        android:gravity="start|center"
-                        android:textColor="#a9a9a9"
-                        android:text=""/>
+                        android:layout_gravity="end"
+                        android:gravity="end"
+                         android:orientation="horizontal">
+
+                        <prabhalab.client.location.login.FontAweSomeTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/_3sdp"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:text="@string/fa_clock_o"/>
+
+
+                        <prabhalab.client.location.CustomTextViewRegular
+                            android:id="@+id/order_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="@dimen/_12sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:text=""/>
+
+
+                    </LinearLayout>
+
 
 
                 </LinearLayout>
@@ -88,32 +113,48 @@
                 android:padding="@dimen/_3sdp"
                 android:orientation="horizontal">
 
+
+
+
+                <prabhalab.client.location.login.FontAweSomeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="@string/fa_user" />
+
+
+
                 <prabhalab.client.location.CustomTextView
                     android:id="@+id/passangerName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:layout_marginStart="@dimen/_4sdp"
-                    android:layout_weight="1"
+                    android:layout_weight="2.5"
                     android:layout_gravity="center"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_12sdp"
                     android:textColor="@color/f56"
                     android:text="passangerName" />
 
                 <prabhalab.client.location.CustomTextViewLight
                     android:id="@+id/jobDateTime"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_marginLeft="6dp"
                     android:layout_marginStart="6dp"
-                    android:textSize="14sp"
-                    android:text="Hi" />
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/text_titleColor"
+                    android:text="fsac" />
 
 
-                </LinearLayout>
+            </LinearLayout>
 
 
 

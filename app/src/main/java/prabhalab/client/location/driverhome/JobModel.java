@@ -1,20 +1,98 @@
 package prabhalab.client.location.driverhome;
 
 public class JobModel {
-    public String ID;
-    public String BatchID;
-    public String PickupDate;
-    public String PickupTime;
-    public String Passenger;
-    public String PickupAddress1;
-    public String PickupTown;
-    public String DestinationAddress1;
-    public String DestinationTown;
-    public String Identifier;
-    public String Colour;
-    public String Passengers;
-    public String MaskSuppliersPassenger;
+    private String ID;
+    private String BatchID;
+    private String PickupDate;
+    private String PickupTime;
+    private String Passenger;
+    private String PickupAddress;
+    private String PickupTown;
+    private String DropAddress;
+    private String DestinationTown;
+    private String Identifier;
+    private String Colour;
+    private String Passengers;
+    private String MaskSuppliersPassenger;
+    private String FlightNumber;
+    private String Mobile;
+    private String IsPointToPoint;
+    private String DriverName;
+    private String DriverMobile;
+    private String VehicleRegistrationNumber;
 
+
+
+    public String getPickupAddress() {
+        return PickupAddress;
+    }
+
+    public void setPickupAddress(String pickupAddress) {
+        PickupAddress = pickupAddress;
+    }
+
+    public String getFlightNumber() {
+        return FlightNumber;
+    }
+
+    public void setFlightNumber(String flightNumber) {
+        FlightNumber = flightNumber;
+    }
+
+    public String getMobile() {
+        return Mobile;
+    }
+
+    public void setMobile(String mobile) {
+        Mobile = mobile;
+    }
+
+    public String getIsPointToPoint() {
+        return IsPointToPoint;
+    }
+
+    public void setIsPointToPoint(String isPointToPoint) {
+        IsPointToPoint = isPointToPoint;
+    }
+
+    public String getDriverName() {
+        return DriverName;
+    }
+
+    public void setDriverName(String driverName) {
+        DriverName = driverName;
+    }
+
+    public String getDriverMobile() {
+        return DriverMobile;
+    }
+
+    public void setDriverMobile(String driverMobile) {
+        DriverMobile = driverMobile;
+    }
+
+    public String getVehicleRegistrationNumber() {
+        return VehicleRegistrationNumber;
+    }
+
+    public void setVehicleRegistrationNumber(String vehicleRegistrationNumber) {
+        VehicleRegistrationNumber = vehicleRegistrationNumber;
+    }
+
+
+
+
+
+
+
+
+    public String getDropAddress() {
+        return DropAddress;
+    }
+
+    public void setDropAddress(String dropAddress) {
+        DropAddress = dropAddress;
+    }
 
     public String getID() {
         return ID;
@@ -57,11 +135,11 @@ public class JobModel {
     }
 
     public String getPickupAddress1() {
-        return PickupAddress1;
+        return PickupAddress;
     }
 
     public void setPickupAddress1(String pickupAddress1) {
-        PickupAddress1 = pickupAddress1;
+        PickupAddress = pickupAddress1;
     }
 
     public String getPickupTown() {
@@ -72,13 +150,7 @@ public class JobModel {
         PickupTown = pickupTown;
     }
 
-    public String getDestinationAddress1() {
-        return DestinationAddress1;
-    }
 
-    public void setDestinationAddress1(String destinationAddress1) {
-        DestinationAddress1 = destinationAddress1;
-    }
 
     public String getDestinationTown() {
         return DestinationTown;
