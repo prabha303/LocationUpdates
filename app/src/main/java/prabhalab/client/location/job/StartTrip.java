@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -174,7 +176,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             @Override
             public void onClick(View view) {
 
-                showEndTrip();
+                showEndTripPage();
             }
         });
 
@@ -231,6 +233,9 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.job_status, job_pickuped);
 
         showButton();
+
+        Toast.makeText(StartTrip.this, "Successfully pickedup!", Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -532,6 +537,9 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                     SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.trip_sheet_ref_number, tripSheetRef);
                     showButton();
 
+                    Toast.makeText(StartTrip.this, "Successfully started!", Toast.LENGTH_SHORT).show();
+
+
                 }else
                 {
                     showCustomDialog(result.toString(), false);
@@ -628,6 +636,21 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             e.printStackTrace();
         }
 
+    }
+
+
+
+    private void showEndTripPage()
+    {
+        try
+        {
+            Intent i = new Intent(StartTrip.this, EndTrip.class);
+            i.putExtra("refId",job_Id);
+            startActivityForResult(i, 100);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void showEndTrip()

@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:card_view="http://schemas.android.com/tools"
+
+    android:orientation="vertical"
+    android:background="@color/white"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay" >
+        <include layout="@layout/toolbar" />
+    </android.support.design.widget.AppBarLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/extra_amount_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_weight="1"
+                    android:textColor="@color/f56"
+                    android:text="Waiting" />
+
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="Parking" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/waiting_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_5sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:inputType="numberDecimal"
+
+                    android:hint="Enter waiting amount" />
+
+                <EditText
+                    android:id="@+id/parking_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_5sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:inputType="numberDecimal"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:hint="parking amount" />
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="horizontal">
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_weight="1"
+                    android:textColor="@color/f56"
+                    android:text="Toll / CC" />
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="Amendment" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/toll_cc_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_5sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:inputType="numberDecimal"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:hint="toll / cc amount" />
+                <EditText
+                    android:id="@+id/amendment_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_5sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:inputType="numberDecimal"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:hint="amendment amount" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="horizontal">
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_weight="1"
+                    android:textColor="@color/f56"
+                    android:text="Phone" />
+
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="Others" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/phone_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_5sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:inputType="numberDecimal"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:hint="Phone amount" />
+                <EditText
+                    android:id="@+id/others_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_5sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:inputType="numberDecimal"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:hint="Others amount" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="horizontal">
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_weight="1"
+                    android:textColor="@color/f56"
+                    android:text="Service Charge" />
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:visibility="invisible"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/service_charge_amt"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_5sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:inputType="numberDecimal"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:hint="Service charge" />
+                <EditText
+                    android:visibility="invisible"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_5sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:inputType="numberDecimal"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:hint="Others amount" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="vertical">
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_weight="1"
+                    android:textColor="@color/f56"
+                    android:text="Notes" />
+                <EditText
+                    android:id="@+id/notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_style"
+                    android:gravity="left"
+                    android:hint="notes"
+                    android:imeOptions="actionDone"
+                    android:lines="3"
+                    android:inputType="textMultiLine"
+                    android:text=""
+                    android:padding="@dimen/_5sdp"
+                    android:textColor="@color/f56"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp" />
+            </LinearLayout>
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/go_next"
+                android:layout_width="match_parent"
+                android:visibility="visible"
+                android:layout_height="wrap_content"
+                fancy:fb_borderColor="@color/colorPrimary"
+                fancy:fb_defaultColor="@color/colorPrimaryDark"
+                android:padding="@dimen/_7sdp"
+                fancy:fb_focusColor="@color/white"
+                android:foregroundGravity="center"
+                fancy:fb_iconPaddingLeft= "0dp"
+                fancy:fb_text="NEXT"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                fancy:fb_iconPaddingRight= "4dp"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                fancy:fb_textSize="@dimen/_16sdp"
+                fancy:fb_textColor="#FFFFFF" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/checklist_layout"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:orientation="horizontal">
+            <prabhalab.client.location.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:layout_weight="1"
+                android:textColor="@color/f56"
+                android:text="Trip Duration" />
+
+            <prabhalab.client.location.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/f56"
+                android:text="Total KM" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:orientation="horizontal">
+            <prabhalab.client.location.CustomTextViewLight
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:layout_weight="1"
+                android:textColor="@color/f56"
+                android:text="1 hour 20 min" />
+
+            <prabhalab.client.location.CustomTextViewLight
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/f56"
+                android:text="45.54" />
+        </LinearLayout>
+
+
+        <prabhalab.client.location.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/f56"
+            android:text="How would you rate the following?" />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:orientation="horizontal">
+            <prabhalab.client.location.CustomTextViewLight
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:layout_weight="2"
+                android:textColor="@color/f56"
+                android:text="Was there imporoper use of breaks (last minutes) breaking   " />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+            <RadioGroup
+                android:id="@+id/was_there_imporoper_use_of_breaks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Yes"
+                    android:id="@+id/imporoper_yes"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="No"
+                    android:id="@+id/imporoper_no"/>
+            </RadioGroup>
+     </LinearLayout>
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:orientation="horizontal">
+            <prabhalab.client.location.CustomTextViewLight
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:textSize="@dimen/_12sdp"
+                android:layout_weight="2"
+                android:textColor="@color/f56"
+                android:text="Did you notice any overspeed" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+                <RadioGroup
+                    android:id="@+id/did_see_overspeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Yes"
+                        android:id="@+id/overspeed_yes"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="No"
+                        android:id="@+id/overspeed_no"/>
+                </RadioGroup>
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:orientation="horizontal">
+            <prabhalab.client.location.CustomTextViewLight
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:textSize="@dimen/_12sdp"
+                android:layout_weight="2"
+                android:textColor="@color/f56"
+                android:text="Did you any traffic vialation" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+                <RadioGroup
+                    android:id="@+id/did_see_traffic_violation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Yes"
+                        android:id="@+id/traffic_violation_yes"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="No"
+                        android:id="@+id/traffic_violation_no"/>
+                </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:orientation="horizontal">
+            <prabhalab.client.location.CustomTextViewLight
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:textSize="@dimen/_12sdp"
+                android:layout_weight="2"
+                android:textColor="@color/f56"
+                android:text="Was the driver using cell phone while driving" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+                <RadioGroup
+                    android:id="@+id/cellphone_while_driving"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Yes"
+                        android:id="@+id/while_driving_yes"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="No"
+                        android:id="@+id/while_driving_no"/>
+                </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
+
+        <prabhalab.client.location.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center|left"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp"
+            android:layout_weight="2"
+            android:textColor="@color/f56"
+            android:text="Signature" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:orientation="vertical">
+            <android.support.v7.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cart_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="#ffff"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                app:cardElevation="@dimen/cardview_default_elevation"
+                android:padding="1dp"
+                app:cardPreventCornerOverlap="true"
+                card_view:cardUseCompatPadding="true">
+
+                <prabhalab.client.location.job.DrawingView
+                    android:id="@+id/drawing"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp" />
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_gravity="center"
+            android:gravity="center|right"
+            android:orientation="horizontal">
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/clear_sign"
+                android:layout_width="wrap_content"
+                android:visibility="visible"
+                android:layout_gravity="center"
+                android:gravity="center|right"
+                android:layout_height="wrap_content"
+                fancy:fb_borderColor="@color/colorPrimary"
+                fancy:fb_defaultColor="@color/colorPrimaryDark"
+                fancy:fb_focusColor="@color/white"
+                android:foregroundGravity="center"
+                fancy:fb_iconPaddingLeft= "0dp"
+                fancy:fb_text="Clear"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                fancy:fb_iconPaddingRight= "4dp"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="3dp"
+                fancy:fb_textSize="@dimen/_12sdp"
+                fancy:fb_textColor="#FFFFFF" />
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_gravity="center"
+            android:gravity="center|right"
+            android:orientation="horizontal">
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/go_back"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="@dimen/_7sdp"
+                fancy:fb_borderColor="@color/colorPrimary"
+                fancy:fb_defaultColor="@color/colorPrimaryDark"
+                fancy:fb_focusColor="@color/white"
+                android:foregroundGravity="center"
+                fancy:fb_iconPaddingLeft= "0dp"
+                fancy:fb_text="Back"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_2sdp"
+                fancy:fb_radius="5dp"
+                fancy:fb_textSize="@dimen/_12sdp"
+                fancy:fb_textColor="#FFFFFF" />
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:layout_gravity="center"
+                android:gravity="center"
+                fancy:fb_borderColor="@color/colorPrimary"
+                fancy:fb_defaultColor="@color/colorPrimaryDark"
+                fancy:fb_focusColor="@color/white"
+                android:foregroundGravity="center"
+                fancy:fb_iconPaddingLeft= "0dp"
+                android:layout_weight="1"
+                fancy:fb_text="Submit"
+                android:padding="@dimen/_7sdp"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                fancy:fb_iconPaddingRight= "4dp"
+                fancy:fb_radius="5dp"
+                fancy:fb_textSize="@dimen/_12sdp"
+                fancy:fb_textColor="#FFFFFF" />
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>
