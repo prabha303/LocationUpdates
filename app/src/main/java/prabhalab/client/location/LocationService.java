@@ -11,6 +11,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -31,16 +32,28 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import prabhalab.client.location.job.DriverLocation;
+import prabhalab.client.location.job.StartTrip;
+
+import static prabhalab.client.location.Utility.AppData.job_started;
 
 /**
  * Created by PrabhagaranR on 01-03-19.
@@ -58,6 +71,7 @@ public class LocationService extends Service implements UpdateInterService {
     private Location mCurrentLocation;
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    public static DriverLocation driverLocation = new DriverLocation();
     // boolean flag to toggle the ui
 
     public LocationService() {
@@ -219,7 +233,7 @@ public class LocationService extends Service implements UpdateInterService {
                     try {
                         if(context != null)
                         {
-                            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                            /*Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                             List<Address> addresses = null;
 
                             try {
@@ -240,23 +254,93 @@ public class LocationService extends Service implements UpdateInterService {
                                     out.append(address.getAddressLine(i));
                                 }
                                 resultMessage = out.toString();
-                            }
+                            }*/
                         }
                     }catch (Exception e)
                     {
                         e.printStackTrace();
                     }
+                    SetLocationVariable(location);
                     updateInterService.doUpdateLocation(location,resultMessage);
 
-                    if(context != null)
+
+                }
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void SetLocationVariable(final Location location)
+    {
+        try {
+            boolean accuracyFilter = Utility.checkAccuracy(location);
+            if(accuracyFilter)
+            {
+                long  timeMillis = System.currentTimeMillis();
+                Date curDateTime = new Date(timeMillis);
+                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                final String dateTime = sdf.format(curDateTime);
+                LocationService.driverLocation = new DriverLocation();
+                LocationService.driverLocation.setCLatLng(new LatLng(location.getLatitude(),location.getLongitude()));
+                LocationService.driverLocation.setLat(""+location.getLatitude());
+                LocationService.driverLocation.setLng(""+location.getLongitude());
+                LocationService.driverLocation.setTimeStamp(timeMillis);
+                LocationService.driverLocation.setDatetimeString(dateTime);
+                LocationService.driverLocation.setDateFormat(curDateTime);
+                LocationService.driverLocation.setLocation(location);
+
+
+
+                String jobStatus = SharedPref.getStringValue(context, Utility.AppData.job_status);
+                if(Utility.isNotEmpty(jobStatus))
+                {
+                    if(jobStatus.equalsIgnoreCase(Utility.AppData.job_started) || jobStatus.equalsIgnoreCase(Utility.AppData.job_pickuped))
                     {
-                        String start_track = SharedPref.getStringValue(context, "start_track");
-                        if(Utility.isNotEmpty(start_track) && start_track.equalsIgnoreCase("yes"))
+
+                        new AsyncTask<Void, Void, Boolean>()
                         {
-                            JrWayDao.insertUserDetails(context,location,resultMessage);
-                        }
+                            protected Boolean doInBackground(Void... params)
+                            {
+
+                                String resultAdress = "";
+                                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                                List<Address> addresses = null;
+
+                                try {
+                                    addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1); // In this sample, get just a single address
+                                } catch (IOException ioException) {
+                                    //resultMessage = MainActivity.this .getString(R.string.service_not_available);
+                                    Log.e(TAG, resultAdress, ioException);
+                                }
+                                if (addresses == null || addresses.size() == 0) {
+                                    if (resultAdress.isEmpty()) {
+                                        //resultMessage = MainActivity.this.getString(R.string.no_address_found);
+                                        // Log.e(TAG, resultMessage);
+                                    }
+                                } else {
+                                    Address address = addresses.get(0);
+                                    StringBuilder out = new StringBuilder();
+                                    for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+                                        out.append(address.getAddressLine(i));
+                                    }
+                                    resultAdress = out.toString();
+                                }
+
+
+                                JrWayDao.insertUserDetails(context,location, resultAdress);
+
+                                return null;
+                            }
+                        }.execute();
+
+
+
+
                     }
                 }
+
             }
         }catch (Exception e)
         {

@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.File;
 
+import static prabhalab.client.location.Utility.AppData.user_id;
+
 /**
  * Database helper class holds the database functionality
  * .i.e., Database creation, table creation and database version upgrade are done.
@@ -20,37 +22,91 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final String DB_NAME = "my_location.db";
 
     //DataBase Version..
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 5;
 
 
     public static final String TABLE_NAME = "location_detail";
-
-    public static final String location_id = "location_id";
-    public static final String latlng = "latlng";
-    public static final String address = "address";
-    public static final String update_date = "update_date";
-    public static final String modified_date = "modified_date";
-    public static final String timeMillSec = "timeMillSec";
+    public static final String TABLE_TODAY_JOBS = "today_jobs";
 
     public static final String orderId = "order_id";
+    public static final String JobrefId = "job_refId";
+    public static final String DriverId = "driver_id";
+    public static final String jobStatus = "job_status";
+    public static final String latlng = "latlng";
+    public static final String address = "address";
+    public static final String PlaceID = "place_id";
+    public static final String ReceivedTime = "received_time";
+    public static final String accuracy = "accuracy";
+    public static final String modified_date = "modified_date";
+    public static final String timeMillSec = "timeMillSec";
     public static final String speed = "speed";
-    public static final String user_id = "user_id";
 
+
+
+    public static String ID =  "ID";
+    public static String BatchID = "BatchID";
+    public static String PickupDate = "PickupDate";
+    public static String PickupTime = "PickupTime";
+    public static String Passenger = "Passenger";
+    public static String PickupAddress = "PickupAddress";
+    public static String PickupTown = "PickupTown";
+    public static String DropAddress = "DropAddress";
+    public static String DestinationTown = "DestinationTown";
+    public static String Identifier = "Identifier";
+    public static String Colour = "Colour";
+    public static String Passengers = "Passengers";
+    public static String MaskSuppliersPassenger = "MaskSuppliersPassenger";
+    public static String FlightNumber = "FlightNumber";
+    public static String Mobile = "Mobile";
+    public static String IsPointToPoint = "IsPointToPoint";
+    public static String DriverName = "DriverName";
+    public static String DriverMobile = "DriverMobile";
+    public static String VehicleRegistrationNumber = "VehicleRegistrationNumber";
+    public static String JobStatus = "JobStatus";
 
 
 
     //User Details table create query...
     final private String locationDetails = "create table if not exists "
             + TABLE_NAME
-            + " ( location_id integer primary key , "
+            + " ( order_id integer primary key autoincrement , "
+            + JobrefId + " text, "
+            + DriverId + " text, "
+            + jobStatus + " text, "
             + latlng + " text, "
             + address + " text, "
-            + update_date + " text, "
-            + modified_date+ " text, "
-            + orderId+ " text, "
-            + speed+ " text, "
-            + user_id+ " text, "
+            + PlaceID + " text, "
+            + ReceivedTime + " text, "
+            + accuracy + " text, "
+            + modified_date + " text, "
+            + speed + " text, "
             + timeMillSec + " text); ";
+
+
+    final private String todayJobs = "create table if not exists "
+            + TABLE_TODAY_JOBS
+            + " ( ID text primary key , "
+            + PickupDate + " text, "
+            + PickupTime + " text, "
+            + Passenger + " text, "
+            + PickupAddress+ " text, "
+            + PickupTown+ " text, "
+            + DropAddress+ " text, "
+            + DestinationTown+ " text, "
+            + Identifier+ " text, "
+            + Colour+ " text, "
+            + Passengers+ " text, "
+            + MaskSuppliersPassenger+ " text, "
+            + FlightNumber+ " text, "
+            + Mobile+ " text, "
+            + IsPointToPoint+ " text, "
+            + DriverName+ " text, "
+            + DriverMobile+ " text, "
+            + JobStatus+ " text, "
+            + VehicleRegistrationNumber + " text); ";
+
+
+
 
 
 
@@ -90,6 +146,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             db.execSQL(locationDetails);
 
+            db.execSQL(todayJobs);
 
         }
         catch (Exception e)

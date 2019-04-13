@@ -20,6 +20,17 @@ public class JobModel {
     private String DriverName;
     private String DriverMobile;
     private String VehicleRegistrationNumber;
+    private String JobStatus;
+
+    public String getJobStatus() {
+        return JobStatus;
+    }
+
+    public void setJobStatus(String jobStatus) {
+        JobStatus = jobStatus;
+    }
+
+
 
 
 

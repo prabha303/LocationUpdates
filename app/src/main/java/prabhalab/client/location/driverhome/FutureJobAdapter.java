@@ -1,18 +1,15 @@
 package prabhalab.client.location.driverhome;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import prabhalab.client.location.MainActivity;
+
 import prabhalab.client.location.R;
 import prabhalab.client.location.job.StartTrip;
 
@@ -21,7 +18,7 @@ import prabhalab.client.location.job.StartTrip;
  * Destination List adapter class.
  * Act's as the adapter class for the destination list recycler view.
  */
-public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHolder> {
+public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.ViewHolder> {
 
     private Context context = null;
     private ArrayList<JobModel> pastJobModel = null;
@@ -29,7 +26,7 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
 
 
     //Construction...
-    public PastJobAdapter(Context context, ArrayList<JobModel> pastJobModel) {
+    public FutureJobAdapter(Context context, ArrayList<JobModel> pastJobModel) {
         this.context = context;
         this.pastJobModel = pastJobModel;
     }
@@ -51,10 +48,7 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
         holder.jobDateTime.setText(pastJobModel.get(position).getMobile());
         holder.pickupAddress.setText(pastJobModel.get(position).getPickupAddress1());
         holder.dropAddress.setText(pastJobModel.get(position).getDropAddress());
-
         holder.order_time.setText(pastJobModel.get(position).getPickupTime());
-
-
     }
 
     @Override

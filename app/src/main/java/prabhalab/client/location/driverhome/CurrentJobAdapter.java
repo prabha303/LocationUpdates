@@ -1,18 +1,15 @@
 package prabhalab.client.location.driverhome;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import prabhalab.client.location.MainActivity;
+
 import prabhalab.client.location.R;
 import prabhalab.client.location.job.StartTrip;
 
@@ -21,7 +18,7 @@ import prabhalab.client.location.job.StartTrip;
  * Destination List adapter class.
  * Act's as the adapter class for the destination list recycler view.
  */
-public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHolder> {
+public class CurrentJobAdapter extends RecyclerView.Adapter<CurrentJobAdapter.ViewHolder> {
 
     private Context context = null;
     private ArrayList<JobModel> pastJobModel = null;
@@ -29,7 +26,7 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
 
 
     //Construction...
-    public PastJobAdapter(Context context, ArrayList<JobModel> pastJobModel) {
+    public CurrentJobAdapter(Context context, ArrayList<JobModel> pastJobModel) {
         this.context = context;
         this.pastJobModel = pastJobModel;
     }
@@ -54,7 +51,17 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
 
         holder.order_time.setText(pastJobModel.get(position).getPickupTime());
 
-
+        holder.job_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, StartTrip.class);
+                i.putExtra("refId",pastJobModel.get(position).getID());
+                i.putExtra("vehicleRegistrationNumber",pastJobModel.get(position).getVehicleRegistrationNumber());
+                i.putExtra("pickupAddress",pastJobModel.get(position).getPickupAddress());
+                i.putExtra("dropAddress",pastJobModel.get(position).getDropAddress());
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override

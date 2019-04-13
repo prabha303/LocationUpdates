@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay" >
+        <include layout="@layout/toolbar" />
+    </android.support.design.widget.AppBarLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="Vehicle Reg: " />
+
+                <prabhalab.client.location.CustomTextViewLight
+                    android:id="@+id/vehicle_reg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_2sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="######" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="vertical">
+
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="left"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="Trip sheet ref: " />
+
+                <EditText
+                    android:id="@+id/trip_sheet_ref"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_gravity="left"
+                    android:padding="@dimen/_10sdp"
+                    android:imeOptions="actionDone"
+                    android:singleLine = "true"
+                    android:inputType="text"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="@dimen/_12sdp"
+                    android:background="@drawable/edittext_style"
+                    android:textColor="@color/f56"
+                    android:hint="Enter trip ref number" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <prabhalab.client.location.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="left"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="Billing location" />
+
+                <prabhalab.client.location.CustomTextViewLight
+                    android:id="@+id/billing_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_gravity="left"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="Trip sheet ref: " />
+            </LinearLayout>
+
+
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/start_trip"
+                android:layout_width="match_parent"
+                android:visibility="visible"
+                android:layout_height="wrap_content"
+                fancy:fb_borderColor="@color/colorPrimary"
+                fancy:fb_defaultColor="@color/pickup_location_color"
+                android:padding="@dimen/_10sdp"
+                fancy:fb_focusColor="@color/white"
+                android:foregroundGravity="center"
+                fancy:fb_iconPaddingLeft= "0dp"
+                fancy:fb_text="Start Trip"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                fancy:fb_fontIconResource="@string/fa_location_arrow"
+                fancy:fb_iconPaddingRight= "4dp"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                fancy:fb_textSize="@dimen/_16sdp"
+                fancy:fb_textColor="#FFFFFF" />
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/pick_up"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                fancy:fb_borderColor="@color/colorPrimary"
+                fancy:fb_defaultColor="@color/pickup_location_color"
+                android:padding="@dimen/_10sdp"
+                fancy:fb_focusColor="@color/white"
+                android:foregroundGravity="center"
+                fancy:fb_iconPaddingLeft= "0dp"
+                fancy:fb_text="Pickup"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                fancy:fb_fontIconResource="@string/fa_location_arrow"
+                fancy:fb_iconPaddingRight= "4dp"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                fancy:fb_textSize="@dimen/_16sdp"
+                fancy:fb_textColor="#FFFFFF" />
+
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/end_trip"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                fancy:fb_borderColor="@color/colorPrimary"
+                fancy:fb_defaultColor="@color/colorPrimaryDark"
+                android:padding="@dimen/_10sdp"
+                fancy:fb_focusColor="@color/white"
+                android:foregroundGravity="center"
+                fancy:fb_iconPaddingLeft= "0dp"
+                fancy:fb_text="End Trip"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                fancy:fb_fontIconResource="@string/fa_location_arrow"
+                fancy:fb_iconPaddingRight= "4dp"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                fancy:fb_textSize="@dimen/_16sdp"
+                fancy:fb_textColor="#FFFFFF" />
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_6sdp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/bottom_container"
+                    android:background="@color/f9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <fragment
+                        android:id="@+id/maps"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:id="@+id/navigation"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_gravity="end"
+                        android:src="@drawable/navigation_direction"
+                        android:layout_height="@dimen/_30sdp" />
+                </FrameLayout>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/bottom_container"
+                android:background="@color/f9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <fragment
+                    android:id="@+id/maps"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+
+
+        </LinearLayout>-->
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

@@ -54,7 +54,7 @@ public class FutureJobFragment extends Fragment{
 
                         }
                     }
-                    PastJobAdapter spinnerAdapter = new PastJobAdapter(getContext(),future_jobs_list);
+                    FutureJobAdapter spinnerAdapter = new FutureJobAdapter(getContext(),future_jobs_list);
                     futureList.setAdapter(spinnerAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();

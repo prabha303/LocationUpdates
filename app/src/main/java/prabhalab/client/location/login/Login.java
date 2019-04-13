@@ -18,9 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.iid.FirebaseInstanceId;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,19 +27,19 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-
 import mehdi.sakout.fancybuttons.FancyButton;
-import prabhalab.client.location.APIEngine.APIEngine;
 import prabhalab.client.location.APIEngine.JsonUtil;
-import prabhalab.client.location.MainActivity;
+import prabhalab.client.location.JrWayDao;
+import prabhalab.client.location.LocationService;
 import prabhalab.client.location.R;
 import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.Utility;
 import prabhalab.client.location.driverhome.DriverHome;
 import prabhalab.client.location.driverhome.JobModel;
-import prabhalab.client.location.driverhome.PastJobAdapter;
+import prabhalab.client.location.job.StartTrip;
 
 import static prabhalab.client.location.Utility.AppData.hasLoggedIn;
+import static prabhalab.client.location.Utility.AppData.job_pickuped;
 
 
 /**
@@ -59,7 +57,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        fcmToken = FirebaseInstanceId.getInstance().getToken();
+        //fcmToken = FirebaseInstanceId.getInstance().getToken();
 
         Log.d("refreshedToken","--"+fcmToken);
         if(Utility.isNotEmpty(fcmToken))
@@ -71,6 +69,8 @@ public class Login extends AppCompatActivity {
         userId = findViewById(R.id.userId);
         password = findViewById(R.id.password);
 
+
+        //SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.job_status, "");
         //login.setText(getResources().getString(R.string.fa_arrow_circle_right) + " Login");
 
         showSplashImage();
@@ -271,6 +271,8 @@ public class Login extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+
+                        JrWayDao.updateUserDetails(Login.this,today_jobs);
                         SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.user_name, username);
 
 
@@ -314,6 +316,17 @@ public class Login extends AppCompatActivity {
 
 
                         SharedPref.getInstance().setSharedValue(Login.this, hasLoggedIn, true);
+
+                        String job_status = SharedPref.getStringValue(Login.this,Utility.AppData.job_status);
+
+                        if(Utility.isNotEmpty(job_status))
+                        {
+                            if(job_status.equalsIgnoreCase(Utility.AppData.job_started) || job_status.equalsIgnoreCase(Utility.AppData.job_pickuped))
+                            {
+                                Intent service = new Intent(Login.this, LocationService.class);
+                                startService(service);
+                            }
+                        }
 
                         Intent i = new Intent(Login.this, DriverHome.class);
                         startActivity(i);

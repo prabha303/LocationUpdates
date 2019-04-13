@@ -10,6 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:visibility="visible"
         android:scrollbars="vertical" />
+
+
+
+       <prabhalab.client.location.CustomTextView
+           android:id="@+id/no_jobs"
+           android:layout_width="match_parent"
+           android:text="No Jobs"
+           android:visibility="visible"
+           android:gravity="center"
+
+           android:layout_gravity="center"
+           android:textSize="@dimen/_16sdp"
+           android:layout_height="match_parent" />
 
 </RelativeLayout>

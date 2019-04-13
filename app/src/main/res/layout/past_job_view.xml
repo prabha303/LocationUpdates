@@ -69,7 +69,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="end"
                         android:gravity="end"
-                         android:orientation="horizontal">
+                        android:orientation="horizontal">
 
                         <prabhalab.client.location.login.FontAweSomeTextView
                             android:layout_width="wrap_content"
@@ -105,10 +105,13 @@
             </LinearLayout>
 
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_4sdp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:padding="@dimen/_3sdp"
                 android:orientation="horizontal">
@@ -116,43 +119,69 @@
 
 
 
-                <prabhalab.client.location.login.FontAweSomeTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_marginStart="@dimen/_3sdp"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/_12sdp"
-                    android:textColor="@color/f56"
-                    android:text="@string/fa_user" />
-
-
-
-                <prabhalab.client.location.CustomTextView
-                    android:id="@+id/passangerName"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:layout_weight="2.5"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/_12sdp"
-                    android:textColor="@color/f56"
-                    android:text="passangerName" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal">
 
-                <prabhalab.client.location.CustomTextViewLight
-                    android:id="@+id/jobDateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    <prabhalab.client.location.login.FontAweSomeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:textColor="@color/f56"
+                        android:text="@string/fa_user" />
+
+
+
+                    <prabhalab.client.location.CustomTextView
+                        android:id="@+id/passangerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="left"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:layout_weight="2.5"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:textColor="@color/f56"
+                        android:text="passangerName" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginStart="6dp"
-                    android:textSize="@dimen/_12sdp"
-                    android:textColor="@color/text_titleColor"
-                    android:text="fsac" />
+                    android:orientation="horizontal">
 
+                    <prabhalab.client.location.login.FontAweSomeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:textColor="@color/light_text"
+                        android:text="@string/fa_phone" />
+
+
+                    <prabhalab.client.location.CustomTextViewRegular
+                        android:id="@+id/jobDateTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:layout_weight="2.5"
+                        android:textSize="@dimen/_12sdp"
+                        android:textColor="@color/light_text"
+                        android:text="mob" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -166,7 +195,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 android:padding="@dimen/_3sdp"
                 android:orientation="horizontal">
 
@@ -186,11 +215,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:textSize="14sp"
-                    android:text="" />
+                    android:text="Hiiiiii" />
 
             </LinearLayout>
 
@@ -201,7 +231,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginStart="@dimen/_6sdp"
         android:padding="@dimen/_3sdp"
         android:orientation="horizontal">
 
@@ -221,7 +251,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:textSize="14sp"
