@@ -42,6 +42,7 @@ public class FutureJobFragment extends Fragment{
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             futureList.setLayoutManager(manager);
             String future_jobs = SharedPref.getStringValue(getContext(), Utility.AppData.future_jobs);
+            SharedPref.getInstance().setSharedValue(getContext(), Utility.AppData.future_job_count, "0");
             if(Utility.isNotEmpty(future_jobs))
             {
                 try {
@@ -53,6 +54,7 @@ public class FutureJobFragment extends Fragment{
                             future_jobs_list.add(objectFromJson);
 
                         }
+                        SharedPref.getInstance().setSharedValue(getContext(), Utility.AppData.future_job_count, "" + jsonArray.length());
                     }
                     FutureJobAdapter spinnerAdapter = new FutureJobAdapter(getContext(),future_jobs_list);
                     futureList.setAdapter(spinnerAdapter);

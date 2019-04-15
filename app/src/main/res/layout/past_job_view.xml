@@ -150,8 +150,6 @@
                         android:textColor="@color/f56"
                         android:text="passangerName" />
                 </LinearLayout>
-
-
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -186,6 +184,45 @@
             </LinearLayout>
 
 
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_3sdp" />
+
+
+            <LinearLayout
+                android:id="@+id/flight_layout"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:orientation="horizontal">
+
+                <prabhalab.client.location.login.FontAweSomeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_gravity="center"
+                    android:gravity="left|center"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/f56"
+                    android:text="@string/fa_plane" />
+
+
+
+                <prabhalab.client.location.CustomTextViewRegular
+                    android:id="@+id/flight_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="left|center"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:layout_weight="2.5"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/light_text"
+                    android:text="" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

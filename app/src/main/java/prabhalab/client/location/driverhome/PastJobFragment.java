@@ -17,6 +17,7 @@ import prabhalab.client.location.APIEngine.JsonUtil;
 import prabhalab.client.location.R;
 import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.Utility;
+import prabhalab.client.location.login.Login;
 
 
 public class PastJobFragment extends Fragment{
@@ -41,6 +42,9 @@ public class PastJobFragment extends Fragment{
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         pastJobPointList.setLayoutManager(manager);
         String past_jobs = SharedPref.getStringValue(getContext(), Utility.AppData.past_jobs);
+
+        SharedPref.getInstance().setSharedValue(getContext(), Utility.AppData.past_job_count, "0");
+
         try {
             if(Utility.isNotEmpty(past_jobs))
             {
@@ -51,6 +55,7 @@ public class PastJobFragment extends Fragment{
                         past_jobs_list.add(objectFromJson);
 
                     }
+                    SharedPref.getInstance().setSharedValue(getContext(), Utility.AppData.past_job_count, "" + jsonArray.length());
                 }
         PastJobAdapter spinnerAdapter = new PastJobAdapter(getContext(),past_jobs_list);
         pastJobPointList.setAdapter(spinnerAdapter);

@@ -6,11 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import prabhalab.client.location.R;
+import prabhalab.client.location.Utility;
 import prabhalab.client.location.job.StartTrip;
 
 
@@ -62,6 +64,17 @@ public class CurrentJobAdapter extends RecyclerView.Adapter<CurrentJobAdapter.Vi
                 context.startActivity(i);
             }
         });
+
+
+        if (Utility.isNotEmpty(pastJobModel.get(position).getFlightNumber()))
+        {
+            holder.flight_number.setText(pastJobModel.get(position).getFlightNumber());
+            holder.flight_layout.setVisibility(View.VISIBLE);
+        }else
+        {
+            holder.flight_layout.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -74,7 +87,8 @@ public class CurrentJobAdapter extends RecyclerView.Adapter<CurrentJobAdapter.Vi
      */
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView passangerName,jobDateTime,pickupAddress, dropAddress,order_id,order_time;
+        TextView passangerName,jobDateTime,flight_number,pickupAddress, dropAddress,order_id,order_time;
+        LinearLayout flight_layout;
         CardView job_layout;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -85,10 +99,9 @@ public class CurrentJobAdapter extends RecyclerView.Adapter<CurrentJobAdapter.Vi
             dropAddress = (TextView) itemView.findViewById(R.id.dropAddress);
             order_id = (TextView) itemView.findViewById(R.id.order_id);
             job_layout = (CardView) itemView.findViewById(R.id.job_layout);
-
             order_time =  itemView.findViewById(R.id.order_time);
-
-
+            flight_number =  itemView.findViewById(R.id.flight_number);
+            flight_layout =  itemView.findViewById(R.id.flight_layout);
         }
     }
 

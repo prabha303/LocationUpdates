@@ -67,6 +67,8 @@ public class DriverHome extends AppCompatActivity {
             adapter.addFragment(new PastJobFragment(), yesterday_date, 0);
             adapter.addFragment(new PresentJobFragment(), today_date, 0);
             adapter.addFragment(new FutureJobFragment(), tomorrow_date, 0);
+
+
             viewPager.setAdapter(adapter);
             tabLayout.setupWithViewPager(viewPager);
 
@@ -82,14 +84,21 @@ public class DriverHome extends AppCompatActivity {
                     }
                     @Override
                     public void onPageSelected(int position) {
-                        highLightCurrentTab(position);
+                        try
+                        {
+                            jobCount.setText("(" + getJobCount(position) +")" );
+                            highLightCurrentTab(position);
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                     @Override
                     public void onPageScrollStateChanged(int state) {
+
+
                     }
                 });
-
-
             }catch (Exception e)
             {
                 e.printStackTrace();
@@ -198,8 +207,36 @@ public class DriverHome extends AppCompatActivity {
         {
             w.printStackTrace();
         }
+    }
 
+    private String getJobCount (int pos)
+    {
+        try
+        {
+            String today = SharedPref.getStringValue(DriverHome.this,Utility.AppData.today_job_count);
+            String past = SharedPref.getStringValue(DriverHome.this,Utility.AppData.past_job_count);
+            String future = SharedPref.getStringValue(DriverHome.this,Utility.AppData.future_job_count);
 
+            String count = "";
+
+            if(pos == 0)
+            {
+                return  past;
+
+            }else if (pos == 2)
+            {
+                return  future;
+
+            }else
+            {
+                return  today;
+            }
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 

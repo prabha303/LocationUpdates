@@ -1,17 +1,9 @@
 package prabhalab.client.location.job;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import mehdi.sakout.fancybuttons.FancyButton;
 import prabhalab.client.location.R;
+
 
 
 /**
@@ -70,7 +63,7 @@ public class EndTrip extends AppCompatActivity {
       <hours>string</hours>
       <PaxOnBoardlatlog>pickup location </PaxOnBoardlatlog>
       <PaxOnBoardAddress>pickup location Address</PaxOnBoardAddress>
-      <PaxOnBoardDatetime>pickup time </PaxOnBoardDatetime>
+      <PaxOnBoardDatetime>pickup time </PaxOnBoardDatetime>FlightNumber
 
       <PaxDropOfflatlog>end location lat</PaxDropOfflatlog>
 

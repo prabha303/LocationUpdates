@@ -45,6 +45,7 @@ public class PresentJobFragment extends Fragment  {
             String today_jobs = SharedPref.getStringValue(getContext(), Utility.AppData.today_jobs);
 
             ArrayList<JobModel> present_jobs_list = JrWayDao.getInstance().getWayPoints(todayList.getContext());
+
             if(present_jobs_list != null && present_jobs_list.size() >0)
             {
                 no_jobs.setVisibility(View.GONE);

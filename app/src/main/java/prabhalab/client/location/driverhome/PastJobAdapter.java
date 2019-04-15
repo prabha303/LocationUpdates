@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import prabhalab.client.location.MainActivity;
 import prabhalab.client.location.R;
+import prabhalab.client.location.Utility;
 import prabhalab.client.location.job.StartTrip;
 
 
@@ -51,9 +53,17 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
         holder.jobDateTime.setText(pastJobModel.get(position).getMobile());
         holder.pickupAddress.setText(pastJobModel.get(position).getPickupAddress1());
         holder.dropAddress.setText(pastJobModel.get(position).getDropAddress());
-
         holder.order_time.setText(pastJobModel.get(position).getPickupTime());
 
+
+        if (Utility.isNotEmpty(pastJobModel.get(position).getFlightNumber()))
+        {
+            holder.flight_number.setText(pastJobModel.get(position).getFlightNumber());
+            holder.flight_layout.setVisibility(View.VISIBLE);
+        }else
+        {
+            holder.flight_layout.setVisibility(View.GONE);
+        }
 
     }
 
@@ -67,7 +77,8 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
      */
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView passangerName,jobDateTime,pickupAddress, dropAddress,order_id,order_time;
+        TextView passangerName,flight_number,jobDateTime,pickupAddress, dropAddress,order_id,order_time;
+        LinearLayout flight_layout;
         CardView job_layout;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -78,8 +89,9 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
             dropAddress = (TextView) itemView.findViewById(R.id.dropAddress);
             order_id = (TextView) itemView.findViewById(R.id.order_id);
             job_layout = (CardView) itemView.findViewById(R.id.job_layout);
-
             order_time =  itemView.findViewById(R.id.order_time);
+            flight_number =  itemView.findViewById(R.id.flight_number);
+            flight_layout =  itemView.findViewById(R.id.flight_layout);
 
 
         }
