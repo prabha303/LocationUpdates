@@ -2,12 +2,19 @@ package prabhalab.client.location.login;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +43,7 @@ import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.Utility;
 import prabhalab.client.location.driverhome.DriverHome;
 import prabhalab.client.location.driverhome.JobModel;
+import prabhalab.client.location.job.RestartServiceBroadCastReceiver;
 import prabhalab.client.location.job.StartTrip;
 
 import static prabhalab.client.location.Utility.AppData.hasLoggedIn;
@@ -131,7 +139,7 @@ public class Login extends AppCompatActivity {
                         openDriverPage(userId.getText().toString(),password.getText().toString());
                     }else
                     {
-                        Toast.makeText(Login.this, "UserId, password should not empty", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "UserId, password should not empty", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -201,7 +209,7 @@ public class Login extends AppCompatActivity {
                 SoapObject soapObject = new SoapObject(NAMESPACE, METHOD_NAME);
                 soapObject.addProperty("userName",userId);
                 soapObject.addProperty("password",password);
-                soapObject.addProperty("fcmid",fcmToken);
+                soapObject.addProperty("fcmID",fcmToken);
 
                 SoapSerializationEnvelope envelope =  new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
@@ -273,7 +281,12 @@ public class Login extends AppCompatActivity {
                         }
 
                         JrWayDao.updateUserDetails(Login.this,today_jobs);
-                        SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.user_name, username);
+
+                        if(Utility.isNotEmpty(username))
+                        {
+                            SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.user_name, username);
+                        }
+
 
 
 
@@ -328,6 +341,10 @@ public class Login extends AppCompatActivity {
                             }
                         }
 
+
+                        gettimeutc();
+                        createNotificationChannel();
+
                         Intent i = new Intent(Login.this, DriverHome.class);
                         startActivity(i);
                         finish();
@@ -346,13 +363,36 @@ public class Login extends AppCompatActivity {
     }
 
 
+    private void gettimeutc(){
+
+        AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(Login.this, RestartServiceBroadCastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarms.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+30*1000, pendingIntent);
+
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.CHANNEL_ID);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(getString(R.string.CHANNEL_ID), name, importance);
+            NotificationManager notificationManager =(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
+
+
+
     private void showCustomDialog(String msg, final boolean retryAPI)
     {
         try {
             boolean cancelButtonFalg = false;
             boolean cancelDialog = true;
             //String message = getResources().getString(R.string.checkYourInternetConnection);;
-            Utility.showCustomDialogWithHeader(Login.this, "BTR", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+            Utility.showCustomDialogWithHeader(Login.this, "LOGOUT", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
                 @Override                                                              //cancelButton yes r no flag
                 public void confirmed(boolean status) {  // true ok butoon
                     try
@@ -389,7 +429,7 @@ public class Login extends AppCompatActivity {
                     initializeUI();
 
                 } else {
-                    Toast.makeText(this,R.string.location_permission_denied,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,R.string.location_permission_denied,Toast.LENGTH_LONG).show();
 
                 }
                 break;

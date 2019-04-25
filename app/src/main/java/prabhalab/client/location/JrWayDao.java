@@ -10,6 +10,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +54,8 @@ public class JrWayDao {
 
                 long  timeMillis = System.currentTimeMillis();
                 Date curDateTime = new Date(timeMillis);
-                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM:SS");
+                //final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 final String dateTime = sdf.format(curDateTime);
                 ContentValues contentValues = new ContentValues();
                 //contentValues.put(DatabaseHelper.orderId,timeMillis);
@@ -78,6 +80,142 @@ public class JrWayDao {
         }
     }
 
+
+
+    public static float getPickupKM(Context context) {
+
+        float t_pickup_km = 0;
+        try
+        {
+
+            if (context != null) {
+                SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
+                String selectQuery = "SELECT * FROM "+ DatabaseHelper.TABLE_NAME +" WHERE "+ DatabaseHelper.jobStatus +" = " + Utility.AppData.job_started  + " ORDER BY cast(order_id as integer)"  +" ASC;";
+                Cursor cursor = db.rawQuery(selectQuery, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    if (cursor.moveToFirst()) {
+
+                        String location_init = "";
+                        do {
+
+                            if(Utility.isNotEmpty(location_init))
+                            {
+                                float distance = Utility.CalCulateDistance(location_init, cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng)));
+                                location_init = cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng));
+
+                                t_pickup_km = t_pickup_km + distance;
+
+
+                            }else
+                            {
+                                location_init = cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng));
+                            }
+                        }  while (cursor.moveToNext());
+
+                    }
+                }
+            }
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return t_pickup_km;
+    }
+
+
+
+    public static float getDropKM(Context context) {
+
+        float t_pickup_km = 0;
+        try
+        {
+
+            if (context != null) {
+                SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
+                String selectQuery = "SELECT * FROM "+ DatabaseHelper.TABLE_NAME +" WHERE "+ DatabaseHelper.jobStatus +" = " + Utility.AppData.job_pickuped  + " ORDER BY cast(order_id as integer)"  +" ASC;";
+                Cursor cursor = db.rawQuery(selectQuery, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    if (cursor.moveToFirst()) {
+
+                        String location_init = "";
+                        do {
+
+                            if(Utility.isNotEmpty(location_init))
+                            {
+                                float distance = Utility.CalCulateDistance(location_init, cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng)));
+                                location_init = cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng));
+
+                                t_pickup_km = t_pickup_km + distance;
+
+
+                            }else
+                            {
+                                location_init = cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng));
+                            }
+                        }  while (cursor.moveToNext());
+
+                    }
+                }
+            }
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return t_pickup_km;
+    }
+
+
+    public static String  getTotalKM(Context context) {
+        float t_km = 0;
+        String total_km = "";
+        ArrayList<WayPoint> wayPointList = new ArrayList<>();
+        try
+        {
+
+            if (context != null) {
+                SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
+                String selectQuery = "SELECT * FROM "+ DatabaseHelper.TABLE_NAME +" ORDER BY cast(order_id as integer)"  +" ASC;";
+                Cursor cursor = db.rawQuery(selectQuery, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            WayPoint wayPoint = new WayPoint();
+                            wayPoint.setLatLang(cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng)));
+                            wayPointList.add(wayPoint);
+
+                        }  while (cursor.moveToNext());
+
+                    }
+                }
+
+                String nextLat = "";
+                for(int i=0; i<wayPointList.size(); i++){
+                    String latLang = wayPointList.get(i).getLatLang();
+                    if(Utility.isNotEmpty(latLang))
+                    {
+                        float distance = MainActivity.CalCulateDistance(nextLat,latLang);
+                        t_km = t_km + distance;
+                    }
+                    nextLat = latLang;
+                }
+
+                float totalKM = t_km/1000;
+
+
+                DecimalFormat dtime = new DecimalFormat("#.##");
+                total_km = dtime.format(totalKM);
+
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return total_km;
+    }
 
 
 
@@ -181,7 +319,7 @@ public class JrWayDao {
                     JobModel objectFromJson = JsonUtil.getObjectFromJson(jsonArray.getJSONObject(i), JobModel.class);
                     long  timeMillis = System.currentTimeMillis();
                     Date curDateTime = new Date(timeMillis);
-                    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM");
                     final String dateTime = sdf.format(curDateTime);
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(DatabaseHelper.ID,objectFromJson.getID());
@@ -205,12 +343,14 @@ public class JrWayDao {
 
 
                     String jobStatus = SharedPref.getStringValue(context, Utility.AppData.job_status);
-                    if(Utility.isNotEmpty(jobStatus))
+                    String savedJobId = SharedPref.getStringValue(context, Utility.AppData.job_Id);
+                    if(Utility.isNotEmpty(jobStatus) && Utility.isNotEmpty(savedJobId) && savedJobId.equalsIgnoreCase(objectFromJson.getID()))
                     {
                         contentValues.put(DatabaseHelper.JobStatus,SharedPref.getStringValue(context, Utility.AppData.job_status));
 
                     }else
                     {
+                        contentValues.put(DatabaseHelper.JobStatus,"");
 
                     }
 
@@ -266,6 +406,40 @@ public class JrWayDao {
         }
         return wayPointList;
     }
+
+
+    public static ArrayList<WayPoint> getAllWaypoints(Context context)
+    {
+        ArrayList<WayPoint> wayPointList = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = DatabaseHelper.getInstance(context).getReadableDatabase();
+            String selectQuery = "SELECT * FROM  location_detail ORDER BY cast(order_id as integer)"  +" ASC;";
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        String latlag = cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng));
+                        String address = cursor.getString(cursor.getColumnIndex(DatabaseHelper.address));
+                        int order_id = cursor.getInt(cursor.getColumnIndex("order_id"));
+                        if(Utility.isNotEmpty(latlag))
+                        {
+                            WayPoint wayPoint = new WayPoint();
+                            wayPoint.setOrder(order_id);
+                            wayPoint.setAddress(address);
+                            wayPoint.setLatLang(latlag);
+                            wayPointList.add(wayPoint);
+                        }
+                    } while (cursor.moveToNext());
+                }
+            }cursor.close();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return wayPointList;
+    }
+
 
     public static boolean deleteRecords(Context context)
     {

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements UpdateInterServic
                     startLocationButtonClick();
 
                 } else {
-                    Toast.makeText(this,R.string.location_permission_denied,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,R.string.location_permission_denied,Toast.LENGTH_LONG).show();
 
                 }
                 break;
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements UpdateInterServic
         {
             long  timeMillis = System.currentTimeMillis();
             Date curDateTime = new Date(timeMillis);
-            final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+            final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM");
             final String dateTime = sdf.format(curDateTime);
             mTimestamp.setText(dateTime);
             mAddress.setText(address);

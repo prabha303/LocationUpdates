@@ -42,10 +42,13 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import mehdi.sakout.fancybuttons.FancyButton;
 import prabhalab.client.location.JrWayDao;
 import prabhalab.client.location.LocationService;
+import prabhalab.client.location.MainActivity;
 import prabhalab.client.location.R;
 import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.UpdateInterService;
@@ -64,7 +67,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
     private static final String TAG = StartTrip.class.getSimpleName();
     FancyButton end_track_button,start_track_button;
     TextView mLatitude,mLongitude,mTimestamp,status,mAddress,lastTripKM;
-    String vehicleRegistrationNumber="",pickupAddress = "", dropAddress="",job_Id = "", jobStatus = "";
+    String vehicleRegistrationNumber="",pickupAddress = "", dropAddress="",job_Id = "", FlightNumber ="", jobStatus = "";
     private GoogleMap googleMap;
     static  LatLng pickip_point = null;
     static  Marker pickip_point_marker = null;
@@ -86,6 +89,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             pickupAddress = jobModel.getPickupAddress();
             dropAddress = jobModel.getDropAddress();
             jobStatus = jobModel.getJobStatus();
+            FlightNumber = jobModel.getFlightNumber();
             init();
 
             String savedJobId = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_Id);
@@ -115,9 +119,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
     private void showButton()
     {
 
-        jobStatus = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_status);
         String savedJobId = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_Id);
-
         if(Utility.isNotEmpty(jobStatus) && Utility.isNotEmpty(savedJobId) && job_Id.equalsIgnoreCase(savedJobId))
         {
             String trip_sheet_ref_number = SharedPref.getStringValue(StartTrip.this, Utility.AppData.trip_sheet_ref_number);
@@ -167,7 +169,15 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             @Override
             public void onClick(View view) {
 
-                showPicup();
+
+
+                if(Utility.isNotEmpty(Utility.getLatLng(StartTrip.this)))
+                {
+                    showPicup();
+                }else
+                {
+                    Toast.makeText(StartTrip.this, "Location not detected, move somewhere ", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -231,10 +241,19 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         //new ProcessStartTrip(job_Id,CurrentLocation, pickupAddress, Jobsheet_ref,vehicleRegistrationNumber).execute();
 
         SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.job_status, job_pickuped);
+        jobStatus = job_pickuped;
+        long  timeMillis = System.currentTimeMillis();
+        Date curDateTime = new Date(timeMillis);
+        final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM");
+        final String pickupTime = sdf.format(curDateTime);
+
+        SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.pickup_location_latlng, Utility.getLatLng(StartTrip.this));
+        SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.pickup_time, pickupTime);
+
 
         showButton();
 
-        Toast.makeText(StartTrip.this, "Successfully pickedup!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(StartTrip.this, "Successfully pickedup!", Toast.LENGTH_LONG).show();
 
     }
 
@@ -256,7 +275,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             case 1003:
                 if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED))
                 {
-                    //Toast.makeText(Home.this, "External File Permission done!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Home.this, "External File Permission done!", Toast.LENGTH_LONG).show();
                 }
                 break;
             default:
@@ -441,9 +460,14 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                     LatLngBounds bounds = builder.build();
                     int width = getResources().getDisplayMetrics().widthPixels;
                     int height = getResources().getDisplayMetrics().heightPixels;
-                    int padding = (int) (width * 0.10); // offset from edges of the map 10% of screen
+                    //int padding = (int) (width * 0.05); // offset from edges of the map 10% of screen
 
-                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+
+                    int padding = Utility.convertDpToPixel(40); // offset from edges of the map in pixels
+
+
+                    //CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,  padding);
                     googleMap.animateCamera(cu);
 
 
@@ -502,6 +526,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                 soapObject.addProperty("address",pickupAddress);
                 soapObject.addProperty("tripSheetRef",tripSheetRef);
                 soapObject.addProperty("vehicleRegistration",vehicleRegistrationNumber);
+                soapObject.addProperty("journeystartdatetime",getStartTime());
                 SoapSerializationEnvelope envelope =  new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
                 envelope.setOutputSoapObject(soapObject);
@@ -533,11 +558,20 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                 {
 
                     SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.job_status, job_started);
+                    SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.trip_start_loc, CurrentLocation);
+                    jobStatus = job_started;
                     SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.job_Id, job_Id);
                     SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.trip_sheet_ref_number, tripSheetRef);
+                    long  timeMillis = System.currentTimeMillis();
+                    SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.start_time, ""+timeMillis);
+
+
+
+
+
                     showButton();
 
-                    Toast.makeText(StartTrip.this, "Successfully started!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StartTrip.this, "Successfully started!", Toast.LENGTH_LONG).show();
 
 
                 }else
@@ -553,6 +587,21 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
     }
 
 
+
+    private String getStartTime()
+    {
+        try
+        {
+            long  timeMillis = System.currentTimeMillis();
+            Date curDateTime = new Date(timeMillis);
+            final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM");
+            return  sdf.format(curDateTime);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
     private void showCustomDialog(String msg, final boolean retryAPI)
     {
@@ -646,6 +695,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         {
             Intent i = new Intent(StartTrip.this, EndTrip.class);
             i.putExtra("refId",job_Id);
+            i.putExtra("FlightNumber",FlightNumber);
             startActivityForResult(i, 100);
         } catch (Exception e)
         {

@@ -17,7 +17,7 @@ public class SharedPref  {
     // Single ton objects...
     private static SharedPreferences preference = null;
     private static SharedPref sharedPref = null;
-    static String  preferenceName = "LocationTrack";
+    public static String  preferenceName = "LocationTrack";
     //Single ton method for this class...
     public static SharedPref getInstance() {
         if (sharedPref != null) {

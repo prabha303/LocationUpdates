@@ -1,13 +1,16 @@
 package prabhalab.client.location;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationManager;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +36,7 @@ public class Utility {
 
     private static Utility utility = null;
     private static ProgressDialog pDialog;
+    public static int forgroundservice_notification_id = 999;
     public static Utility getInstance()
     {
         if (utility != null)
@@ -70,7 +74,15 @@ public class Utility {
     public void stayScreenOn(Activity activity) {
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
-
+    public static boolean isMyServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void showLoadingDialog(Context context)
     {
@@ -304,7 +316,13 @@ public class Utility {
         String job_status = "job_status";
         String job_Id = "job_id";
         String trip_sheet_ref_number = "trip_sheet_ref_number";
+        String start_time = "start_time";
+        String pickup_location_latlng = "pickup_location_latlng";
+        String pickup_time = "pickup_time";
 
+
+
+        String trip_start_loc = "trip_start_loc";
 
         String job_started = "started";
         String job_pickuped = "pickuped";
@@ -322,6 +340,51 @@ public class Utility {
         String today_date = "today_date";
         String yesterday_date = "yesterday_date";
         String tomorrow_date = "tomorrow_date";
+    }
+
+
+    public static int convertDpToPixel(float dp){
+        try {
+            DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+            float px = dp * (metrics.densityDpi / 160f);
+            return (int)Math.round(px);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+    public static float CalCulateDistance (String startLocation, String endLocation)
+    {
+        try
+        {
+            if(Utility.isNotEmpty(startLocation) && Utility.isNotEmpty(endLocation))
+            {
+                String[] s_latLng = startLocation.split(",");
+                String[] n_latLng = endLocation.split(",");
+
+                double s_latitude = Double.parseDouble(s_latLng[0]);
+                double s_longitude = Double.parseDouble(s_latLng[1]);
+
+                double n_latitude = Double.parseDouble(n_latLng[0]);
+                double n_longitude = Double.parseDouble(n_latLng[1]);
+
+                Location slocation = new Location("");
+                slocation.setLatitude(s_latitude);
+                slocation.setLongitude(s_longitude);
+
+                Location nlocation = new Location("");
+                nlocation.setLatitude(n_latitude);
+                nlocation.setLongitude(n_longitude);
+
+                return slocation.distanceTo(nlocation);
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }

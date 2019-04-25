@@ -75,10 +75,24 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text=""
-                        android:layout_marginEnd="@dimen/_14sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
                         android:textSize="@dimen/_14sdp"
                         android:textColor="@color/colorPrimaryDark"
                         android:visibility="visible" />
+
+
+                    <prabhalab.client.location.login.FontAweSomeTextView
+                        android:id="@+id/logOut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/fa_power_off"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:textSize="@dimen/_14sdp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:visibility="visible" />
+
 
                 </LinearLayout>
             </LinearLayout>

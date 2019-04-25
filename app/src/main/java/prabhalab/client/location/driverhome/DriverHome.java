@@ -1,6 +1,8 @@
 package prabhalab.client.location.driverhome;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -14,12 +16,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import prabhalab.client.location.R;
 import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.Utility;
+import prabhalab.client.location.job.EndTrip;
 import prabhalab.client.location.login.FontAweSomeTextView;
+import prabhalab.client.location.login.Login;
 
 
 /**
@@ -31,6 +37,7 @@ public class DriverHome extends AppCompatActivity {
     private RelativeLayout toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    FontAweSomeTextView logOut;
 
     int backPressCount = 0;
 
@@ -57,6 +64,9 @@ public class DriverHome extends AppCompatActivity {
 
             tabLayout = findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(viewPager);
+
+
+            logOut = findViewById(R.id.logOut);
 
             String today_date   = SharedPref.getStringValue(this,Utility.AppData.today_date);
             String tomorrow_date  = SharedPref.getStringValue(this,Utility.AppData.tomorrow_date);
@@ -113,6 +123,18 @@ public class DriverHome extends AppCompatActivity {
             {
                 jobCount.setText("(" + SharedPref.getStringValue(this,Utility.AppData.today_job_count) +")" );
             }
+
+
+
+            logOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    showCustomDialog();
+                }
+            });
+
+
 
         }catch (Exception e)
         {
@@ -237,6 +259,38 @@ public class DriverHome extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
+    }
+
+
+
+    private void showCustomDialog()
+    {
+        try {
+            boolean cancelButtonFalg = false;
+            boolean cancelDialog = true;
+            String message = "Are you sure want loggout?";
+            Utility.showCustomDialogWithHeader(DriverHome.this, "BTR", message, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+                @Override                                                              //cancelButton yes r no flag
+                public void confirmed(boolean status) {  // true ok butoon
+                    try
+                    {
+                        SharedPreferences settings = getSharedPreferences(SharedPref.preferenceName, Context.MODE_PRIVATE);
+                        settings.edit().clear().apply();
+                        Toast.makeText(DriverHome.this, "Successfully logged out", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(DriverHome.this, Login.class);
+                        startActivity(i);
+                        finish();
+
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 

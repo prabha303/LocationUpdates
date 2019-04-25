@@ -56,6 +56,7 @@ public class PresentJobFragment extends Fragment  {
             {
                 no_jobs.setVisibility(View.VISIBLE);
                 todayList.setVisibility(View.GONE);
+                SharedPref.getInstance().setSharedValue(getContext(), Utility.AppData.today_job_count, "0");
             }
 
             /*if(Utility.isNotEmpty(today_jobs))

@@ -20,7 +20,7 @@
 
     <LinearLayout
         android:id="@+id/extra_amount_layout"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -373,6 +373,125 @@
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="@dimen/_12sdp" />
             </LinearLayout>
+
+
+
+            <prabhalab.client.location.CustomTextViewLight
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:textColor="@color/f56"
+                android:text="Upload Bills" />
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <prabhalab.client.location.login.FontAweSomeTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textSize="@dimen/_14sdp"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="@string/fa_upload" />
+                    <prabhalab.client.location.CustomTextViewLight
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:textColor="@color/f56"
+                        android:text="Toll" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <prabhalab.client.location.login.FontAweSomeTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_14sdp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="@string/fa_upload" />
+                    <prabhalab.client.location.CustomTextViewLight
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:textColor="@color/f56"
+                        android:text="Parking" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <prabhalab.client.location.login.FontAweSomeTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_14sdp"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="@string/fa_upload" />
+                    <prabhalab.client.location.CustomTextViewLight
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:layout_weight="1"
+                        android:textColor="@color/f56"
+                        android:text="Dutysheet" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+
+
+
+
+
+
             <mehdi.sakout.fancybuttons.FancyButton
                 android:id="@+id/go_next"
                 android:layout_width="match_parent"
@@ -448,6 +567,7 @@
             android:layout_marginBottom="@dimen/_8sdp"
             android:orientation="horizontal">
             <prabhalab.client.location.CustomTextViewLight
+                android:id="@+id/totalTime"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="left"
@@ -459,6 +579,7 @@
                 android:text="1 hour 20 min" />
 
             <prabhalab.client.location.CustomTextViewLight
+                android:id="@+id/totaKM"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="left"
@@ -689,6 +810,7 @@
             android:text="Signature" />
 
         <LinearLayout
+            android:id="@+id/signLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12sdp"
