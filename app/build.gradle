@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+
+def SOAP_ACTION = hasProperty('SOAP_ACTION') ? SOAP_ACTION : 'SOAP_ACTION'
+def BLT_BASEURL = hasProperty('BLT_BASEURL') ? BLT_BASEURL : 'BLT_BASEURL'
+def NAMESPACE = hasProperty('NAMESPACE') ? NAMESPACE : 'NAMESPACE'
+def APIKEY = hasProperty('APIKEY') ? APIKEY : 'APIKEY'
+
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -10,6 +17,12 @@ android {
         multiDexEnabled true
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField "String", "SOAP_ACTION", "\"$SOAP_ACTION\""
+        buildConfigField "String", "BLT_BASEURL", "\"$BLT_BASEURL\""
+        buildConfigField "String", "NAMESPACE", "\"$NAMESPACE\""
+        buildConfigField "String", "APIKEY", "\"$APIKEY\""
     }
     buildTypes {
         debug {

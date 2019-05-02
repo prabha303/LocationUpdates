@@ -64,7 +64,6 @@ public class PastJobAdapter extends RecyclerView.Adapter<PastJobAdapter.ViewHold
         {
             holder.flight_layout.setVisibility(View.GONE);
         }
-
     }
 
     @Override

@@ -30,12 +30,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import mehdi.sakout.fancybuttons.FancyButton;
 import prabhalab.client.location.APIEngine.JsonUtil;
+import prabhalab.client.location.BuildConfig;
 import prabhalab.client.location.JrWayDao;
 import prabhalab.client.location.LocationService;
 import prabhalab.client.location.R;
@@ -202,9 +204,9 @@ public class Login extends AppCompatActivity {
                 {
                     fcmToken = FirebaseInstanceId.getInstance().getToken();
                 }
-                String SOAP_ACTION = "http://btr-ltd.net/Webservice/ValidateUser";
-                String URL = "http://btr-ltd.net/Webservice/WebServicePartner.asmx";
-                String NAMESPACE = "http://btr-ltd.net/Webservice/";
+                String SOAP_ACTION = BuildConfig.SOAP_ACTION +"ValidateUser";
+                String URL = BuildConfig.BLT_BASEURL;
+                String NAMESPACE = BuildConfig.NAMESPACE;
                 String METHOD_NAME = "ValidateUser";
                 SoapObject soapObject = new SoapObject(NAMESPACE, METHOD_NAME);
                 soapObject.addProperty("userName",userId);
@@ -220,7 +222,10 @@ public class Login extends AppCompatActivity {
                     SoapPrimitive soapPrimitive = (SoapPrimitive)envelope.getResponse();
                     result = soapPrimitive.toString();
                     Log.d("result","--"+result);
-                } catch (Exception e) {
+                } catch(SoapFault sf){
+                    result = sf.faultstring;
+                }
+                catch (Exception e) {
                     showCustomDialog(getResources().getString(R.string.checkYourInternetConnection), true);
                     e.printStackTrace();
                 }
@@ -240,9 +245,9 @@ public class Login extends AppCompatActivity {
             {
                 try {
                     JSONObject jsnobject = new JSONObject(""+result);
-                    if(Utility.isNotEmpty(jsnobject.optString("output")) && jsnobject.optString("output").equalsIgnoreCase("false"))
+                    if(Utility.isNotEmpty(jsnobject.optString("output")) && jsnobject.optString("output").contains("Invalid"))
                     {
-                        showCustomDialog(getResources().getString(R.string.login_failed), false);
+                        showCustomDialog(""+result, false);
 
                     }else
                     {
@@ -269,8 +274,6 @@ public class Login extends AppCompatActivity {
                                         Log.d("username","- "+username);
                                     }
                                     SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.today_job_count, ""+jsonArray.length());
-                                    SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.today_date, today_date);
-
                                 }else
                                 {
                                     SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.today_job_count, "0");
@@ -280,6 +283,12 @@ public class Login extends AppCompatActivity {
                             }
                         }
 
+
+                        SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.today_date, jsnobject.optString("today_tab"));
+                        SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.yesterday_date, jsnobject.optString("past_tab"));
+                        SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.tomorrow_date, jsnobject.optString("future_tab"));
+
+
                         JrWayDao.updateUserDetails(Login.this,today_jobs);
 
                         if(Utility.isNotEmpty(username))
@@ -288,9 +297,17 @@ public class Login extends AppCompatActivity {
                         }
 
 
+                        if(Utility.isNotEmpty(jsnobject.optString("panlocations")))
+                        {
+                            SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.panlocations_data, jsnobject.optString("panlocations"));
+                        }else
+                        {
+                            SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.panlocations_data, "");
+                        }
 
 
-                        String  past_jobs = jsnobject.optString("past_jobs");
+
+                        /*String  past_jobs = jsnobject.optString("past_jobs");
                         if(Utility.isNotEmpty(""+past_jobs))
                         {
                             try {
@@ -306,9 +323,9 @@ public class Login extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        }
+                        }*/
 
-                        String future_jobs = jsnobject.optString("future_jobs");
+                        /*String future_jobs = jsnobject.optString("future_jobs");
                         if(Utility.isNotEmpty(""+future_jobs))
                         {
                             try {
@@ -318,13 +335,13 @@ public class Login extends AppCompatActivity {
                                         JobModel objectFromJson = JsonUtil.getObjectFromJson(jsonArray.getJSONObject(i), JobModel.class);
                                         tomorrow_date = objectFromJson.getPickupDate();
                                     }
-                                    SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.tomorrow_date, tomorrow_date);
+                                    //SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.tomorrow_date, tomorrow_date);
 
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        }
+                        }*/
 
 
 
@@ -392,7 +409,7 @@ public class Login extends AppCompatActivity {
             boolean cancelButtonFalg = false;
             boolean cancelDialog = true;
             //String message = getResources().getString(R.string.checkYourInternetConnection);;
-            Utility.showCustomDialogWithHeader(Login.this, "LOGOUT", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+            Utility.showCustomDialogWithHeaderNew(Login.this, "BTR", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
                 @Override                                                              //cancelButton yes r no flag
                 public void confirmed(boolean status) {  // true ok butoon
                     try

@@ -54,7 +54,7 @@ public class JrWayDao {
 
                 long  timeMillis = System.currentTimeMillis();
                 Date curDateTime = new Date(timeMillis);
-                final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM:SS");
+                final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM:SS");
                 //final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 final String dateTime = sdf.format(curDateTime);
                 ContentValues contentValues = new ContentValues();
@@ -82,7 +82,52 @@ public class JrWayDao {
 
 
 
-    public static float getPickupKM(Context context) {
+
+    public static String  getPickupKM(Context context) {
+        float t_km = 0;
+        String total_km = "0";
+        ArrayList<WayPoint> wayPointList = new ArrayList<>();
+        try
+        {
+            if (context != null) {
+                SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
+                String selectQuery = "SELECT * FROM "+ DatabaseHelper.TABLE_NAME +" WHERE "+ DatabaseHelper.jobStatus +" = '" + Utility.AppData.job_started  + "' ORDER BY cast(order_id as integer)"  +" ASC;";
+                Cursor cursor = db.rawQuery(selectQuery, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            WayPoint wayPoint = new WayPoint();
+                            wayPoint.setLatLang(cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng)));
+                            wayPointList.add(wayPoint);
+
+                        }  while (cursor.moveToNext());
+
+                    }
+                }
+
+                String nextLat = "";
+                for(int i=0; i<wayPointList.size(); i++){
+                    String latLang = wayPointList.get(i).getLatLang();
+                    if(Utility.isNotEmpty(latLang))
+                    {
+                        float distance = MainActivity.CalCulateDistance(nextLat,latLang);
+                        t_km = t_km + distance;
+                    }
+                    nextLat = latLang;
+                }
+                float totalKM = t_km/1000;
+                DecimalFormat dtime = new DecimalFormat("#.##");
+                total_km = dtime.format(totalKM);
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return total_km;
+    }
+
+
+    public static float getPickupKM1(Context context) {
 
         float t_pickup_km = 0;
         try
@@ -125,8 +170,50 @@ public class JrWayDao {
     }
 
 
+    public static String getDropKM(Context context) {
+        float t_km = 0;
+        String total_km = "";
+        ArrayList<WayPoint> wayPointList = new ArrayList<>();
+        try
+        {
+            if (context != null) {
+                SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
+                String selectQuery = "SELECT * FROM "+ DatabaseHelper.TABLE_NAME +" WHERE "+ DatabaseHelper.jobStatus +" = '" + Utility.AppData.job_pickuped  + "' ORDER BY cast(order_id as integer)"  +" ASC;";
+                Cursor cursor = db.rawQuery(selectQuery, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            WayPoint wayPoint = new WayPoint();
+                            wayPoint.setLatLang(cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng)));
+                            wayPointList.add(wayPoint);
+                        }  while (cursor.moveToNext());
+                    }
+                }
 
-    public static float getDropKM(Context context) {
+                String nextLat = "";
+                for(int i=0; i<wayPointList.size(); i++){
+                    String latLang = wayPointList.get(i).getLatLang();
+                    if(Utility.isNotEmpty(latLang))
+                    {
+                        float distance = MainActivity.CalCulateDistance(nextLat,latLang);
+                        t_km = t_km + distance;
+                    }
+                    nextLat = latLang;
+                }
+                float totalKM = t_km/1000;
+                DecimalFormat dtime = new DecimalFormat("#.##");
+                total_km = dtime.format(totalKM);
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return total_km;
+    }
+
+
+
+    public static float getDropKM1(Context context) {
 
         float t_pickup_km = 0;
         try
@@ -208,7 +295,6 @@ public class JrWayDao {
 
                 DecimalFormat dtime = new DecimalFormat("#.##");
                 total_km = dtime.format(totalKM);
-
             }
         }catch (Exception e)
         {
@@ -317,10 +403,6 @@ public class JrWayDao {
                 if(jsonArray.length() != 0){
                 for (int i =0;i<jsonArray.length();i++){
                     JobModel objectFromJson = JsonUtil.getObjectFromJson(jsonArray.getJSONObject(i), JobModel.class);
-                    long  timeMillis = System.currentTimeMillis();
-                    Date curDateTime = new Date(timeMillis);
-                    final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM");
-                    final String dateTime = sdf.format(curDateTime);
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(DatabaseHelper.ID,objectFromJson.getID());
                     contentValues.put(DatabaseHelper.PickupDate,objectFromJson.getPickupDate());
@@ -407,10 +489,29 @@ public class JrWayDao {
         return wayPointList;
     }
 
-
-    public static ArrayList<WayPoint> getAllWaypoints(Context context)
+    public void deleteTripData(Context context)
     {
-        ArrayList<WayPoint> wayPointList = new ArrayList<>();
+        try {
+
+            JrWayDao.deleteRecords(context);
+
+            SharedPref.getInstance().setSharedValue(context, Utility.AppData.trip_sheet_ref_number, "");
+            SharedPref.getInstance().setSharedValue(context, Utility.AppData.start_time, "");
+            SharedPref.getInstance().setSharedValue(context, Utility.AppData.pickup_location_latlng, "");
+            SharedPref.getInstance().setSharedValue(context, Utility.AppData.pickup_time, "");
+            SharedPref.getInstance().setSharedValue(context, Utility.AppData.trip_start_loc, "");
+            SharedPref.getInstance().setSharedValue(context, Utility.AppData.job_status, "");
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static JSONArray getAllWaypoints(Context context)
+    {
+        JSONArray jsonArray = new JSONArray();
         try
         {
             SQLiteDatabase db = DatabaseHelper.getInstance(context).getReadableDatabase();
@@ -419,16 +520,30 @@ public class JrWayDao {
             if (cursor != null && cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     do {
-                        String latlag = cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng));
-                        String address = cursor.getString(cursor.getColumnIndex(DatabaseHelper.address));
                         int order_id = cursor.getInt(cursor.getColumnIndex("order_id"));
+                        String latlag = cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng));
+                        String JobrefId = cursor.getString(cursor.getColumnIndex(DatabaseHelper.JobrefId));
+                        String DriverId = cursor.getString(cursor.getColumnIndex(DatabaseHelper.DriverId));
+                        String jobStatus = cursor.getString(cursor.getColumnIndex(DatabaseHelper.jobStatus));
+                        String ReceivedTime = cursor.getString(cursor.getColumnIndex(DatabaseHelper.ReceivedTime));
+                        String accuracy = cursor.getString(cursor.getColumnIndex(DatabaseHelper.accuracy));
+                        String speed = cursor.getString(cursor.getColumnIndex(DatabaseHelper.speed));
+                        String PlaceID = cursor.getString(cursor.getColumnIndex(DatabaseHelper.PlaceID));
+                        String address = cursor.getString(cursor.getColumnIndex(DatabaseHelper.address));
                         if(Utility.isNotEmpty(latlag))
                         {
-                            WayPoint wayPoint = new WayPoint();
-                            wayPoint.setOrder(order_id);
-                            wayPoint.setAddress(address);
-                            wayPoint.setLatLang(latlag);
-                            wayPointList.add(wayPoint);
+                            JSONObject jsonObj= new JSONObject();
+                            jsonObj.put("OrderId", order_id);
+                            jsonObj.put("JobrefId", JobrefId);
+                            jsonObj.put("DriverId", DriverId);
+                            jsonObj.put("jobStatus", jobStatus);
+                            jsonObj.put("LatLng", latlag);
+                            jsonObj.put("ReceivedTime", ReceivedTime);
+                            jsonObj.put("accuracy", accuracy);
+                            jsonObj.put("speed", speed);
+                            jsonObj.put("PlaceID", "");
+                            jsonObj.put("Address", address);
+                            jsonArray.put(jsonObj);
                         }
                     } while (cursor.moveToNext());
                 }
@@ -437,7 +552,7 @@ public class JrWayDao {
         {
             e.printStackTrace();
         }
-        return wayPointList;
+        return jsonArray;
     }
 
 

@@ -18,8 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
+
+import prabhalab.client.location.JrWayDao;
 import prabhalab.client.location.R;
 import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.Utility;
@@ -118,7 +121,16 @@ public class DriverHome extends AppCompatActivity {
             jobcarsymbol = findViewById(R.id.jobcarsymbol);
             jobCount = findViewById(R.id.jobCount);
 
-            driverName.setText("Welcome - " + SharedPref.getStringValue(this,Utility.AppData.user_name));
+
+            if(Utility.isNotEmpty(SharedPref.getStringValue(this,Utility.AppData.user_name)))
+            {
+                driverName.setText("Welcome - " + SharedPref.getStringValue(this,Utility.AppData.user_name));
+            }else
+            {
+                driverName.setText("Welcome");
+            }
+
+
             if(Utility.isNotEmpty(SharedPref.getStringValue(this,Utility.AppData.today_job_count)))
             {
                 jobCount.setText("(" + SharedPref.getStringValue(this,Utility.AppData.today_job_count) +")" );
@@ -269,13 +281,14 @@ public class DriverHome extends AppCompatActivity {
             boolean cancelButtonFalg = false;
             boolean cancelDialog = true;
             String message = "Are you sure want loggout?";
-            Utility.showCustomDialogWithHeader(DriverHome.this, "BTR", message, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+            Utility.showCustomDialogWithHeaderNew(DriverHome.this, "BTR", message, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
                 @Override                                                              //cancelButton yes r no flag
                 public void confirmed(boolean status) {  // true ok butoon
                     try
                     {
                         SharedPreferences settings = getSharedPreferences(SharedPref.preferenceName, Context.MODE_PRIVATE);
                         settings.edit().clear().apply();
+                        JrWayDao.getInstance().deleteTripData(DriverHome.this);
                         Toast.makeText(DriverHome.this, "Successfully logged out", Toast.LENGTH_LONG).show();
                         Intent i = new Intent(DriverHome.this, Login.class);
                         startActivity(i);

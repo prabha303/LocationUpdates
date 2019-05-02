@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements UpdateInterServic
         {
             long  timeMillis = System.currentTimeMillis();
             Date curDateTime = new Date(timeMillis);
-            final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM");
+            final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM");
             final String dateTime = sdf.format(curDateTime);
             mTimestamp.setText(dateTime);
             mAddress.setText(address);

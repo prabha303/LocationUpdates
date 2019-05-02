@@ -402,33 +402,53 @@
 
 
                 <LinearLayout
+                    android:id="@+id/toll_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
+
                     <prabhalab.client.location.login.FontAweSomeTextView
+                        android:id="@+id/toll_font"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:textSize="@dimen/_14sdp"
+                        android:visibility="visible"
                         android:layout_weight="1"
                         android:textColor="@color/colorPrimaryDark"
                         android:text="@string/fa_upload" />
                     <prabhalab.client.location.CustomTextViewLight
+                        android:id="@+id/toll_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:visibility="visible"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_gravity="center"
                         android:textSize="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:textColor="@color/f56"
                         android:text="Toll" />
+
+                      <ImageView
+                          android:id="@+id/toll_image"
+                          android:layout_width="match_parent"
+                          android:gravity="center"
+                          android:visibility="gone"
+                          android:layout_gravity="center"
+                          android:src="@drawable/car_icon"
+                          android:layout_height="match_parent" />
+
+
+
                 </LinearLayout>
 
 
                 <LinearLayout
+                    android:id="@+id/parking_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -455,6 +475,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/dutysheet_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -25,7 +25,7 @@ public class APIEngine {
 
 
 
-    public static String validateUser(final Context context, final String userId, final String password)
+   /* public static String validateUser(final Context context, final String userId, final String password)
     {
         new AsyncTask<Void, Void, String>()
         {
@@ -64,7 +64,7 @@ public class APIEngine {
 
         }.execute();
         return "";
-    }
+    }*/
 
 
     private class DownloadFilesTask extends AsyncTask<Void, Void, String> {

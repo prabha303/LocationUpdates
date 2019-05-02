@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import mehdi.sakout.fancybuttons.FancyButton;
 import prabhalab.client.location.job.StartTrip;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -165,6 +166,64 @@ public class Utility {
             }
         });
     }
+
+
+    public static void showCustomDialogWithHeaderNew(Context context, String  tilte, String message, String pasitiveText, String negativeText,
+                                                  boolean cancelButton, boolean cancelable, final ConfirmCallBack confirmCallBack){
+        final android.app.AlertDialog.Builder alert_dialog= new android.app.AlertDialog.Builder(context);
+        alert_dialog.setCancelable(cancelable);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final View dialogView=inflater.inflate(R.layout.custom_popup_msg, null);
+        alert_dialog.setView(dialogView);
+        final TextView popup_msg =(TextView)dialogView.findViewById(R.id.messageText);
+        final TextView tilteText =(TextView)dialogView.findViewById(R.id.tilteText);
+        final TextView popup_cancel_btn=(TextView)dialogView.findViewById(R.id.popup_cancel_btn);
+        final FancyButton popup_yes_btn = (FancyButton)dialogView.findViewById(R.id.popup_yes_btn);
+        popup_msg.setText(message);
+        popup_yes_btn.setText(pasitiveText);
+        popup_cancel_btn.setText(negativeText);
+        tilteText.setText(tilte);
+
+        // messageText  popup_cancel_btn popup_yes_btn
+        if(!cancelButton)
+        {
+            popup_cancel_btn.setVisibility(View.INVISIBLE);
+        }
+
+
+
+        final android.app.AlertDialog dialog = alert_dialog.create();
+        dialog.show();
+        popup_yes_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                try {
+                    if(confirmCallBack != null)
+                    {
+                        confirmCallBack.confirmed(true);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        popup_cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                try {
+                    if(confirmCallBack != null)
+                    {
+                        confirmCallBack.confirmed(false);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
 
     public static void showSuccessPopup(Context context, String  tilte, String message, String pasitiveText, String negativeText,
@@ -319,9 +378,6 @@ public class Utility {
         String start_time = "start_time";
         String pickup_location_latlng = "pickup_location_latlng";
         String pickup_time = "pickup_time";
-
-
-
         String trip_start_loc = "trip_start_loc";
 
         String job_started = "started";
@@ -340,6 +396,8 @@ public class Utility {
         String today_date = "today_date";
         String yesterday_date = "yesterday_date";
         String tomorrow_date = "tomorrow_date";
+
+        String panlocations_data = "panlocations";
     }
 
 

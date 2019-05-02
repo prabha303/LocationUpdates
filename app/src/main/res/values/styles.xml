@@ -27,6 +27,13 @@
         <item name="android:layout_marginTop">210dp</item>
     </style>
 
+    <style name="customSpinnerTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">#eaeaea</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+    </style>
+
+
 
     <style name="Full_Screen" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>

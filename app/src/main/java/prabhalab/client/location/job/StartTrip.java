@@ -1,10 +1,12 @@
 package prabhalab.client.location.job;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -17,10 +19,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,24 +44,35 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import mehdi.sakout.fancybuttons.FancyButton;
+import prabhalab.client.location.APIEngine.JsonUtil;
+import prabhalab.client.location.BuildConfig;
 import prabhalab.client.location.JrWayDao;
 import prabhalab.client.location.LocationService;
 import prabhalab.client.location.MainActivity;
+import prabhalab.client.location.PanLocationsPojo;
 import prabhalab.client.location.R;
 import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.UpdateInterService;
 import prabhalab.client.location.Utility;
+import prabhalab.client.location.WayPoint;
 import prabhalab.client.location.driverhome.JobModel;
+import prabhalab.client.location.login.Login;
+
 import static prabhalab.client.location.Utility.AppData.job_pickuped;
 import static prabhalab.client.location.Utility.AppData.job_started;
 
@@ -70,12 +89,17 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
     String vehicleRegistrationNumber="",pickupAddress = "", dropAddress="",job_Id = "", FlightNumber ="", jobStatus = "";
     private GoogleMap googleMap;
     static  LatLng pickip_point = null;
+    static  LatLng drop_point = null;
     static  Marker pickip_point_marker = null;
+    static  Marker drop_point_marker = null;
     Marker marker = null;
     SupportMapFragment supportMapFragment;
     FancyButton start_trip,end_trip, pick_up;
+    String  panLocationsId = "";
     EditText trip_sheet_ref;
     ImageView navigation;
+    Spinner panlocation_spinner;
+    ArrayList<PanLocationsPojo> panLocationsPojoArrayList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +118,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
 
             String savedJobId = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_Id);
 
-            if(Utility.isNotEmpty(jobStatus) && Utility.isNotEmpty(savedJobId) && job_Id.equalsIgnoreCase(savedJobId))
+            if(Utility.isNotEmpty(savedJobId) && job_Id.equalsIgnoreCase(savedJobId))
             {
                 jobStatus = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_status);
 
@@ -106,8 +130,19 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             Utility.getInstance().stayScreenOn(this);
             loadingMapview();
 
-            getLocationFromAddress(pickupAddress);
+            if(Utility.isNotEmpty(jobStatus))
+            {
+                if(Utility.isNotEmpty(pickupAddress))
+                {
+                    getLocationFromAddress(pickupAddress,0);
+                }
 
+                if(Utility.isNotEmpty(dropAddress))
+                {
+                    getLocationFromAddress(dropAddress,1);
+                }
+
+            }
 
 
         }catch (Exception e)
@@ -120,7 +155,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
     {
 
         String savedJobId = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_Id);
-        if(Utility.isNotEmpty(jobStatus) && Utility.isNotEmpty(savedJobId) && job_Id.equalsIgnoreCase(savedJobId))
+        if(Utility.isNotEmpty(savedJobId) && job_Id.equalsIgnoreCase(savedJobId))
         {
             String trip_sheet_ref_number = SharedPref.getStringValue(StartTrip.this, Utility.AppData.trip_sheet_ref_number);
             if(Utility.isNotEmpty(trip_sheet_ref_number))
@@ -156,6 +191,69 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         pick_up = findViewById(R.id.pick_up);
         trip_sheet_ref = findViewById(R.id.trip_sheet_ref);
         navigation = findViewById(R.id.navigation);
+
+        panlocation_spinner = findViewById(R.id.panlocation_spinner);
+
+
+        String panlocations_data = SharedPref.getStringValue(StartTrip.this, Utility.AppData.panlocations_data);
+        if(Utility.isNotEmpty(panlocations_data))
+        {
+            try {
+                JSONArray jsonArray = new JSONArray(""+panlocations_data);
+                if(jsonArray.length() != 0){
+                    panLocationsPojoArrayList = new ArrayList<>();
+
+                    PanLocationsPojo panLocation = new PanLocationsPojo();
+                    panLocation.setName("Select location");
+                    panLocation.setID("");
+                    panLocationsPojoArrayList.add(panLocation);
+
+                    for (int i =0;i<jsonArray.length();i++){
+                        PanLocationsPojo panLocationsPojo = new PanLocationsPojo();
+                        PanLocationsPojo objectFromJson = JsonUtil.getObjectFromJson(jsonArray.getJSONObject(i), PanLocationsPojo.class);
+                        panLocationsPojo.setID(objectFromJson.getID());
+                        panLocationsPojo.setName(objectFromJson.getName());
+                        panLocationsPojoArrayList.add(panLocationsPojo);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            Log.d("panLocationsPojo",""+panLocationsPojoArrayList.size());
+
+            PanLocationListAdapter spinnerAdapter = new PanLocationListAdapter(StartTrip.this, R.layout.spinner_row,panLocationsPojoArrayList);
+            panlocation_spinner.setAdapter(spinnerAdapter);
+
+            panlocation_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            {
+                @Override
+                public void onItemSelected(AdapterView<?> adapter, View v, int position, long id)
+                {
+                    try
+                    {
+                        String displayName =  panLocationsPojoArrayList.get(position).getName();
+                        panLocationsId =  panLocationsPojoArrayList.get(position).getID();
+                        Log.d("displayName","-"+displayName);
+                        Log.d("selectedId","-"+panLocationsId);
+                        hideKeyboard(StartTrip.this);
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0)
+                {
+
+
+                }
+            });
+
+
+
+        }
 
         start_trip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,7 +292,20 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         navigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri gmmIntentUri = Uri.parse("google.navigation:q="+pickupAddress);
+
+                String  address = "";
+                if(jobStatus.equalsIgnoreCase(job_started))
+                {
+                    address = pickupAddress;
+                }else
+                {
+                    address = dropAddress;
+                }
+
+
+
+
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+address);
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 //mapIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);//\To remove this app from recent task when moved to driver app.
                 mapIntent.setPackage("com.google.android.apps.maps");
@@ -212,7 +323,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         TextView my_toolbar_title = findViewById(R.id.my_toolbar_title);
         TextView vehicle_reg = findViewById(R.id.vehicle_reg);
         Toolbar toolbar = findViewById(R.id.my_toolbar);
-        TextView billing_location = findViewById(R.id.billing_location);
+        //TextView billing_location = findViewById(R.id.billing_location);
         setSupportActionBar(toolbar);
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -224,7 +335,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         }
         my_toolbar_title.setText("BTR Ref #"+job_Id);
         vehicle_reg.setText(vehicleRegistrationNumber);
-        billing_location.setText(pickupAddress);
+        //billing_location.setText(pickupAddress);
     }
 
 
@@ -244,7 +355,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         jobStatus = job_pickuped;
         long  timeMillis = System.currentTimeMillis();
         Date curDateTime = new Date(timeMillis);
-        final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM");
+        final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM");
         final String pickupTime = sdf.format(curDateTime);
 
         SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.pickup_location_latlng, Utility.getLatLng(StartTrip.this));
@@ -254,7 +365,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         showButton();
 
         Toast.makeText(StartTrip.this, "Successfully pickedup!", Toast.LENGTH_LONG).show();
-
+        hideKeyboard(StartTrip.this);
     }
 
 
@@ -332,7 +443,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
     }
 
 
-    private void setMarker(Location location)
+    /*private void setMarker(Location location)
     {
         if (location != null) {
 
@@ -380,23 +491,11 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
 
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
             }
-
-
-
-
-
-
-
-
-
-
-
-
         }
-    }
+    }*/
 
 
-    public void getLocationFromAddress(final String strAddress) {
+    public void getLocationFromAddress(final String strAddress, final int points) {
 
         try
         {
@@ -415,8 +514,14 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                             return null;
                         }
                         Address location = address.get(0);
-                        pickip_point = new LatLng(location.getLatitude(), location.getLongitude());
 
+                        if(points == 0)
+                        {
+                            pickip_point = new LatLng(location.getLatitude(), location.getLongitude());
+                        }else
+                        {
+                            drop_point = new LatLng(location.getLatitude(), location.getLongitude());
+                        }
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
@@ -446,34 +551,77 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
 
         if(location != null)
         {
+
+            String savedJobId = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_Id);
+            if(Utility.isNotEmpty(savedJobId) && job_Id.equalsIgnoreCase(savedJobId))
+            {
+                jobStatus = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_status);
+            }
+
+
             MarkerOptions options = new MarkerOptions().position(new LatLng(location.getLatitude(),location.getLongitude())).icon(BitmapDescriptorFactory.fromResource(R.drawable.car_icon));
             marker = googleMap.addMarker(options);
+
+
+            int padding = Utility.convertDpToPixel(40);
+
+
+
             if(Utility.isNotEmpty(jobStatus) && (jobStatus.equalsIgnoreCase(job_started) || jobStatus.equalsIgnoreCase(job_pickuped)))
             {
-                if(pickip_point != null)
+                if(jobStatus.equalsIgnoreCase(job_started))
                 {
-                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    builder.include(marker.getPosition());
-                    builder.include(pickip_point);
-                    MarkerOptions options_dest = new MarkerOptions().position(pickip_point).title(pickupAddress);
-                    pickip_point_marker = googleMap.addMarker(options_dest);
-                    LatLngBounds bounds = builder.build();
-                    int width = getResources().getDisplayMetrics().widthPixels;
-                    int height = getResources().getDisplayMetrics().heightPixels;
-                    //int padding = (int) (width * 0.05); // offset from edges of the map 10% of screen
+                    if(pickip_point != null)
+                    {
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        builder.include(marker.getPosition());
+                        MarkerOptions options_dest = new MarkerOptions().position(pickip_point).title(pickupAddress);
+                        builder.include(pickip_point);
+                        pickip_point_marker = googleMap.addMarker(options_dest);
+                        LatLngBounds bounds = builder.build();
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,  padding);
+                        googleMap.animateCamera(cu);
+
+                    }else
+                    {
+                        getLocationFromAddress(pickupAddress,0);
+                        CameraPosition cameraPosition1 = new CameraPosition.Builder()
+                                .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                                .zoom(15)                   // Sets the zoom
+                                .bearing(0)// Sets the orientation of the camera to north /\  0 is east.
+                                .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                                .build();
+
+                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
+                    }
 
 
-                    int padding = Utility.convertDpToPixel(40); // offset from edges of the map in pixels
-
-
-                    //CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
-                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,  padding);
-                    googleMap.animateCamera(cu);
-
-
-                }else
+                }else if (jobStatus.equalsIgnoreCase(job_pickuped))
                 {
-                    getLocationFromAddress(pickupAddress);
+                    if(drop_point != null)
+                    {
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        builder.include(marker.getPosition());
+                        MarkerOptions options_dest = new MarkerOptions().position(drop_point).title(dropAddress);
+                        builder.include(drop_point);
+                        drop_point_marker = googleMap.addMarker(options_dest);
+                        LatLngBounds bounds = builder.build();
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,  padding);
+                        googleMap.animateCamera(cu);
+                    }else
+                    {
+                        getLocationFromAddress(dropAddress,1);
+                        CameraPosition cameraPosition1 = new CameraPosition.Builder()
+                                .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                                .zoom(15)                   // Sets the zoom
+                                .bearing(0)// Sets the orientation of the camera to north /\  0 is east.
+                                .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                                .build();
+
+                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
+                    }
+
+                }else{
                     CameraPosition cameraPosition1 = new CameraPosition.Builder()
                             .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
                             .zoom(15)                   // Sets the zoom
@@ -516,9 +664,9 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             String result = "";
             try
             {
-                String SOAP_ACTION = "http://btr-ltd.net/Webservice/StartJourney";
-                String URL = "http://btr-ltd.net/Webservice/WebServicePartner.asmx";
-                String NAMESPACE = "http://btr-ltd.net/Webservice/";
+                String SOAP_ACTION = BuildConfig.SOAP_ACTION +"StartJourney";
+                String URL = BuildConfig.BLT_BASEURL;
+                String NAMESPACE = BuildConfig.NAMESPACE;
                 String METHOD_NAME = "StartJourney";
                 SoapObject soapObject = new SoapObject(NAMESPACE, METHOD_NAME);
                 soapObject.addProperty("jobID",refId);
@@ -527,6 +675,9 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                 soapObject.addProperty("tripSheetRef",tripSheetRef);
                 soapObject.addProperty("vehicleRegistration",vehicleRegistrationNumber);
                 soapObject.addProperty("journeystartdatetime",getStartTime());
+                soapObject.addProperty("username", SharedPref.getStringValue(StartTrip.this, Utility.AppData.user_id));
+                soapObject.addProperty("password",SharedPref.getStringValue(StartTrip.this, Utility.AppData.password));
+
                 SoapSerializationEnvelope envelope =  new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
                 envelope.setOutputSoapObject(soapObject);
@@ -536,8 +687,11 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                     SoapPrimitive soapPrimitive = (SoapPrimitive)envelope.getResponse();
                     result = soapPrimitive.toString();
                     Log.d("result","--"+result);
-                } catch (Exception e) {
-                    showCustomDialog(getResources().getString(R.string.checkYourInternetConnection), false);
+                }catch(SoapFault sf){
+                    result = sf.faultstring;
+                }
+                catch (Exception e) {
+                    result = e.getMessage();
                     e.printStackTrace();
                 }
                 Utility.getInstance().closeLoadingDialog();
@@ -557,6 +711,8 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                 if (Utility.isJSONValid(result.toString()))
                 {
 
+                    JrWayDao.deleteRecords(StartTrip.this);
+
                     SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.job_status, job_started);
                     SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.trip_start_loc, CurrentLocation);
                     jobStatus = job_started;
@@ -565,10 +721,6 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                     long  timeMillis = System.currentTimeMillis();
                     SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.start_time, ""+timeMillis);
 
-
-
-
-
                     showButton();
 
                     Toast.makeText(StartTrip.this, "Successfully started!", Toast.LENGTH_LONG).show();
@@ -576,13 +728,38 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
 
                 }else
                 {
-                    showCustomDialog(result.toString(), false);
+
+                    showCustomDialog(""+result, false);
                 }
 
             }else
             {
-                showCustomDialog(getResources().getString(R.string.checkYourInternetConnection), false);
+                result = getResources().getString(R.string.checkYourInternetConnection);
+                showCustomDialog(""+result, false);
             }
+
+
+            hideKeyboard(StartTrip.this);
+        }
+    }
+
+
+    public static void hideKeyboard(Activity activity) {
+
+        try
+        {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            //Find the currently focused view, so we can grab the correct window token from it.
+            View view = activity.getCurrentFocus();
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+            if (view == null) {
+                view = new View(activity);
+            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -594,7 +771,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         {
             long  timeMillis = System.currentTimeMillis();
             Date curDateTime = new Date(timeMillis);
-            final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY HH:MM");
+            final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM");
             return  sdf.format(curDateTime);
         }catch (Exception e)
         {
@@ -609,7 +786,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             boolean cancelButtonFalg = false;
             boolean cancelDialog = true;
             //String message = getResources().getString(R.string.checkYourInternetConnection);;
-            Utility.showCustomDialogWithHeader(StartTrip.this, "BTR", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+            Utility.showCustomDialogWithHeaderNew(StartTrip.this, "BTR", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
                 @Override                                                              //cancelButton yes r no flag
                 public void confirmed(boolean status) {  // true ok butoon
                     try
@@ -638,13 +815,12 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             boolean cancelButtonFalg = false;
             boolean cancelDialog = true;
             //String message = getResources().getString(R.string.checkYourInternetConnection);;
-            Utility.showCustomDialogWithHeader(StartTrip.this, "Confirmation", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+            Utility.showCustomDialogWithHeaderNew(StartTrip.this, "Confirmation", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
                 @Override                                                              //cancelButton yes r no flag
                 public void confirmed(boolean status) {  // true ok butoon
                     try
                     {
-
-                            startTrip();
+                        startTrip();
 
                     } catch (Exception e)
                     {
@@ -656,8 +832,9 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         {
             e.printStackTrace();
         }
-
     }
+
+
 
     private void showPicup()
     {
@@ -665,13 +842,11 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             String  msg = "Are you sure in pickup point?";
             boolean cancelButtonFalg = false;
             boolean cancelDialog = true;
-            //String message = getResources().getString(R.string.checkYourInternetConnection);;
-            Utility.showCustomDialogWithHeader(StartTrip.this, "Confirmation", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+            Utility.showCustomDialogWithHeaderNew(StartTrip.this, "Confirmation", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
                 @Override                                                              //cancelButton yes r no flag
                 public void confirmed(boolean status) {  // true ok butoon
                     try
                     {
-
                         picupCustomer();
 
                     } catch (Exception e)
@@ -684,7 +859,6 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         {
             e.printStackTrace();
         }
-
     }
 
 
@@ -693,10 +867,19 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
     {
         try
         {
-            Intent i = new Intent(StartTrip.this, EndTrip.class);
-            i.putExtra("refId",job_Id);
-            i.putExtra("FlightNumber",FlightNumber);
-            startActivityForResult(i, 100);
+
+            if(Utility.isNotEmpty(panLocationsId))
+            {
+                Intent i = new Intent(StartTrip.this, EndTrip.class);
+                i.putExtra("refId",job_Id);
+                i.putExtra("FlightNumber",FlightNumber);
+                i.putExtra("panLocationsId",panLocationsId);
+                startActivityForResult(i, 100);
+            }else
+            {
+                Toast.makeText(StartTrip.this, "Please select location" , Toast.LENGTH_LONG).show();
+            }
+
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -710,7 +893,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             boolean cancelButtonFalg = false;
             boolean cancelDialog = true;
             //String message = getResources().getString(R.string.checkYourInternetConnection);;
-            Utility.showCustomDialogWithHeader(StartTrip.this, "Confirmation", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+            Utility.showCustomDialogWithHeaderNew(StartTrip.this, "Confirmation", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
                 @Override                                                              //cancelButton yes r no flag
                 public void confirmed(boolean status) {  // true ok butoon
                     try

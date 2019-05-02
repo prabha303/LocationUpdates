@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import prabhalab.client.location.R;
+import prabhalab.client.location.SharedPref;
 import prabhalab.client.location.Utility;
 import prabhalab.client.location.job.StartTrip;
 
@@ -75,6 +76,25 @@ public class CurrentJobAdapter extends RecyclerView.Adapter<CurrentJobAdapter.Vi
             holder.flight_layout.setVisibility(View.GONE);
         }
 
+
+        String savedJobId = SharedPref.getStringValue(context, Utility.AppData.job_Id);
+
+        if(Utility.isNotEmpty(savedJobId) && Utility.isNotEmpty(pastJobModel.get(position).getID()) && pastJobModel.get(position).getID().equalsIgnoreCase(savedJobId))
+        {
+            holder.status_layout.setVisibility(View.VISIBLE);
+            String job_status = SharedPref.getStringValue(context, Utility.AppData.job_status);
+            if(Utility.isNotEmpty(job_status))
+            {
+                holder.status.setText(job_status);
+            }else
+            {
+                holder.status_layout.setVisibility(View.GONE);
+            }
+        }else
+        {
+            holder.status_layout.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -87,8 +107,9 @@ public class CurrentJobAdapter extends RecyclerView.Adapter<CurrentJobAdapter.Vi
      */
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView passangerName,jobDateTime,flight_number,pickupAddress, dropAddress,order_id,order_time;
-        LinearLayout flight_layout;
+        TextView passangerName,jobDateTime,flight_number,pickupAddress, dropAddress,order_id,order_time,status;
+
+        LinearLayout flight_layout,status_layout;
         CardView job_layout;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -102,6 +123,8 @@ public class CurrentJobAdapter extends RecyclerView.Adapter<CurrentJobAdapter.Vi
             order_time =  itemView.findViewById(R.id.order_time);
             flight_number =  itemView.findViewById(R.id.flight_number);
             flight_layout =  itemView.findViewById(R.id.flight_layout);
+            status_layout =  itemView.findViewById(R.id.status_layout);
+            status =  itemView.findViewById(R.id.status);
         }
     }
 
