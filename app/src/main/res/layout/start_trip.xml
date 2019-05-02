@@ -40,7 +40,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal">
 
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -50,7 +50,7 @@
                     android:textColor="@color/f56"
                     android:text="Vehicle Reg: " />
 
-                <prabhalab.client.location.CustomTextViewLight
+                <in.vendor.rides.CustomTextViewLight
                     android:id="@+id/vehicle_reg"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -73,7 +73,7 @@
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:orientation="vertical">
 
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -112,7 +112,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:orientation="vertical">
 
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -122,7 +122,7 @@
                     android:textColor="@color/f56"
                     android:text="Billing location" />
 
-                <!--<prabhalab.client.location.CustomTextViewLight
+                <!--<in.vendor.rides.CustomTextViewLight
                     android:id="@+id/billing_location"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

@@ -21,7 +21,7 @@
        android:padding="@dimen/_3sdp"
        android:layout_height="wrap_content">
 
-       <prabhalab.client.location.CustomTextViewRegular
+       <in.vendor.rides.CustomTextViewRegular
            android:id="@+id/latitude_label"
            android:layout_width="0dp"
            android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
            android:text="@string/latitude"
            style="@style/CustomLabel"/>
 
-       <prabhalab.client.location.CustomTextViewRegular
+       <in.vendor.rides.CustomTextViewRegular
            android:id="@+id/latitude_value"
            android:layout_width="0dp"
            android:layout_weight="2.5"
@@ -46,7 +46,7 @@
         android:padding="@dimen/_3sdp"
         android:layout_height="wrap_content">
 
-        <prabhalab.client.location.CustomTextViewRegular
+        <in.vendor.rides.CustomTextViewRegular
             android:id="@+id/longitude_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             android:text="@string/longitude"
             style="@style/CustomLabel"/>
 
-        <prabhalab.client.location.CustomTextViewRegular
+        <in.vendor.rides.CustomTextViewRegular
             android:id="@+id/longitude_value"
             android:layout_width="0dp"
             android:layout_weight="2.5"
@@ -69,7 +69,7 @@
         android:padding="@dimen/_3sdp"
         android:layout_height="wrap_content">
 
-        <prabhalab.client.location.CustomTextViewRegular
+        <in.vendor.rides.CustomTextViewRegular
             android:id="@+id/timestamp_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             android:text="@string/timestamp"
             style="@style/CustomLabel"/>
 
-        <prabhalab.client.location.CustomTextViewRegular
+        <in.vendor.rides.CustomTextViewRegular
             android:id="@+id/timestamp_value"
             android:layout_width="0dp"
             android:layout_weight="2.5"
@@ -94,7 +94,7 @@
         android:padding="@dimen/_3sdp"
         android:layout_height="wrap_content">
 
-        <prabhalab.client.location.CustomTextViewRegular
+        <in.vendor.rides.CustomTextViewRegular
             android:id="@+id/address_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
             android:text="@string/address"
             style="@style/CustomLabel"/>
 
-        <prabhalab.client.location.CustomTextViewRegular
+        <in.vendor.rides.CustomTextViewRegular
             android:id="@+id/address_value"
             android:layout_width="0dp"
             android:layout_weight="2.5"
@@ -168,7 +168,7 @@
 
 
 
-    <prabhalab.client.location.CustomTextViewRegular
+    <in.vendor.rides.CustomTextViewRegular
         android:id="@+id/lastTripKM"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_width="match_parent"
@@ -180,7 +180,7 @@
         android:text="" />
 
 
-    <prabhalab.client.location.CustomTextViewRegular
+    <in.vendor.rides.CustomTextViewRegular
         android:id="@+id/status"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_width="match_parent"

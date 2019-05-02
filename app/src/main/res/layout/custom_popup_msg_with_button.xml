@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="5dp">
-            <prabhalab.client.location.CustomTextView
+            <in.vendor.rides.CustomTextView
                 android:id="@+id/tilteText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 android:background="@color/cardview_shadow_start_color" />
 
 
-            <prabhalab.client.location.CustomTextViewLight
+            <in.vendor.rides.CustomTextViewLight
                 android:id="@+id/messageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:id="@+id/popup_cancel_btn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -104,7 +104,7 @@
                     android:layout_height="35dp"
                     android:background="@color/f9" />
 
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:id="@+id/popup_yes_btn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

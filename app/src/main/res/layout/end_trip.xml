@@ -37,7 +37,7 @@
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal">
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -48,7 +48,7 @@
                     android:textColor="@color/f56"
                     android:text="Waiting" />
 
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -119,7 +119,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:orientation="horizontal">
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -129,7 +129,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/f56"
                     android:text="Toll / CC" />
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -193,7 +193,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:orientation="horizontal">
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -204,7 +204,7 @@
                     android:textColor="@color/f56"
                     android:text="Phone" />
 
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -268,7 +268,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:orientation="horizontal">
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -278,7 +278,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/f56"
                     android:text="Service Charge" />
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="left"
@@ -343,7 +343,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:orientation="vertical">
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
@@ -376,7 +376,7 @@
 
 
 
-            <prabhalab.client.location.CustomTextViewLight
+            <in.vendor.rides.CustomTextViewLight
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
@@ -409,7 +409,7 @@
                     android:orientation="vertical">
 
 
-                    <prabhalab.client.location.login.FontAweSomeTextView
+                    <in.vendor.rides.login.FontAweSomeTextView
                         android:id="@+id/toll_font"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -420,7 +420,7 @@
                         android:layout_weight="1"
                         android:textColor="@color/colorPrimaryDark"
                         android:text="@string/fa_upload" />
-                    <prabhalab.client.location.CustomTextViewLight
+                    <in.vendor.rides.CustomTextViewLight
                         android:id="@+id/toll_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -453,7 +453,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
-                    <prabhalab.client.location.login.FontAweSomeTextView
+                    <in.vendor.rides.login.FontAweSomeTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -461,7 +461,7 @@
                         android:textSize="@dimen/_14sdp"
                         android:textColor="@color/colorPrimaryDark"
                         android:text="@string/fa_upload" />
-                    <prabhalab.client.location.CustomTextViewLight
+                    <in.vendor.rides.CustomTextViewLight
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -480,7 +480,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
-                    <prabhalab.client.location.login.FontAweSomeTextView
+                    <in.vendor.rides.login.FontAweSomeTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -489,7 +489,7 @@
                         android:layout_weight="1"
                         android:textColor="@color/colorPrimaryDark"
                         android:text="@string/fa_upload" />
-                    <prabhalab.client.location.CustomTextViewLight
+                    <in.vendor.rides.CustomTextViewLight
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -556,7 +556,7 @@
             android:layout_marginBottom="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:orientation="horizontal">
-            <prabhalab.client.location.CustomTextView
+            <in.vendor.rides.CustomTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="left"
@@ -567,7 +567,7 @@
                 android:textColor="@color/f56"
                 android:text="Trip Duration" />
 
-            <prabhalab.client.location.CustomTextView
+            <in.vendor.rides.CustomTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="left"
@@ -587,7 +587,7 @@
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_8sdp"
             android:orientation="horizontal">
-            <prabhalab.client.location.CustomTextViewLight
+            <in.vendor.rides.CustomTextViewLight
                 android:id="@+id/totalTime"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -599,7 +599,7 @@
                 android:textColor="@color/f56"
                 android:text="1 hour 20 min" />
 
-            <prabhalab.client.location.CustomTextViewLight
+            <in.vendor.rides.CustomTextViewLight
                 android:id="@+id/totaKM"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -613,7 +613,7 @@
         </LinearLayout>
 
 
-        <prabhalab.client.location.CustomTextView
+        <in.vendor.rides.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -635,7 +635,7 @@
             android:layout_marginBottom="@dimen/_4sdp"
             android:layout_marginTop="@dimen/_4sdp"
             android:orientation="horizontal">
-            <prabhalab.client.location.CustomTextViewLight
+            <in.vendor.rides.CustomTextViewLight
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="left"
@@ -681,7 +681,7 @@
             android:gravity="center|left"
             android:layout_marginTop="@dimen/_4sdp"
             android:orientation="horizontal">
-            <prabhalab.client.location.CustomTextViewLight
+            <in.vendor.rides.CustomTextViewLight
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -733,7 +733,7 @@
             android:gravity="center|left"
             android:layout_marginTop="@dimen/_4sdp"
             android:orientation="horizontal">
-            <prabhalab.client.location.CustomTextViewLight
+            <in.vendor.rides.CustomTextViewLight
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -782,7 +782,7 @@
             android:gravity="center|left"
             android:layout_marginTop="@dimen/_4sdp"
             android:orientation="horizontal">
-            <prabhalab.client.location.CustomTextViewLight
+            <in.vendor.rides.CustomTextViewLight
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -818,7 +818,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <prabhalab.client.location.CustomTextView
+        <in.vendor.rides.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -856,7 +856,7 @@
                 app:cardPreventCornerOverlap="true"
                 card_view:cardUseCompatPadding="true">
 
-                <prabhalab.client.location.job.DrawingView
+                <in.vendor.rides.job.DrawingView
                     android:id="@+id/drawing"
                     android:background="@color/white"
                     android:layout_width="match_parent"

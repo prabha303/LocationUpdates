@@ -7,14 +7,14 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <prabhalab.client.location.login.FontAweSomeTextView
+    <in.vendor.rides.login.FontAweSomeTextView
         android:id="@+id/tabImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fa_calendar"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/_12sdp" />
-    <prabhalab.client.location.CustomTextView
+    <in.vendor.rides.CustomTextView
         android:id="@+id/tabTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -10,7 +10,7 @@ def APIKEY = hasProperty('APIKEY') ? APIKEY : 'APIKEY'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "prabhalab.client.location"
+        applicationId "in.vendor.rides"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 5

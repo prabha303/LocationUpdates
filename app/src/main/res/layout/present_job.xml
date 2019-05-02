@@ -15,7 +15,7 @@
 
 
 
-       <prabhalab.client.location.CustomTextView
+       <in.vendor.rides.CustomTextView
            android:id="@+id/no_jobs"
            android:layout_width="match_parent"
            android:text="No Jobs"

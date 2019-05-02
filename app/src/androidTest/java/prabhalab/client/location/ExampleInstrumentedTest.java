@@ -1,4 +1,4 @@
-package prabhalab.client.location;
+package in.vendor.rides;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("prabhalab.client.location", appContext.getPackageName());
+        assertEquals("in.vendor.rides", appContext.getPackageName());
     }
 }

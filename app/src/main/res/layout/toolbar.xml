@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <prabhalab.client.location.CustomTextViewRegular
+            <in.vendor.rides.CustomTextViewRegular
                 android:id="@+id/my_toolbar_title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

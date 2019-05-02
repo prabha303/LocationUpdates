@@ -28,7 +28,7 @@
                 android:background="@color/colorPrimary"
                 android:padding="@dimen/_6sdp"
                 android:orientation="vertical" >
-                <prabhalab.client.location.CustomTextView
+                <in.vendor.rides.CustomTextView
                     android:id="@+id/tilteText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 android:layout_marginRight="@dimen/_16sdp"
                 android:layout_marginLeft="@dimen/_16sdp"
                 android:orientation="vertical">
-                <prabhalab.client.location.CustomTextViewLight
+                <in.vendor.rides.CustomTextViewLight
                     android:id="@+id/messageText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal"
                 android:layout_height="wrap_content" >
-                <prabhalab.client.location.CustomTextViewLight
+                <in.vendor.rides.CustomTextViewLight
                     android:id="@+id/popup_cancel_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

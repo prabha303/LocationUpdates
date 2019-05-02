@@ -100,7 +100,7 @@
             fancy:fb_textColor="#FFFFFF" />
 
 
-        <prabhalab.client.location.CustomTextViewRegular
+        <in.vendor.rides.CustomTextViewRegular
             android:id="@+id/textViewLinkRegister"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

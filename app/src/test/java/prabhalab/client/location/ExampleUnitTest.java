@@ -1,4 +1,4 @@
-package prabhalab.client.location;
+package in.vendor.rides;
 
 import org.junit.Test;
 
