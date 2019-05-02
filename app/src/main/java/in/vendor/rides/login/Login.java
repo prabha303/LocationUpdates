@@ -369,6 +369,7 @@ public class Login extends AppCompatActivity {
 
 
                 } catch (JSONException e) {
+                    showCustomDialog(""+result, false);
                     e.printStackTrace();
                 }
 
