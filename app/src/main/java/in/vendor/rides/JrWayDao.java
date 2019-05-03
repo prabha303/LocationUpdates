@@ -54,7 +54,7 @@ public class JrWayDao {
 
                 long  timeMillis = System.currentTimeMillis();
                 Date curDateTime = new Date(timeMillis);
-                final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM:SS");
+                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
                 //final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 final String dateTime = sdf.format(curDateTime);
                 ContentValues contentValues = new ContentValues();

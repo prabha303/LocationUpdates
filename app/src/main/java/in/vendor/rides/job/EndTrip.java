@@ -845,7 +845,7 @@ public class EndTrip extends AppCompatActivity {
     {
         long  timeMillis = System.currentTimeMillis();
         Date curDateTime = new Date(timeMillis);
-        final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM");
         return  sdf.format(curDateTime);
     }
 
@@ -874,7 +874,7 @@ public class EndTrip extends AppCompatActivity {
     {
         String start_time = SharedPref.getStringValue(EndTrip.this, Utility.AppData.start_time);
         Date curDateTime = new Date(Long.parseLong(start_time));
-        final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM");
         final String startTime = sdf.format(curDateTime);
 
         if(Utility.isNotEmpty(startTime))

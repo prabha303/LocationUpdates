@@ -355,7 +355,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         jobStatus = job_pickuped;
         long  timeMillis = System.currentTimeMillis();
         Date curDateTime = new Date(timeMillis);
-        final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM");
         final String pickupTime = sdf.format(curDateTime);
 
         SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.pickup_location_latlng, Utility.getLatLng(StartTrip.this));
@@ -771,7 +771,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         {
             long  timeMillis = System.currentTimeMillis();
             Date curDateTime = new Date(timeMillis);
-            final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:MM");
+            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM");
             return  sdf.format(curDateTime);
         }catch (Exception e)
         {
