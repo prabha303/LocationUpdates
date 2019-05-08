@@ -302,7 +302,7 @@ public class LocationService extends Service implements UpdateInterService {
             {
                 long  timeMillis = System.currentTimeMillis();
                 Date curDateTime = new Date(timeMillis);
-                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM");
+                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 final String dateTime = sdf.format(curDateTime);
                 LocationService.driverLocation = new DriverLocation();
                 LocationService.driverLocation.setCLatLng(new LatLng(location.getLatitude(),location.getLongitude()));

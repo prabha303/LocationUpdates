@@ -92,7 +92,7 @@ import static in.vendor.rides.Utility.AppData.job_started;
 public class EndTrip extends AppCompatActivity {
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String TAG = EndTrip.class.getSimpleName();
-    String FlightNumber="", job_Id = "",panLocationsId = "";
+    String FlightNumber="", job_Id = "",panLocationsId = "", totalKM = "",dropKM = "", pickUpKM= "";
     LinearLayout signLayout,checklist_layout,extra_amount_layout;
     EditText waiting_amount, parking_amount,toll_cc_amount,amendment_amount,phone_amount,others_amount,service_charge_amt,notes;
     FancyButton go_next,submit,go_back,clear_sign;
@@ -400,29 +400,27 @@ public class EndTrip extends AppCompatActivity {
         endTripPojo.setWayPointList(""+watPoints);
         endTripPojo.setStartingKm("1");
 
-        String  pickUpKm = JrWayDao.getPickupKM(EndTrip.this);
+        String  pickUpKm = pickUpKM;
         if(!Utility.isNotEmpty(pickUpKm))
         {
-            pickUpKm = "0";
+            pickUpKm = JrWayDao.getPickupKM(EndTrip.this);
         }
-        String  dropKm = JrWayDao.getDropKM(EndTrip.this);
+        String dropKm = dropKM;
         if(!Utility.isNotEmpty(dropKm))
         {
-            dropKm = "0";
+            dropKm = JrWayDao.getDropKM(EndTrip.this);;
         }
-
-        String totalKM = JrWayDao.getTotalKM(EndTrip.this);
-        if(!Utility.isNotEmpty(totalKM))
+        String totalKMs = totalKM;
+        if(!Utility.isNotEmpty(totalKMs))
         {
-            totalKM = "0";
+            totalKMs = JrWayDao.getTotalKM(EndTrip.this);
         }
 
         endTripPojo.setTotalpickupKM(pickUpKm);
         endTripPojo.setTotalDropKM(dropKm);
-        endTripPojo.setGetTotalKM(totalKM);
-
-
+        endTripPojo.setGetTotalKM(totalKMs);
         endTripPojo.setJourneyEndTime(getDropTime());
+
 
         endTripPojo.setFinishingKm(finishingKm_google);
 
@@ -845,7 +843,7 @@ public class EndTrip extends AppCompatActivity {
     {
         long  timeMillis = System.currentTimeMillis();
         Date curDateTime = new Date(timeMillis);
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return  sdf.format(curDateTime);
     }
 
@@ -874,7 +872,7 @@ public class EndTrip extends AppCompatActivity {
     {
         String start_time = SharedPref.getStringValue(EndTrip.this, Utility.AppData.start_time);
         Date curDateTime = new Date(Long.parseLong(start_time));
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String startTime = sdf.format(curDateTime);
 
         if(Utility.isNotEmpty(startTime))
@@ -928,7 +926,13 @@ public class EndTrip extends AppCompatActivity {
 
         totalTime.setText(getTripTimeDisplay());
 
-        totaKM_TextView.setText(JrWayDao.getTotalKM(EndTrip.this) + " km");
+
+
+
+        new CalculateTripKMData().execute();
+
+
+
 
 
         toll_layout.setOnClickListener(new View.OnClickListener() {
@@ -1036,12 +1040,49 @@ public class EndTrip extends AppCompatActivity {
      }
 
 
+    public  class CalculateTripKMData extends AsyncTask {
+        public CalculateTripKMData() {
+        }
+        protected void onPreExecute() {
+            Utility.getInstance().showLoadingDialog(EndTrip.this);
+        }
+        protected String doInBackground(Object... params) {
+            String result = "";
+            try
+            {
+                totalKM = JrWayDao.getTotalKM(EndTrip.this);
+                dropKM = JrWayDao.getDropKM(EndTrip.this);
+                pickUpKM = JrWayDao.getPickupKM(EndTrip.this);
+                return result;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+        @Override
+        protected void onPostExecute(Object result) {
+
+            if(!Utility.isNotEmpty(totalKM))
+            {
+                totalKM = "0";
+            }
+            totaKM_TextView.setText(totalKM + " km");
+
+            Utility.getInstance().closeLoadingDialog();
+        }
+    }
 
 
-     private void showNextStep()
+
+
+
+
+    private void showNextStep()
      {
          extra_amount_layout.setVisibility(View.GONE);
          checklist_layout.setVisibility(View.VISIBLE);
+         new CalculateTripKMData().execute();
      }
 
 
@@ -1166,8 +1207,8 @@ public class EndTrip extends AppCompatActivity {
                 String boundary = "*****";
                 int bytesRead, bytesAvailable, bufferSize;
 
-                String serverFileName= imageName+".jpeg";
-                String SERVER_URL ="http://btr-ltd.net/webservice/SupportFilesLocation/"+serverFileName;  //http://btr-ltd.net/PMVTest/test.png
+                String serverFileName= imageName+".png";
+                String SERVER_URL ="http://m.btr-ltd.in/FileUpload/";
                 Log.e("SERVER_URL", SERVER_URL.toString());
 
                 //encoding image into a byte array
@@ -1186,7 +1227,7 @@ public class EndTrip extends AppCompatActivity {
                 conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                 dos = new DataOutputStream(conn.getOutputStream());
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\"files\";filename=\"" + serverFileName+".jpeg" + "\"" + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"files\";filename=\"" + serverFileName + "\"" + lineEnd);
                 dos.writeBytes(lineEnd);
                 // create a buffer of  maximum size
                 bytesAvailable = fileInputStream.available();
@@ -1233,7 +1274,7 @@ public class EndTrip extends AppCompatActivity {
             dialog.dismiss();
             try {
                 if(Utility.isNotEmpty(res)){
-                    if(res.equals("Created")){
+                    if(res.equalsIgnoreCase("OK")){
                         res = "Photo uploaded successfully";
                     }
                 }
@@ -1259,12 +1300,9 @@ public class EndTrip extends AppCompatActivity {
                     toll_image.setVisibility(View.VISIBLE);
                     toll_font.setVisibility(View.GONE);
                     toll_text.setVisibility(View.GONE);
-                    String path = android.os.Environment.getExternalStorageDirectory() + File.separator+ "Phoenix" + File.separator + "default";
-                    filepath.delete();
                     OutputStream outFile = null;
-                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-                    try {
-                        outFile = new FileOutputStream(file);
+                    /*try {
+                        outFile = new FileOutputStream(filepath);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
                         outFile.flush();
                         outFile.close();
@@ -1274,10 +1312,12 @@ public class EndTrip extends AppCompatActivity {
                         e.printStackTrace();
                     } catch (Exception e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                     UploadToServer task=new UploadToServer(bitmap,"toll_cemara_imgpath",1);
                     task.execute();
+
+                    filepath.delete();
 
                 } catch (Exception e) {
                     e.printStackTrace();
