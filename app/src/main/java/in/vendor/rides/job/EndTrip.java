@@ -1286,6 +1286,25 @@ public class EndTrip extends AppCompatActivity {
     }
 
 
+    private Bitmap getBitmap(String  fileName)
+    {
+        String imageInSD = "";
+        try {
+            //imageInSD = "/sdcard/UserImages/" + fileName;
+            return BitmapFactory.decodeFile(fileName);
+        } catch (OutOfMemoryError e) {
+            try {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                Bitmap bitmap = BitmapFactory.decodeFile(imageInSD, options);
+                return bitmap;
+            } catch(Exception excepetion) {
+                excepetion.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1293,10 +1312,17 @@ public class EndTrip extends AppCompatActivity {
             if (requestCode == 1) {
                 File filepath = new File(toll_cemara_imgpath);
                 try {
-                    Bitmap bitmap;
+
                     BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                    bitmap = BitmapFactory.decodeFile(filepath.getAbsolutePath(),bitmapOptions);
-                    toll_image.setImageBitmap(bitmap);
+                    Bitmap bitmap1 = BitmapFactory.decodeFile(filepath.getAbsolutePath(),bitmapOptions);
+                    toll_image.setImageBitmap(bitmap1);
+
+
+                    Bitmap bitmap = getBitmap(toll_cemara_imgpath);
+                    Log.d("path_from gallery", toll_cemara_imgpath + " - "+bitmap);
+
+
+
                     toll_image.setVisibility(View.VISIBLE);
                     toll_font.setVisibility(View.GONE);
                     toll_text.setVisibility(View.GONE);
@@ -1314,19 +1340,16 @@ public class EndTrip extends AppCompatActivity {
                         e.printStackTrace();
                     }*/
 
-                    UploadToServer task=new UploadToServer(bitmap,"toll_cemara_imgpath",1);
+                    String serverFileName = job_Id +"_toll";
+
+                    UploadToServer task=new UploadToServer(bitmap,serverFileName,1);
                     task.execute();
 
-                    filepath.delete();
+                    //filepath.delete();
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-
-
-
             } else if (requestCode == 2) {
                 Uri selectedImage = data.getData();
                 String[] filePath = { MediaStore.Images.Media.DATA };
@@ -1336,13 +1359,13 @@ public class EndTrip extends AppCompatActivity {
                 String picturePath = c.getString(columnIndex);
                 c.close();
                 Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                Log.w("path_from gallery", picturePath+"");
+                Log.d("path_from gallery", picturePath+"");
                 toll_image.setImageBitmap(thumbnail);
                 toll_image.setVisibility(View.VISIBLE);
                 toll_font.setVisibility(View.GONE);
                 toll_text.setVisibility(View.GONE);
-
-                UploadToServer task=new UploadToServer(thumbnail,"toll_cemara_imgpath",1);
+                String serverFileName = job_Id +"_toll";
+                UploadToServer task=new UploadToServer(thumbnail,serverFileName,1);
                 task.execute();
 
             }
