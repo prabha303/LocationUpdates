@@ -8,19 +8,17 @@ import android.content.Context;
 import android.util.Log;
 
 
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
 
 
 import org.json.JSONObject;
 
 import java.util.Map;
 
-public class FcmListenerService extends FirebaseMessagingService
+public class FcmListenerService /*extends FirebaseMessagingService*/
 {
      Context context = null;
 
-    @Override
+    /*@Override
     public void onMessageReceived(RemoteMessage remoteMessage)
     {
         System.out.println("Prabha---- onMessage Received Called ");
@@ -37,6 +35,6 @@ public class FcmListenerService extends FirebaseMessagingService
         {
             System.out.println("Exception in onMessage Received "+e.getMessage());
         }
-    }
+    }*/
 
 }

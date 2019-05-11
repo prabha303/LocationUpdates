@@ -1,13 +1,10 @@
 package in.vendor.rides.fcm;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
-import in.vendor.rides.SharedPref;
-import in.vendor.rides.Utility;
 
-public class FBaseListenerService extends FirebaseInstanceIdService
+
+public class FBaseListenerService /*extends FirebaseInstanceIdService*/
 {
 
-    private static final String TAG = "MyAndroidFCMIIDService";
+    /*private static final String TAG = "MyAndroidFCMIIDService";
 
     @Override
     public void onTokenRefresh()
@@ -24,7 +21,7 @@ public class FBaseListenerService extends FirebaseInstanceIdService
         {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
 }

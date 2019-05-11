@@ -42,36 +42,46 @@ public class JrWayDao {
     }
 
 
-    public static void insertUserDetails(Context context, Location location, String address) {
+    public static void insertUserDetails(Context context, Location location, String address, String  place_id) {
         try
         {
             SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
             if (location != null)
             {
-                String JobrefId = SharedPref.getStringValue(context, Utility.AppData.job_Id);
-                String user_id = SharedPref.getStringValue(context, Utility.AppData.user_id);
-                String jobStatus = SharedPref.getStringValue(context, Utility.AppData.job_status);
+                String selectQuery = "SELECT * FROM "+ DatabaseHelper.TABLE_NAME +" WHERE "+ DatabaseHelper.PlaceID +" = '" + place_id  + "' ORDER BY cast(order_id as integer)"  +" ASC;";
+                Cursor cursor = db.rawQuery(selectQuery, null);
+                Log.d("geolocationData1","-"+cursor.getCount());
+                if (cursor != null && cursor.getCount() == 0) {
 
-                long  timeMillis = System.currentTimeMillis();
-                Date curDateTime = new Date(timeMillis);
-                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
-                //final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                final String dateTime = sdf.format(curDateTime);
-                ContentValues contentValues = new ContentValues();
-                //contentValues.put(DatabaseHelper.orderId,timeMillis);
-                contentValues.put(DatabaseHelper.JobrefId,JobrefId);
-                contentValues.put(DatabaseHelper.DriverId,user_id);
-                contentValues.put(DatabaseHelper.jobStatus,jobStatus);
-                contentValues.put(DatabaseHelper.latlng,location.getLatitude() +","+location.getLongitude());
-                contentValues.put(DatabaseHelper.address,address);
-                contentValues.put(DatabaseHelper.PlaceID,address);
-                contentValues.put(DatabaseHelper.ReceivedTime,dateTime);
-                contentValues.put(DatabaseHelper.accuracy,""+location.getAccuracy());
-                contentValues.put(DatabaseHelper.modified_date,dateTime);
-                contentValues.put(DatabaseHelper.timeMillSec,""+timeMillis);
-                contentValues.put(DatabaseHelper.speed,""+location.getSpeed());
-                long saved = db.insert(DatabaseHelper.TABLE_NAME, null, contentValues);
-                Log.d("Updated_Location_save","-"+saved);
+                    Log.d("geolocationData12","-"+cursor.getCount());
+                    String JobrefId = SharedPref.getStringValue(context, Utility.AppData.job_Id);
+                    String user_id = SharedPref.getStringValue(context, Utility.AppData.user_id);
+                    String jobStatus = SharedPref.getStringValue(context, Utility.AppData.job_status);
+
+                    long  timeMillis = System.currentTimeMillis();
+                    Date curDateTime = new Date(timeMillis);
+                    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+                    //final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    final String dateTime = sdf.format(curDateTime);
+                    ContentValues contentValues = new ContentValues();
+                    //contentValues.put(DatabaseHelper.orderId,timeMillis);
+                    contentValues.put(DatabaseHelper.JobrefId,JobrefId);
+                    contentValues.put(DatabaseHelper.DriverId,user_id);
+                    contentValues.put(DatabaseHelper.jobStatus,jobStatus);
+                    contentValues.put(DatabaseHelper.latlng,location.getLatitude() +","+location.getLongitude());
+                    contentValues.put(DatabaseHelper.address,address);
+                    contentValues.put(DatabaseHelper.PlaceID,place_id);
+                    contentValues.put(DatabaseHelper.ReceivedTime,dateTime);
+                    contentValues.put(DatabaseHelper.accuracy,""+location.getAccuracy());
+                    contentValues.put(DatabaseHelper.modified_date,dateTime);
+                    contentValues.put(DatabaseHelper.timeMillSec,""+timeMillis);
+                    contentValues.put(DatabaseHelper.speed,""+location.getSpeed());
+                    long saved = db.insert(DatabaseHelper.TABLE_NAME, null, contentValues);
+                    Log.d("Updated_Location_save","-"+saved);
+                }else
+                {
+                    Log.d("geolocationData1_dup","-"+place_id);
+                }
             }
             db.close();
         }catch (Exception e)

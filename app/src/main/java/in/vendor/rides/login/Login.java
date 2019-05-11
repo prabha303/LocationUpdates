@@ -25,7 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.FirebaseInstanceId;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -202,7 +202,7 @@ public class Login extends AppCompatActivity {
             {
                 if(!Utility.isNotEmpty(fcmToken))
                 {
-                    fcmToken = FirebaseInstanceId.getInstance().getToken();
+                    //fcmToken = FirebaseInstanceId.getInstance().getToken();
                 }
                 String SOAP_ACTION = BuildConfig.SOAP_ACTION +"ValidateUser";
                 String URL = BuildConfig.BLT_BASEURL;
@@ -211,7 +211,7 @@ public class Login extends AppCompatActivity {
                 SoapObject soapObject = new SoapObject(NAMESPACE, METHOD_NAME);
                 soapObject.addProperty("userName",userId);
                 soapObject.addProperty("password",password);
-                soapObject.addProperty("fcmID",fcmToken);
+                soapObject.addProperty("fcmID",""+BuildConfig.VERSION_CODE);
 
                 SoapSerializationEnvelope envelope =  new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;

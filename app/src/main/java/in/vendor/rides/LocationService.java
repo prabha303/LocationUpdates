@@ -37,7 +37,10 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.gson.JsonArray;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -45,7 +48,12 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -324,32 +332,58 @@ public class LocationService extends Service implements UpdateInterService {
                             protected Boolean doInBackground(Void... params)
                             {
 
-                                String resultAdress = "";
-                                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                                List<Address> addresses = null;
+                                String  formatted_address = "";
+                                String  place_id = "";
 
+
+                                String url =  "https://maps.googleapis.com/maps/api/geocode/json?" +
+                                        "latlng="+location.getLatitude() +"," + location.getLongitude()
+                                        +"&key="+ BuildConfig.APIKEY;
+
+                                Log.d("geolocationData",url);
                                 try {
-                                    addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1); // In this sample, get just a single address
-                                } catch (IOException ioException) {
-                                    //resultMessage = MainActivity.this .getString(R.string.service_not_available);
-                                    Log.e(TAG, resultAdress, ioException);
-                                }
-                                if (addresses == null || addresses.size() == 0) {
-                                    if (resultAdress.isEmpty()) {
-                                        //resultMessage = MainActivity.this.getString(R.string.no_address_found);
-                                        // Log.e(TAG, resultMessage);
+                                   String  data = downloadUrl(url);
+
+                                   if(Utility.isNotEmpty(data))
+                                   {
+                                       Log.d("geolocationData",data);
+
+                                       JSONObject jsonObject =  new JSONObject(data);
+                                       if(jsonObject != null && jsonObject.length() != 0)
+                                       {
+                                          String result = jsonObject.getString("results");
+                                          if(Utility.isNotEmpty(result))
+                                          {
+                                              JSONArray jsonArray = new JSONArray(result);
+                                              if(jsonArray != null && jsonArray.length() != 0)
+                                              {
+                                                  String address = jsonArray.get(0).toString();
+
+                                                  JSONObject jsonObject_address =  new JSONObject(address);
+                                                  if(jsonObject_address != null && jsonObject_address.length() != 0)
+                                                  {
+
+                                                      formatted_address = jsonObject_address.getString("formatted_address");
+                                                      place_id = jsonObject_address.getString("place_id");
+
+                                                  }
+                                              }
+                                          }
+                                       }
+                                   }
+                                    Log.d("geolocationData1",place_id +" - "+ formatted_address);
+
+                                    if(Utility.isNotEmpty(formatted_address) && Utility.isNotEmpty(place_id))
+                                    {
+                                        JrWayDao.insertUserDetails(context,location, formatted_address,place_id);
                                     }
-                                } else {
-                                    Address address = addresses.get(0);
-                                    StringBuilder out = new StringBuilder();
-                                    for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                                        out.append(address.getAddressLine(i));
-                                    }
-                                    resultAdress = out.toString();
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
 
-
-                                JrWayDao.insertUserDetails(context,location, resultAdress);
 
                                 return null;
                             }
@@ -367,5 +401,42 @@ public class LocationService extends Service implements UpdateInterService {
             e.printStackTrace();
         }
     }
+
+
+
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(10000);//5Seconds.
+            // Connecting to url
+            urlConnection.connect();
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+            StringBuffer sb = new StringBuffer();
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            data = sb.toString();
+            br.close();
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return "";
+
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
 }
 

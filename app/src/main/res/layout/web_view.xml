@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+
+
+        <!--<RelativeLayout
+            android:id="@+id/topbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/lighter_gray"
+            android:layout_alignParentTop="true"
+            >
+
+
+            <com.lynk.customer.utility.CustomTextViewRegular
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:drawableLeft="@drawable/close_image"
+                android:drawablePadding="18dp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#ffff"
+                android:textSize="20sp"
+                android:visibility="visible" />
+
+        </RelativeLayout>-->
+
+
+        <WebView
+            android:id="@+id/supp_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <in.vendor.rides.CustomTextViewRegular
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_gravity="center_vertical|top|left"
+            android:layout_marginLeft="10dp"
+            android:drawableLeft="@drawable/arrow_left"
+            android:drawablePadding="18dp"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ffff"
+            android:textSize="20sp"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+</RelativeLayout>

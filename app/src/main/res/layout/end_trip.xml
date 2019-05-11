@@ -20,7 +20,7 @@
 
     <LinearLayout
         android:id="@+id/extra_amount_layout"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -387,7 +387,7 @@
                 android:textSize="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:textColor="@color/f56"
-                android:text="Upload Bills" />
+                android:text="Supporting documents" />
 
 
 
@@ -431,7 +431,7 @@
                         android:textSize="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:textColor="@color/f56"
-                        android:text="Toll" />
+                        android:text="click to upload documents" />
 
                       <ImageView
                           android:id="@+id/toll_image"
@@ -452,6 +452,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:orientation="vertical">
                     <in.vendor.rides.login.FontAweSomeTextView
                         android:layout_width="match_parent"
@@ -479,6 +480,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:orientation="vertical">
                     <in.vendor.rides.login.FontAweSomeTextView
                         android:layout_width="match_parent"
@@ -597,7 +599,7 @@
                 android:textSize="@dimen/_12sdp"
                 android:layout_weight="1"
                 android:textColor="@color/f56"
-                android:text="1 hour 20 min" />
+                android:text="" />
 
             <in.vendor.rides.CustomTextViewLight
                 android:id="@+id/totaKM"

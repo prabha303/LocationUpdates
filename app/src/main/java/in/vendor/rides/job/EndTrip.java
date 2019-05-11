@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import in.vendor.rides.driverhome.UploadWebView;
 import mehdi.sakout.fancybuttons.FancyButton;
 import in.vendor.rides.BuildConfig;
 import in.vendor.rides.JrWayDao;
@@ -108,6 +109,7 @@ public class EndTrip extends AppCompatActivity {
     TextView toll_text;
     boolean signFlag  = false;
     int CAMERA_PERMISSION_CODE = 100;
+    public int UPLOADDOCUMET_RETURNRESULT = 1000;
     String toll_cemara_imgpath = "";
     private static final int REQUEST_EXTERNAL_STORAGE = 2;
     private static String[] PERMISSIONS_STORAGE = {
@@ -915,8 +917,7 @@ public class EndTrip extends AppCompatActivity {
 
         toll_layout = findViewById(R.id.toll_layout);
         toll_image = findViewById(R.id.toll_image);
-        toll_font = findViewById(R.id.toll_font);
-        toll_text = findViewById(R.id.toll_font);
+        toll_text = findViewById(R.id.toll_text);
 
 
         parking_layout = findViewById(R.id.parking_layout);
@@ -947,6 +948,10 @@ public class EndTrip extends AppCompatActivity {
                     }else
                     {
                         selectImage();
+
+
+
+
                     }
                 }catch (Exception e)
                 {
@@ -1094,7 +1099,15 @@ public class EndTrip extends AppCompatActivity {
 
 
     private void selectImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+
+
+        Intent intent = new Intent(EndTrip.this, UploadWebView.class);
+        intent.putExtra("job_Id",job_Id);
+        startActivityForResult(intent, UPLOADDOCUMET_RETURNRESULT);
+
+
+
+        /*final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(EndTrip.this);
         builder.setTitle("Add Photo!");
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -1114,7 +1127,7 @@ public class EndTrip extends AppCompatActivity {
                 }
             }
         });
-        builder.show();
+        builder.show();*/
     }
 
 
@@ -1207,13 +1220,13 @@ public class EndTrip extends AppCompatActivity {
                 String boundary = "*****";
                 int bytesRead, bytesAvailable, bufferSize;
 
-                String serverFileName= imageName+".png";
-                String SERVER_URL ="http://m.btr-ltd.in/FileUpload/";
-                Log.e("SERVER_URL", SERVER_URL.toString());
+                String serverFileName = imageName + ".png";
+                String SERVER_URL = "http://m.btr-ltd.in/FileUpload";
+                Log.e("SERVER_URL", SERVER_URL);
 
                 //encoding image into a byte array
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                resized_bitmap.compress(Bitmap.CompressFormat.JPEG, 55, baos);
+                resized_bitmap.compress(Bitmap.CompressFormat.PNG, 55, baos);
                 byte[] imageBytes = baos.toByteArray();
                 ByteArrayInputStream fileInputStream = new ByteArrayInputStream(imageBytes);
                 URL url = new URL(SERVER_URL);
@@ -1227,7 +1240,7 @@ public class EndTrip extends AppCompatActivity {
                 conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                 dos = new DataOutputStream(conn.getOutputStream());
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\"files\";filename=\"" + serverFileName + "\"" + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\" " + imageName + "\";filename=\"" + serverFileName + "\"" + lineEnd);
                 dos.writeBytes(lineEnd);
                 // create a buffer of  maximum size
                 bytesAvailable = fileInputStream.available();
@@ -1247,22 +1260,25 @@ public class EndTrip extends AppCompatActivity {
                 // Responses from the server (code and message)
                 serverResponseCode = conn.getResponseCode();
                 serverResponseMessage = conn.getResponseMessage();
-                Log.i("upload_File", "HTTP Response is : " + serverResponseMessage + ": " + serverResponseCode);
+                Log.i("upload_File", "HTTP Response is : " + serverFileName + " - " + serverResponseMessage + ": " + serverResponseCode);
                 //close the streams //
                 fileInputStream.close();
                 dos.flush();
                 dos.close();
                 conn.disconnect();
                 // image bit map...
-                if(imgProcess == 1){
+                if (imgProcess == 1) {
                     resized_bitmap = resized_bitmap;
-                }else if(imgProcess ==2){
+                } else if (imgProcess == 2) {
                     resized_bitmap = resized_bitmap;
-                }else if(imgProcess ==3){
+                } else if (imgProcess == 3) {
                     resized_bitmap = resized_bitmap;
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
+                serverResponseMessage = "Unable to connect with server";
+            }catch (Exception ex) {
+                ex.printStackTrace();
                 serverResponseMessage = "Unable to connect with server";
             }
             Log.d("serverResponseMessage", "message : " + serverResponseMessage);
@@ -1309,17 +1325,32 @@ public class EndTrip extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
+
+            Log.d("onActivityResult", ""+requestCode);
+
+            if (requestCode == UPLOADDOCUMET_RETURNRESULT) {
+
+                String Status = data.getStringExtra("Status");
+                toll_text.setText(Status);
+                toll_text.setTextColor(getResources().getColor(R.color.green));
+
+            }else if (requestCode == 1) {
                 File filepath = new File(toll_cemara_imgpath);
                 try {
 
                     BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
                     Bitmap bitmap1 = BitmapFactory.decodeFile(filepath.getAbsolutePath(),bitmapOptions);
-                    toll_image.setImageBitmap(bitmap1);
+                    if (bitmap1 != null)
+                    {
+                        //String img = BitmapToString(bitmap1);
+                        //Log.d("path_from_gallery", img);
+                        toll_image.setImageBitmap(bitmap1);
+                    }
+
 
 
                     Bitmap bitmap = getBitmap(toll_cemara_imgpath);
-                    Log.d("path_from gallery", toll_cemara_imgpath + " - "+bitmap);
+                    Log.d("path_from_gallery", toll_cemara_imgpath + " - "+bitmap);
 
 
 
@@ -1342,7 +1373,7 @@ public class EndTrip extends AppCompatActivity {
 
                     String serverFileName = job_Id +"_toll";
 
-                    UploadToServer task=new UploadToServer(bitmap,serverFileName,1);
+                    UploadToServer task=new UploadToServer(bitmap1,serverFileName,1);
                     task.execute();
 
                     //filepath.delete();
@@ -1371,5 +1402,20 @@ public class EndTrip extends AppCompatActivity {
             }
         }
     }
+
+    public static String BitmapToString(Bitmap bitmap) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();
+            String temp = Base64.encodeToString(b, Base64.DEFAULT);
+            return temp;
+        } catch (NullPointerException e) {
+            return null;
+        } catch (OutOfMemoryError e) {
+            return null;
+        }
+    }
+
 
 }
