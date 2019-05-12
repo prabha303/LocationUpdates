@@ -145,6 +145,7 @@ public class EndTrip extends AppCompatActivity {
             verifyStoragePermissions(this);
 
             //JSONArray watPoints = JrWayDao.getAllWaypoints(EndTrip.this);
+            //Log.d("watPoints", ""+watPoints);
 
 
 
@@ -362,13 +363,13 @@ public class EndTrip extends AppCompatActivity {
 
         if(!signFlag)
         {
-            Toast.makeText(EndTrip.this, "put your signature", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "put your signature", Toast.LENGTH_LONG).show();
             return;
         }
 
         if(!Utility.isNotEmpty(Utility.getLatLng(this)))
         {
-            Toast.makeText(EndTrip.this, "Location not detected, move somewhere ", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Location not detected, move somewhere ", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -381,7 +382,7 @@ public class EndTrip extends AppCompatActivity {
         if(bitmap == null)
         {
             init();
-            Toast.makeText(EndTrip.this, "Please Sign to continue!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Please Sign to continue!", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -389,6 +390,7 @@ public class EndTrip extends AppCompatActivity {
         Log.d("signature",signature);
 
         JSONArray watPoints = JrWayDao.getAllWaypoints(EndTrip.this);
+
 
         EndTripPojo endTripPojo = new EndTripPojo();
         endTripPojo.setJobID(job_Id);
@@ -892,10 +894,8 @@ public class EndTrip extends AppCompatActivity {
     {
         extra_amount_layout = findViewById(R.id.extra_amount_layout);
         checklist_layout = findViewById(R.id.checklist_layout);
-
         extra_amount_layout.setVisibility(View.VISIBLE);
         checklist_layout.setVisibility(View.GONE);
-
         waiting_amount = findViewById(R.id.waiting_amount);
         parking_amount = findViewById(R.id.parking_amount);
         toll_cc_amount = findViewById(R.id.toll_cc_amount);
@@ -913,28 +913,14 @@ public class EndTrip extends AppCompatActivity {
         signLayout = findViewById(R.id.signLayout);
         totalTime = findViewById(R.id.totalTime);
         totaKM_TextView = findViewById(R.id.totaKM);
-
-
         toll_layout = findViewById(R.id.toll_layout);
         toll_image = findViewById(R.id.toll_image);
         toll_text = findViewById(R.id.toll_text);
-
-
         parking_layout = findViewById(R.id.parking_layout);
         dutysheet_layout = findViewById(R.id.dutysheet_layout);
-
-
-
         totalTime.setText(getTripTimeDisplay());
 
-
-
-
         new CalculateTripKMData().execute();
-
-
-
-
 
         toll_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -948,18 +934,11 @@ public class EndTrip extends AppCompatActivity {
                     }else
                     {
                         selectImage();
-
-
-
-
                     }
                 }catch (Exception e)
                 {
                     e.printStackTrace();
                 }
-
-
-
             }
         });
 
@@ -1132,7 +1111,7 @@ public class EndTrip extends AppCompatActivity {
 
 
 
-    private void processCameraClick()
+    /*private void processCameraClick()
     {
         try
         {
@@ -1167,7 +1146,7 @@ public class EndTrip extends AppCompatActivity {
         {
              e.printStackTrace();
         }
-    }
+    }*/
 
 
     @Override
@@ -1189,137 +1168,6 @@ public class EndTrip extends AppCompatActivity {
         }
     }
 
-    public class UploadToServer extends AsyncTask<String, String, String> {
-        ProgressDialog dialog;
-        Bitmap resized_bitmap;
-        String imageName = "";
-        int imgProcess=0;
-        int maxBufferSize = 1 * 1024 * 1024;
-        byte[] buffer;
-        int serverResponseCode = 0;
-
-        UploadToServer(Bitmap bitmap,String imageId,int imgProcess) {
-            this.resized_bitmap = bitmap;
-            this.imageName = imageId;
-            this.imgProcess = imgProcess;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            dialog = ProgressDialog.show(EndTrip.this, "", "Uploading File...", false);
-        }
-
-        @Override
-        protected String doInBackground(String... args) {
-            String serverResponseMessage =null;
-            try {
-                HttpURLConnection conn = null;
-                DataOutputStream dos = null;
-                String lineEnd = "\r\n";
-                String twoHyphens = "--";
-                String boundary = "*****";
-                int bytesRead, bytesAvailable, bufferSize;
-
-                String serverFileName = imageName + ".png";
-                String SERVER_URL = "http://m.btr-ltd.in/FileUpload";
-                Log.e("SERVER_URL", SERVER_URL);
-
-                //encoding image into a byte array
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                resized_bitmap.compress(Bitmap.CompressFormat.PNG, 55, baos);
-                byte[] imageBytes = baos.toByteArray();
-                ByteArrayInputStream fileInputStream = new ByteArrayInputStream(imageBytes);
-                URL url = new URL(SERVER_URL);
-                Log.e("fileInputStream", fileInputStream.toString());
-                // Open a HTTP  connection to  the URL
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setDoInput(true); // Allow Inputs
-                conn.setDoOutput(true); // Allow Outputs
-                conn.setUseCaches(false); // Don't use a Cached Copy
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                dos = new DataOutputStream(conn.getOutputStream());
-                dos.writeBytes(twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\" " + imageName + "\";filename=\"" + serverFileName + "\"" + lineEnd);
-                dos.writeBytes(lineEnd);
-                // create a buffer of  maximum size
-                bytesAvailable = fileInputStream.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                buffer = new byte[bufferSize];
-                //read file and write it into form...
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                while (bytesRead > 0) {
-                    dos.write(buffer, 0, bufferSize);
-                    bytesAvailable = fileInputStream.available();
-                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                }
-                // send multipart form data necesssary after file data...
-                dos.writeBytes(lineEnd);
-                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-                // Responses from the server (code and message)
-                serverResponseCode = conn.getResponseCode();
-                serverResponseMessage = conn.getResponseMessage();
-                Log.i("upload_File", "HTTP Response is : " + serverFileName + " - " + serverResponseMessage + ": " + serverResponseCode);
-                //close the streams //
-                fileInputStream.close();
-                dos.flush();
-                dos.close();
-                conn.disconnect();
-                // image bit map...
-                if (imgProcess == 1) {
-                    resized_bitmap = resized_bitmap;
-                } else if (imgProcess == 2) {
-                    resized_bitmap = resized_bitmap;
-                } else if (imgProcess == 3) {
-                    resized_bitmap = resized_bitmap;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                serverResponseMessage = "Unable to connect with server";
-            }catch (Exception ex) {
-                ex.printStackTrace();
-                serverResponseMessage = "Unable to connect with server";
-            }
-            Log.d("serverResponseMessage", "message : " + serverResponseMessage);
-            return serverResponseMessage;
-        }
-
-        @Override
-        protected void onPostExecute(String res) {
-            dialog.dismiss();
-            try {
-                if(Utility.isNotEmpty(res)){
-                    if(res.equalsIgnoreCase("OK")){
-                        res = "Photo uploaded successfully";
-                    }
-                }
-                Toast.makeText(EndTrip.this,res,Toast.LENGTH_LONG).show();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    private Bitmap getBitmap(String  fileName)
-    {
-        String imageInSD = "";
-        try {
-            //imageInSD = "/sdcard/UserImages/" + fileName;
-            return BitmapFactory.decodeFile(fileName);
-        } catch (OutOfMemoryError e) {
-            try {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 2;
-                Bitmap bitmap = BitmapFactory.decodeFile(imageInSD, options);
-                return bitmap;
-            } catch(Exception excepetion) {
-                excepetion.printStackTrace();
-            }
-        }
-        return null;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1334,88 +1182,13 @@ public class EndTrip extends AppCompatActivity {
                 toll_text.setText(Status);
                 toll_text.setTextColor(getResources().getColor(R.color.green));
 
-            }else if (requestCode == 1) {
-                File filepath = new File(toll_cemara_imgpath);
-                try {
-
-                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                    Bitmap bitmap1 = BitmapFactory.decodeFile(filepath.getAbsolutePath(),bitmapOptions);
-                    if (bitmap1 != null)
-                    {
-                        //String img = BitmapToString(bitmap1);
-                        //Log.d("path_from_gallery", img);
-                        toll_image.setImageBitmap(bitmap1);
-                    }
-
-
-
-                    Bitmap bitmap = getBitmap(toll_cemara_imgpath);
-                    Log.d("path_from_gallery", toll_cemara_imgpath + " - "+bitmap);
-
-
-
-                    toll_image.setVisibility(View.VISIBLE);
-                    toll_font.setVisibility(View.GONE);
-                    toll_text.setVisibility(View.GONE);
-                    OutputStream outFile = null;
-                    /*try {
-                        outFile = new FileOutputStream(filepath);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
-                        outFile.flush();
-                        outFile.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }*/
-
-                    String serverFileName = job_Id +"_toll";
-
-                    UploadToServer task=new UploadToServer(bitmap1,serverFileName,1);
-                    task.execute();
-
-                    //filepath.delete();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (requestCode == 2) {
-                Uri selectedImage = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                String picturePath = c.getString(columnIndex);
-                c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                Log.d("path_from gallery", picturePath+"");
-                toll_image.setImageBitmap(thumbnail);
-                toll_image.setVisibility(View.VISIBLE);
-                toll_font.setVisibility(View.GONE);
-                toll_text.setVisibility(View.GONE);
-                String serverFileName = job_Id +"_toll";
-                UploadToServer task=new UploadToServer(thumbnail,serverFileName,1);
-                task.execute();
-
             }
+
+
+
         }
     }
 
-    public static String BitmapToString(Bitmap bitmap) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] b = baos.toByteArray();
-            String temp = Base64.encodeToString(b, Base64.DEFAULT);
-            return temp;
-        } catch (NullPointerException e) {
-            return null;
-        } catch (OutOfMemoryError e) {
-            return null;
-        }
-    }
 
 
 }

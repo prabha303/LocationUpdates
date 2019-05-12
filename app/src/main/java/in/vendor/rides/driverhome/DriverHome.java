@@ -289,7 +289,7 @@ public class DriverHome extends AppCompatActivity {
                         SharedPreferences settings = getSharedPreferences(SharedPref.preferenceName, Context.MODE_PRIVATE);
                         settings.edit().clear().apply();
                         JrWayDao.getInstance().deleteTripData(DriverHome.this);
-                        Toast.makeText(DriverHome.this, "Successfully logged out", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Successfully logged out", Toast.LENGTH_LONG).show();
                         Intent i = new Intent(DriverHome.this, Login.class);
                         startActivity(i);
                         finish();

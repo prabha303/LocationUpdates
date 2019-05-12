@@ -226,61 +226,10 @@ public class Utility {
 
 
 
-    public static void showSuccessPopup(Context context, String  tilte, String message, String pasitiveText, String negativeText,
-                                                  boolean cancelButton, boolean cancelable, final ConfirmCallBack confirmCallBack){
-        final android.app.AlertDialog.Builder alert_dialog= new android.app.AlertDialog.Builder(context);
-        alert_dialog.setCancelable(cancelable);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        final View dialogView=inflater.inflate(R.layout.success_popup_msg_with_button, null);
-        alert_dialog.setView(dialogView);
-        //final TextView popup_msg =(TextView)dialogView.findViewById(R.id.messageText);
-        //final TextView tilteText =(TextView)dialogView.findViewById(R.id.tilteText);
-        //final TextView popup_cancel_btn=(TextView)dialogView.findViewById(R.id.popup_cancel_btn);
-        //final TextView popup_yes_btn = (TextView)dialogView.findViewById(R.id.popup_yes_btn);
-        //popup_msg.setText(message);
-        //popup_yes_btn.setText(pasitiveText);
-        //popup_cancel_btn.setText(negativeText);
-        //tilteText.setText(tilte);
+    public static void showForgetPasswordPopup(Context context, final ConfirmCallBack confirmCallBack){
 
-        // messageText  popup_cancel_btn popup_yes_btn
-        /*if(!cancelButton)
-        {
-            popup_cancel_btn.setVisibility(View.INVISIBLE);
-        }*/
-
-
-
-        final android.app.AlertDialog dialog = alert_dialog.create();
-        dialog.show();
-        /*popup_yes_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                try {
-                    if(confirmCallBack != null)
-                    {
-                        confirmCallBack.confirmed(true);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        popup_cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                try {
-                    if(confirmCallBack != null)
-                    {
-                        confirmCallBack.confirmed(false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
     }
+
 
 
     public static boolean canGetLocation(Context context) {
@@ -373,6 +322,7 @@ public class Utility {
         String future_jobs = "future_jobs";
         String today_jobs = "today_jobs";
         String job_status = "job_status";
+        String job_status_dropped = "job_status_dropped";
         String job_Id = "job_id";
         String trip_sheet_ref_number = "trip_sheet_ref_number";
         String start_time = "start_time";
@@ -382,6 +332,7 @@ public class Utility {
 
         String job_started = "started";
         String job_pickuped = "pickuped";
+        String job_dropped = "dropped";
 
 
         String hasLoggedIn = "has_logged_in";

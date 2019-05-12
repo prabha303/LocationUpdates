@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements UpdateInterServic
                     startLocationButtonClick();
 
                 } else {
-                    Toast.makeText(this,R.string.location_permission_denied,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),R.string.location_permission_denied,Toast.LENGTH_LONG).show();
 
                 }
                 break;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements UpdateInterServic
                     end_track_button.setVisibility(View.VISIBLE);
                     start_track_button.setVisibility(View.GONE);
                     getLocation();
-                    Toast.makeText(MainActivity.this, "Started",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Started",Toast.LENGTH_LONG).show();
                 }
             });
 

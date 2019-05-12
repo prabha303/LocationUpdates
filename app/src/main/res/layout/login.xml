@@ -101,12 +101,13 @@
 
 
         <in.vendor.rides.CustomTextViewRegular
-            android:id="@+id/textViewLinkRegister"
+            android:id="@+id/forgetPassword"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:textColor="@color/colorPrimary"
             android:text="@string/forgot_password"
             android:textSize="16dp" />
     </android.support.v7.widget.LinearLayoutCompat>

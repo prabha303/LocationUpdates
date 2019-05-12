@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -60,7 +62,7 @@ public class Login extends AppCompatActivity {
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String TAG = Login.class.getSimpleName();
     FancyButton login;
-    TextView mLatitude,mLongitude,mTimestamp,status,mAddress,lastTripKM;
+    TextView forgetPassword;
     EditText password,userId;
     String fcmToken = "";
     @Override
@@ -78,10 +80,20 @@ public class Login extends AppCompatActivity {
         login = findViewById(R.id.login);
         userId = findViewById(R.id.userId);
         password = findViewById(R.id.password);
+        forgetPassword = findViewById(R.id.forgetPassword);
 
 
         //SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.job_status, "");
         //login.setText(getResources().getString(R.string.fa_arrow_circle_right) + " Login");
+
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                callForgetPasswordDialog();
+            }
+        });
 
         showSplashImage();
 
@@ -141,7 +153,7 @@ public class Login extends AppCompatActivity {
                         openDriverPage(userId.getText().toString(),password.getText().toString());
                     }else
                     {
-                        Toast.makeText(Login.this, "UserId, password should not empty", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "UserId, password should not empty", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -186,6 +198,63 @@ public class Login extends AppCompatActivity {
 
     }
 
+
+    public  class ForgetPassword extends AsyncTask {
+        String  emailId;
+        public ForgetPassword(String emailId) {
+            this.emailId = emailId;
+         }
+        protected void onPreExecute() {
+            Utility.getInstance().showLoadingDialog(Login.this);
+        }
+        protected String doInBackground(Object... params) {
+            String result = "";
+            try
+            {
+                String SOAP_ACTION = BuildConfig.SOAP_ACTION +"ForgotPassword";
+                String URL = BuildConfig.BLT_BASEURL;
+                String NAMESPACE = BuildConfig.NAMESPACE;
+                String METHOD_NAME = "ForgotPassword";
+                SoapObject soapObject = new SoapObject(NAMESPACE, METHOD_NAME);
+                soapObject.addProperty("emailAddress",emailId);
+                SoapSerializationEnvelope envelope =  new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envelope.dotNet = true;
+                envelope.setOutputSoapObject(soapObject);
+                HttpTransportSE httpTransportSE = new HttpTransportSE(URL);
+                try {
+                    httpTransportSE.call(SOAP_ACTION, envelope);
+                    SoapPrimitive soapPrimitive = (SoapPrimitive)envelope.getResponse();
+                    result = soapPrimitive.toString();
+                    Log.d("result","--"+result);
+                } catch(SoapFault sf){
+                    result = sf.faultstring;
+                }
+                catch (Exception e) {
+                    showCustomDialog(getResources().getString(R.string.checkYourInternetConnection), true);
+                    e.printStackTrace();
+                }
+                Utility.getInstance().closeLoadingDialog();
+                return result;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+        @Override
+        protected void onPostExecute(Object result) {
+            Utility.getInstance().closeLoadingDialog();
+            Log.d("result","--"+result);
+            if(Utility.isNotEmpty(""+result))
+            {
+                Toast.makeText(getApplicationContext(), ""+result , Toast.LENGTH_LONG).show();
+
+            }else
+            {
+                showCustomDialog(getResources().getString(R.string.checkYourInternetConnection), true);
+            }
+        }
+    }
 
     public  class ProcessLogin extends AsyncTask {
         String userId, password;
@@ -447,12 +516,65 @@ public class Login extends AppCompatActivity {
                     initializeUI();
 
                 } else {
-                    Toast.makeText(this,R.string.location_permission_denied,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),R.string.location_permission_denied,Toast.LENGTH_LONG).show();
 
                 }
                 break;
         }
     }
+
+
+
+    private void callForgetPasswordDialog()
+    {
+        try {
+
+            final android.app.AlertDialog.Builder alert_dialog= new android.app.AlertDialog.Builder(this);
+            alert_dialog.setCancelable(true);
+            LayoutInflater inflater = LayoutInflater.from(this);
+            final View dialogView=inflater.inflate(R.layout.forget_password_popup_msg, null);
+            final FancyButton popup_yes_btn =dialogView.findViewById(R.id.popup_yes_btn);
+            final EditText emailAddress =dialogView.findViewById(R.id.emailAddress);
+            alert_dialog.setView(dialogView);
+            final android.app.AlertDialog dialog = alert_dialog.create();
+            dialog.show();
+
+         popup_yes_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                try {
+                    new ForgetPassword(emailAddress.getText().toString()).execute();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        /*popup_cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                try {
+                    if(confirmCallBack != null)
+                    {
+                        confirmCallBack.confirmed(false);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
+
+
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

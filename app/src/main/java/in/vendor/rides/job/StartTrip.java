@@ -47,13 +47,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -274,7 +281,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                     showPicup();
                 }else
                 {
-                    Toast.makeText(StartTrip.this, "Location not detected, move somewhere ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Location not detected, move somewhere ", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -364,7 +371,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
 
         showButton();
 
-        Toast.makeText(StartTrip.this, "Successfully pickedup!", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Successfully pickedup!", Toast.LENGTH_LONG).show();
         hideKeyboard(StartTrip.this);
     }
 
@@ -723,7 +730,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
 
                     showButton();
 
-                    Toast.makeText(StartTrip.this, "Successfully started!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Successfully started!", Toast.LENGTH_LONG).show();
 
 
                 }else
@@ -868,17 +875,31 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         try
         {
 
-            if(Utility.isNotEmpty(panLocationsId))
+            /*if(Utility.isNotEmpty(panLocationsId))
             {
+                SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.job_status_dropped, Utility.AppData.job_dropped);
                 Intent i = new Intent(StartTrip.this, EndTrip.class);
                 i.putExtra("refId",job_Id);
                 i.putExtra("FlightNumber",FlightNumber);
                 i.putExtra("panLocationsId",panLocationsId);
                 startActivityForResult(i, 100);
+
+                UpdateTable();
+
             }else
             {
-                Toast.makeText(StartTrip.this, "Please select location" , Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(getApplicationContext(), "Please select location" , Toast.LENGTH_LONG).show();
+            }*/
+
+
+            SharedPref.getInstance().setSharedValue(StartTrip.this, Utility.AppData.job_status_dropped, Utility.AppData.job_dropped);
+            Intent i = new Intent(StartTrip.this, EndTrip.class);
+            i.putExtra("refId",job_Id);
+            i.putExtra("FlightNumber",FlightNumber);
+            i.putExtra("panLocationsId",panLocationsId);
+            startActivityForResult(i, 100);
+
+            UpdateTable();
 
         } catch (Exception e)
         {
@@ -886,37 +907,128 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         }
     }
 
-    private void showEndTrip()
-    {
+
+
+
+  private void UpdateTable()
+  {
+
+      try
+      {
+          if(LocationService.driverLocation != null && LocationService.driverLocation.getLocation() != null)
+          {
+              final Location location = LocationService.driverLocation.getLocation();
+              if(location != null)
+              {
+                  String jobStatus = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_status);
+                  if(Utility.isNotEmpty(jobStatus))
+                  {
+                      if(jobStatus.equalsIgnoreCase(Utility.AppData.job_started) || jobStatus.equalsIgnoreCase(Utility.AppData.job_pickuped))
+                      {
+
+                          new AsyncTask<Void, Void, Boolean>()
+                          {
+                              protected Boolean doInBackground(Void... params)
+                              {
+
+                                  String  formatted_address = "";
+                                  String  place_id = "";
+
+
+                                  String url =  "https://maps.googleapis.com/maps/api/geocode/json?" +
+                                          "latlng="+location.getLatitude() +"," + location.getLongitude()
+                                          +"&key="+ BuildConfig.APIKEY;
+
+                                  Log.d("geolocationData",url);
+                                  try {
+                                      String  data = downloadUrl(url);
+
+                                      if(Utility.isNotEmpty(data))
+                                      {
+                                          Log.d("geolocationData",data);
+
+                                          JSONObject jsonObject =  new JSONObject(data);
+                                          if(jsonObject != null && jsonObject.length() != 0)
+                                          {
+                                              String result = jsonObject.getString("results");
+                                              if(Utility.isNotEmpty(result))
+                                              {
+                                                  JSONArray jsonArray = new JSONArray(result);
+                                                  if(jsonArray != null && jsonArray.length() != 0)
+                                                  {
+                                                      String address = jsonArray.get(0).toString();
+
+                                                      JSONObject jsonObject_address =  new JSONObject(address);
+                                                      if(jsonObject_address != null && jsonObject_address.length() != 0)
+                                                      {
+
+                                                          formatted_address = jsonObject_address.getString("formatted_address");
+                                                          place_id = jsonObject_address.getString("place_id");
+
+                                                      }
+                                                  }
+                                              }
+                                          }
+                                      }
+                                      Log.d("geolocationData1",place_id +" - "+ formatted_address);
+
+                                      if(Utility.isNotEmpty(formatted_address) && Utility.isNotEmpty(place_id))
+                                      {
+                                          JrWayDao.insertUserDetailsDrop(StartTrip.this,location, formatted_address,place_id);
+                                      }
+                                  } catch (IOException e) {
+                                      e.printStackTrace();
+                                  } catch (JSONException e) {
+                                      e.printStackTrace();
+                                  }
+
+
+                                  return null;
+                              }
+                          }.execute();
+                      }
+                  }
+              }
+          }
+      }catch (Exception e)
+      {
+          e.printStackTrace();
+      }
+  }
+
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
         try {
-            String  msg = "Are you sure you want end the trip?";
-            boolean cancelButtonFalg = false;
-            boolean cancelDialog = true;
-            //String message = getResources().getString(R.string.checkYourInternetConnection);;
-            Utility.showCustomDialogWithHeaderNew(StartTrip.this, "Confirmation", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
-                @Override                                                              //cancelButton yes r no flag
-                public void confirmed(boolean status) {  // true ok butoon
-                    try
-                    {
+            URL url = new URL(strUrl);
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(10000);//5Seconds.
+            // Connecting to url
+            urlConnection.connect();
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+            StringBuffer sb = new StringBuffer();
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            data = sb.toString();
+            br.close();
 
-
-                    } catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
+            return "";
+
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
         }
-
+        return data;
     }
-
-
-
-
-
 
 
 }

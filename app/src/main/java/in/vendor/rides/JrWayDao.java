@@ -51,12 +51,17 @@ public class JrWayDao {
                 String selectQuery = "SELECT * FROM "+ DatabaseHelper.TABLE_NAME +" WHERE "+ DatabaseHelper.PlaceID +" = '" + place_id  + "' ORDER BY cast(order_id as integer)"  +" ASC;";
                 Cursor cursor = db.rawQuery(selectQuery, null);
                 Log.d("geolocationData1","-"+cursor.getCount());
-                if (cursor != null && cursor.getCount() == 0) {
-
+                if (cursor != null && cursor.getCount() == 0)
+                {
                     Log.d("geolocationData12","-"+cursor.getCount());
                     String JobrefId = SharedPref.getStringValue(context, Utility.AppData.job_Id);
                     String user_id = SharedPref.getStringValue(context, Utility.AppData.user_id);
                     String jobStatus = SharedPref.getStringValue(context, Utility.AppData.job_status);
+                    String job_status_dropped = SharedPref.getStringValue(context, Utility.AppData.job_status_dropped);
+                    if(Utility.isNotEmpty(job_status_dropped))
+                    {
+                        jobStatus = job_status_dropped;
+                    }
 
                     long  timeMillis = System.currentTimeMillis();
                     Date curDateTime = new Date(timeMillis);
@@ -89,6 +94,51 @@ public class JrWayDao {
             e.printStackTrace();
         }
     }
+
+
+    public static void insertUserDetailsDrop(Context context, Location location, String address, String  place_id) {
+        try
+        {
+            SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
+            if (location != null)
+            {
+                String JobrefId = SharedPref.getStringValue(context, Utility.AppData.job_Id);
+                String user_id = SharedPref.getStringValue(context, Utility.AppData.user_id);
+                String jobStatus = SharedPref.getStringValue(context, Utility.AppData.job_status);
+                String job_status_dropped = SharedPref.getStringValue(context, Utility.AppData.job_status_dropped);
+                if(Utility.isNotEmpty(job_status_dropped))
+                {
+                    jobStatus = job_status_dropped;
+                }
+
+                long  timeMillis = System.currentTimeMillis();
+                Date curDateTime = new Date(timeMillis);
+                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+                //final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                final String dateTime = sdf.format(curDateTime);
+                ContentValues contentValues = new ContentValues();
+                //contentValues.put(DatabaseHelper.orderId,timeMillis);
+                contentValues.put(DatabaseHelper.JobrefId,JobrefId);
+                contentValues.put(DatabaseHelper.DriverId,user_id);
+                contentValues.put(DatabaseHelper.jobStatus,jobStatus);
+                contentValues.put(DatabaseHelper.latlng,location.getLatitude() +","+location.getLongitude());
+                contentValues.put(DatabaseHelper.address,address);
+                contentValues.put(DatabaseHelper.PlaceID,place_id);
+                contentValues.put(DatabaseHelper.ReceivedTime,dateTime);
+                contentValues.put(DatabaseHelper.accuracy,""+location.getAccuracy());
+                contentValues.put(DatabaseHelper.modified_date,dateTime);
+                contentValues.put(DatabaseHelper.timeMillSec,""+timeMillis);
+                contentValues.put(DatabaseHelper.speed,""+location.getSpeed());
+                long saved = db.insert(DatabaseHelper.TABLE_NAME, null, contentValues);
+                Log.d("Updated_Location_save","-"+saved);
+            }
+            db.close();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
 
 
@@ -266,7 +316,7 @@ public class JrWayDao {
     }
 
 
-    public static String  getTotalKM(Context context) {
+    public static String getTotalKM(Context context) {
         float t_km = 0;
         String total_km = "";
         ArrayList<WayPoint> wayPointList = new ArrayList<>();
@@ -511,6 +561,7 @@ public class JrWayDao {
             SharedPref.getInstance().setSharedValue(context, Utility.AppData.pickup_time, "");
             SharedPref.getInstance().setSharedValue(context, Utility.AppData.trip_start_loc, "");
             SharedPref.getInstance().setSharedValue(context, Utility.AppData.job_status, "");
+            SharedPref.getInstance().setSharedValue(context, Utility.AppData.job_status_dropped, "");
 
         }catch (Exception e)
         {
@@ -551,7 +602,7 @@ public class JrWayDao {
                             jsonObj.put("ReceivedTime", ReceivedTime);
                             jsonObj.put("accuracy", accuracy);
                             jsonObj.put("speed", speed);
-                            jsonObj.put("PlaceID", "");
+                            jsonObj.put("PlaceID", PlaceID);
                             jsonObj.put("Address", address);
                             jsonArray.put(jsonObj);
                         }
