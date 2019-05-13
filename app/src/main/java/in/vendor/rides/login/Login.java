@@ -542,9 +542,19 @@ public class Login extends AppCompatActivity {
          popup_yes_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+
                 try {
-                    new ForgetPassword(emailAddress.getText().toString()).execute();
+                    String email = emailAddress.getText().toString();
+                    if(Utility.isNotEmpty(email))
+                    {
+                        dialog.dismiss();
+                        new ForgetPassword(email).execute();
+
+                    }else
+                    {
+                        Toast.makeText(getApplicationContext(), "Enter your valid email", Toast.LENGTH_LONG).show();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

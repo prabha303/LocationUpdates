@@ -14,9 +14,9 @@ android {
         applicationId "in.vendor.rides"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 110
+        versionCode 112
         multiDexEnabled true
-        versionName "v1.1"
+        versionName "v1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
 
