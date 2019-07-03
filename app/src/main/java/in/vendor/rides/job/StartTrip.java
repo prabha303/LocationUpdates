@@ -11,9 +11,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -92,7 +94,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String TAG = StartTrip.class.getSimpleName();
     FancyButton end_track_button,start_track_button;
-    TextView mLatitude,mLongitude,mTimestamp,status,mAddress,lastTripKM;
+    TextView totalKMTravelled;
     String vehicleRegistrationNumber="",pickupAddress = "", dropAddress="",job_Id = "", FlightNumber ="", jobStatus = "";
     private GoogleMap googleMap;
     static  LatLng pickip_point = null;
@@ -128,7 +130,11 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             if(Utility.isNotEmpty(savedJobId) && job_Id.equalsIgnoreCase(savedJobId))
             {
                 jobStatus = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_status);
-
+                totalKMTravelled.setVisibility(View.VISIBLE);
+                showTotalKM();
+            }else
+            {
+                totalKMTravelled.setVisibility(View.GONE);
             }
 
             showButton();
@@ -152,11 +158,73 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
             }
 
 
+            final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+            if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+
+                showMsg("Please Enable Your GPS Location");
+
+            }else
+            {
+                int mode = Utility.getLocationMode(StartTrip.this);
+                if (mode != 3)
+                {
+                    showMsg("Enable GPS High Accuracy");
+                }
+            }
+
+            Log.d("getLocationMode",""+Utility.getLocationMode(StartTrip.this));
+            Log.d("getLocationMode_KM",""+JrWayDao.getSavedKmFromSpeed(StartTrip.this));
+
+
+            reTryData();
+
         }catch (Exception e)
         {
             e.printStackTrace();
         }
     }
+
+
+    public void reTryData() {
+        try {
+            final Handler handlerRetry = new Handler();
+            final Runnable r = new Runnable() {
+                public void run() {
+                    try {
+                        showTotalKM();
+                        handlerRetry.postDelayed(this, 30000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            handlerRetry.postDelayed(r, 30000);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+
+    private void showMsg(String msg)
+    {
+        try {
+            boolean cancelButtonFalg = false;
+            boolean cancelDialog = true;
+            //String message = getResources().getString(R.string.checkYourInternetConnection);;
+            Utility.showCustomDialogWithHeaderNew(StartTrip.this, "BTR", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
+                @Override                                                              //cancelButton yes r no flag
+                public void confirmed(boolean status) {  // true ok butoon
+
+
+                }
+            });
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
     private void showButton()
     {
@@ -182,11 +250,44 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                 pick_up.setVisibility(View.VISIBLE);
                 start_trip.setVisibility(View.GONE);
             }
+
+            totalKMTravelled.setVisibility(View.VISIBLE);
+
+            showTotalKM();
+
         }else
         {
             start_trip.setVisibility(View.VISIBLE);
             pick_up.setVisibility(View.GONE);
             end_trip.setVisibility(View.GONE);
+
+            totalKMTravelled.setVisibility(View.GONE);
+
+        }
+    }
+
+
+
+
+
+    public void showTotalKM()
+    {
+        try {
+            String savedJobId = SharedPref.getStringValue(StartTrip.this, Utility.AppData.job_Id);
+            if(Utility.isNotEmpty(savedJobId) && job_Id.equalsIgnoreCase(savedJobId))
+            {
+
+                String km = JrWayDao.getSavedKmFromSpeed(StartTrip.this);
+                Log.d("showTotalKM", km);
+                totalKMTravelled.setText("Total Travel : " + km);
+                totalKMTravelled.setVisibility(View.VISIBLE);
+            }else
+            {
+                totalKMTravelled.setVisibility(View.GONE);
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -198,6 +299,7 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         pick_up = findViewById(R.id.pick_up);
         trip_sheet_ref = findViewById(R.id.trip_sheet_ref);
         navigation = findViewById(R.id.navigation);
+        totalKMTravelled = findViewById(R.id.totalKMTravelled);
 
         panlocation_spinner = findViewById(R.id.panlocation_spinner);
 
@@ -531,6 +633,9 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
                         }
                     } catch (IOException ex) {
                         ex.printStackTrace();
+                    } catch (RuntimeException r)
+                    {
+                        r.printStackTrace();
                     }
 
                     return null;

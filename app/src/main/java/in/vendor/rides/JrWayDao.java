@@ -63,6 +63,50 @@ public class JrWayDao {
                         jobStatus = job_status_dropped;
                     }
 
+                    String  gpsHighAccuracy = "";
+
+                    try
+                    {
+                         gpsHighAccuracy = ""+Utility.getLocationMode(context);
+
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("gpsHighAccuracy","-"+gpsHighAccuracy);
+
+
+                    String tableQ = "SELECT * FROM location_detail WHERE order_id IN(SELECT MAX(order_id) FROM location_detail)";
+                    Cursor cursor_count = db.rawQuery(tableQ, null);
+                    String KM = "0";
+                    String Oldlatlng = "";
+                    if(cursor_count.getCount() == 0)
+                    {
+                        KM = "0";
+                    }else
+                    {
+                        if (cursor_count.moveToFirst()) {
+                            do {
+                                String  latlng = cursor_count.getString(cursor_count.getColumnIndex(DatabaseHelper.latlng));
+                                String  orderId = cursor_count.getString(cursor_count.getColumnIndex("order_id"));
+
+                                Log.d("gpsHighAccuracy_latlng","-"+latlng);
+                                Log.d("gpsHighAccuracy_orderId","-"+orderId);
+                                Oldlatlng = cursor_count.getString(cursor_count.getColumnIndex(DatabaseHelper.latlng));
+
+                            }  while (cursor_count.moveToNext());
+                        }
+                    }
+
+                    if(Utility.isNotEmpty(Oldlatlng))
+                    {
+                       // KM = getTotalKM()  //Oldlatlng
+                        KM =  ""+ MainActivity.CalCulateDistance(location.getLatitude() +","+location.getLongitude(),Oldlatlng);
+                    }
+
+                    Log.d("gpsHighAccuracy_","-"+KM);
+
                     long  timeMillis = System.currentTimeMillis();
                     Date curDateTime = new Date(timeMillis);
                     final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
@@ -77,10 +121,10 @@ public class JrWayDao {
                     contentValues.put(DatabaseHelper.address,address);
                     contentValues.put(DatabaseHelper.PlaceID,place_id);
                     contentValues.put(DatabaseHelper.ReceivedTime,dateTime);
-                    contentValues.put(DatabaseHelper.accuracy,""+location.getAccuracy());
+                    contentValues.put(DatabaseHelper.accuracy,gpsHighAccuracy +" - "+location.getAccuracy());
                     contentValues.put(DatabaseHelper.modified_date,dateTime);
                     contentValues.put(DatabaseHelper.timeMillSec,""+timeMillis);
-                    contentValues.put(DatabaseHelper.speed,""+location.getSpeed());
+                    contentValues.put(DatabaseHelper.speed,""+KM);
                     long saved = db.insert(DatabaseHelper.TABLE_NAME, null, contentValues);
                     Log.d("Updated_Location_save","-"+saved);
                 }else
@@ -93,6 +137,58 @@ public class JrWayDao {
         {
             e.printStackTrace();
         }
+
+
+        /*String selectQueryd = "SELECT * FROM "+ DatabaseHelper.TABLE_NAME  + " ORDER BY cast(order_id as integer)  DESC LIMIT 1;";
+        Cursor cursor_r = db.rawQuery(selectQueryd, null);
+        if (cursor_r != null && cursor_r.getCount() > 0) {
+            if (cursor.moveToFirst()) {
+                do {
+                    String order_id = cursor.getString(cursor.getColumnIndex("order_id"));
+                    String latLng = cursor.getString(cursor.getColumnIndex(DatabaseHelper.latlng));
+                    Log.d("Updated_Location_save_","-"+order_id +" , "+latLng);
+
+                }  while (cursor.moveToNext());
+
+            }
+        }*/
+
+
+    }
+
+
+    public static String getSavedKmFromSpeed(Context context) {
+        String  totalKMs = "0";
+        SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
+        try
+        {
+            String tableQ = "SELECT * FROM location_detail";
+            Cursor cursor = db.rawQuery(tableQ, null);
+            if (cursor != null && cursor.getCount() != 0)
+            {
+                float totalKMcalc = 0;
+                if (cursor.moveToFirst()) {
+                    do {
+                        String  kmvalues = cursor.getString(cursor.getColumnIndex(DatabaseHelper.speed));
+                        Log.d("kmvalues","-"+kmvalues);
+                        if(Utility.isNotEmpty(kmvalues))
+                        {
+                            Float d = Float.valueOf(kmvalues);
+                            totalKMcalc = d +totalKMcalc;
+                        }
+                    }  while (cursor.moveToNext());
+                }
+
+                Float totalKM = totalKMcalc/1000;
+                DecimalFormat dtime = new DecimalFormat("#.##");
+                totalKMs = dtime.format(totalKM);
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        db.close();
+        return totalKMs + " KM";
     }
 
 

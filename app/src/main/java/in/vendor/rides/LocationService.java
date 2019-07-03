@@ -98,6 +98,18 @@ public class LocationService extends Service implements UpdateInterService {
             e.printStackTrace();
         }
     }
+
+    public LocationService(Activity context) {
+        try {
+            this.context = context;
+            intGPSTracker();
+            startLocationUpdates();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public class LocalBinder extends Binder {
         LocationService getService() {
             return LocationService.this;
@@ -257,43 +269,20 @@ public class LocationService extends Service implements UpdateInterService {
                 String msg = "Updated_Location : " +location.getLatitude() + "," +location.getLongitude();
                 Log.d("Updated_Location - ", ""+location.getAccuracy());
                 double mAccuracy = location.getAccuracy(); // Get Accuracy
-                if (mAccuracy < 100) {  //Accuracy reached  < 100. stop the location updates
+                if (mAccuracy < 400) {  //Accuracy reached  < 100. stop the location updates
                     Log.d("Updated_Location - acc", ""+location.getAccuracy());
                     String resultMessage = "";
-                    try {
-                        if(context != null)
-                        {
-                            /*Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                            List<Address> addresses = null;
+                    SetLocationVariable(location);
 
-                            try {
-                                addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1); // In this sample, get just a single address
-                            } catch (IOException ioException) {
-                                //resultMessage = MainActivity.this .getString(R.string.service_not_available);
-                                Log.e(TAG, resultMessage, ioException);
-                            }
-                            if (addresses == null || addresses.size() == 0) {
-                                if (resultMessage.isEmpty()) {
-                                    //resultMessage = MainActivity.this.getString(R.string.no_address_found);
-                                    // Log.e(TAG, resultMessage);
-                                }
-                            } else {
-                                Address address = addresses.get(0);
-                                StringBuilder out = new StringBuilder();
-                                for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                                    out.append(address.getAddressLine(i));
-                                }
-                                resultMessage = out.toString();
-                            }*/
+                    try {
+                        if(updateInterService != null)
+                        {
+                            updateInterService.doUpdateLocation(location,resultMessage);
                         }
                     }catch (Exception e)
                     {
                         e.printStackTrace();
                     }
-                    SetLocationVariable(location);
-                    updateInterService.doUpdateLocation(location,resultMessage);
-
-
                 }
             }
         }catch (Exception e)

@@ -3,6 +3,7 @@ package in.vendor.rides.driverhome;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.hotspot2.pps.HomeSp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.vendor.rides.JrWayDao;
+import in.vendor.rides.LocationService;
 import in.vendor.rides.R;
 import in.vendor.rides.SharedPref;
 import in.vendor.rides.Utility;
@@ -146,6 +148,17 @@ public class DriverHome extends AppCompatActivity {
                 }
             });
 
+
+            String job_status = SharedPref.getStringValue(DriverHome.this,Utility.AppData.job_status);
+            if(Utility.isNotEmpty(job_status))
+            {
+                if(job_status.equalsIgnoreCase(Utility.AppData.job_started) || job_status.equalsIgnoreCase(Utility.AppData.job_pickuped))
+                {
+                    Intent service = new Intent(DriverHome.this, LocationService.class);
+                    startService(service);
+                    LocationService locationService = new LocationService(DriverHome.this);
+                }
+            }
 
 
         }catch (Exception e)

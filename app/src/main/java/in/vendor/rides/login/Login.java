@@ -424,6 +424,7 @@ public class Login extends AppCompatActivity {
                             {
                                 Intent service = new Intent(Login.this, LocationService.class);
                                 startService(service);
+                                LocationService locationService = new LocationService(Login.this);
                             }
                         }
 

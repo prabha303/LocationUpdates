@@ -29,6 +29,20 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
+            <in.vendor.rides.CustomTextView
+                android:id="@+id/totalKMTravelled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:visibility="visible"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_gravity="right"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/f56"
+                android:text="" />
+
 
 
             <LinearLayout
@@ -234,7 +248,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_12sdp" />
+                android:layout_height="@dimen/_8sdp" />
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"

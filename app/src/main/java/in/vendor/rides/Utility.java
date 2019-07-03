@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationManager;
+import android.provider.Settings;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -395,5 +396,18 @@ public class Utility {
         }
         return 0;
     }
+
+
+    public static int getLocationMode(Context context)
+    {
+        try {
+            return Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
 
 }
