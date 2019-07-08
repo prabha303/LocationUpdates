@@ -10,13 +10,25 @@ def FILEUPLOAD_URL = hasProperty('FILEUPLOAD_URL') ? FILEUPLOAD_URL : 'FILEUPLOA
 
 android {
     compileSdkVersion 27
+
+    signingConfigs {
+        config {
+            storeFile file("/home/prabha/Pictures/BTR/KeyStore/in.vendor.rides")
+            //storeFile file("in.vendor.rides")
+            storePassword "Brite18/04"
+            keyAlias "vendorride"
+            keyPassword "Brite18/04"
+        }
+    }
+
     defaultConfig {
         applicationId "in.vendor.rides"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 112
+        versionCode 126
         multiDexEnabled true
-        versionName "v1.2"
+        signingConfig signingConfigs.config
+        versionName "v1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
 
@@ -25,16 +37,37 @@ android {
         buildConfigField "String", "NAMESPACE", "\"$NAMESPACE\""
         buildConfigField "String", "APIKEY", "\"$APIKEY\""
         buildConfigField "String", "FILEUPLOAD_URL", "\"$FILEUPLOAD_URL\""
+
+        sourceSets.main {
+            jniLibs.srcDir 'src/main/libs'
+            jni.srcDirs = [] //disable automatic ndk-build call
+        }
+
+
     }
     buildTypes {
         debug {
             debuggable true
+            signingConfig signingConfigs.config
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            debuggable false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
+
+    aaptOptions {
+        cruncherEnabled = false
+    }
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
+
+    }
+
 }
 
 dependencies {

@@ -155,67 +155,6 @@ public class EndTrip extends AppCompatActivity {
         }
 
 
-        /*
-
-        tab  selected job count
-        card view should show if flight number
-
-
-        calculate km
-        calculate time
-        google distance , time, canvse image to string
-        end journey api finish
-
-
-
-      <jobID>string</jobID>
-      <hours>string</hours>
-      <PaxOnBoardlatlog>pickup location </PaxOnBoardlatlog>
-      <PaxOnBoardAddress>pickup location Address</PaxOnBoardAddress>
-      <PaxOnBoardDatetime>pickup time </PaxOnBoardDatetime>FlightNumber
-
-      <PaxDropOfflatlog>end location lat</PaxDropOfflatlog>
-
-      <PaxDropOffAddress>end location address</PaxDropOffAddress>
-
-      <PaxDropffDatetime>end location time </PaxDropffDatetime>
-
-
-      <WayPoints>all location</WayPoints>
-
-      <TotalKm>total km </TotalKm>
-
-      <TravellerSignature>string conversion </TravellerSignature>
-
-
-
-
-      <parkingExtras>string</parkingExtras>
-
-      <tollsExtras>string</tollsExtras>
-
-      <cancellationExtras>0</cancellationExtras>
-      <othersExtras>string</othersExtras>
-      <journeyStartTime>start time when button clicks </journeyStartTime>
-      <passengerDropOffTime>end location time</passengerDropOffTime>
-
-        <journeyEndTime> start location and end location between google duration </journeyEndTime>
-        <finishingKm>start location and end location between google km</finishingKm>
-
-      <startingKm>1</startingKm>
-
-      <pickupKm>10.00</pickupKm>  ( this will calculate from start to pickup
-
-      <dropOffKM>string</dropOffKM> (status pick up to end between location km )
-
-
-
-      <isCheckedFixedRate>false</isCheckedFixedRate>
-
-      <SelectedFixedPrice>true</SelectedFixedPrice>
-      <panLocationID>""</panLocationID>
-      <isairportornormal>string</isairportornormal>   - is flight number is there need to send..
-*/
     }
 
 
