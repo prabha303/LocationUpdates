@@ -80,10 +80,10 @@ public class LocationService extends Service implements UpdateInterService {
     private LocationCallback mLocationCallback;
     private Location mCurrentLocation;
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 20000;
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 30000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     public static DriverLocation driverLocation = new DriverLocation();
     // boolean flag to toggle the ui
-
+    static String previousUpdates = "";
     public LocationService() {
 
     }
@@ -170,7 +170,7 @@ public class LocationService extends Service implements UpdateInterService {
                 };
                 mLocationRequest = new LocationRequest();
                 mLocationRequest.setInterval(getInterval());
-                mLocationRequest.setFastestInterval(getFastInterval());
+                mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
                 mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                 LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
                 builder.addLocationRequest(mLocationRequest);
@@ -336,6 +336,14 @@ public class LocationService extends Service implements UpdateInterService {
         }
     }
 
+
+    public String getDateFormat() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date curDateTime = new Date(System.currentTimeMillis());
+        return  formatter.format(curDateTime);
+    }
+
+
     private void SetLocationVariable(final Location location)
     {
         try {
@@ -354,6 +362,22 @@ public class LocationService extends Service implements UpdateInterService {
                 LocationService.driverLocation.setDatetimeString(dateTime);
                 LocationService.driverLocation.setDateFormat(curDateTime);
                 LocationService.driverLocation.setLocation(location);
+
+
+                String now = getDateFormat();
+                if(Utility.isNotEmpty(previousUpdates) && Utility.isNotEmpty(now))
+                {
+                    if(previousUpdates.equals(now))
+                    {
+                        return;
+                    }else
+                    {
+                        Log.d("previousUpdates",previousUpdates);
+                    }
+                }
+                previousUpdates = now;
+
+
 
                 String jobStatus = SharedPref.getStringValue(context, Utility.AppData.job_status);
                 if(Utility.isNotEmpty(jobStatus))
