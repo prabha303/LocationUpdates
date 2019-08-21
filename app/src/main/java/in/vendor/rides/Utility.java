@@ -330,6 +330,7 @@ public class Utility {
         String pickup_location_latlng = "pickup_location_latlng";
         String pickup_time = "pickup_time";
         String trip_start_loc = "trip_start_loc";
+        String location_interval = "location_interval";
 
         String job_started = "started";
         String job_pickuped = "pickuped";

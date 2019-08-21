@@ -79,8 +79,8 @@ public class LocationService extends Service implements UpdateInterService {
     private LocationSettingsRequest mLocationSettingsRequest;
     private LocationCallback mLocationCallback;
     private Location mCurrentLocation;
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 20000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 30000;
     public static DriverLocation driverLocation = new DriverLocation();
     // boolean flag to toggle the ui
 
@@ -132,13 +132,13 @@ public class LocationService extends Service implements UpdateInterService {
                         if (mCurrentLocation == null) {
                             intGPSTracker();
                         }
-                        handlerRetry.postDelayed(this, 10000);
+                        handlerRetry.postDelayed(this, 20000);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             };
-            handlerRetry.postDelayed(r, 10000);
+            handlerRetry.postDelayed(r, 20000);
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -149,6 +149,8 @@ public class LocationService extends Service implements UpdateInterService {
         try {
             if(context != null)
             {
+
+
                 mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
                 mSettingsClient = LocationServices.getSettingsClient(context);
                 mLocationCallback = new LocationCallback() {
@@ -167,8 +169,8 @@ public class LocationService extends Service implements UpdateInterService {
                     }
                 };
                 mLocationRequest = new LocationRequest();
-                mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-                mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+                mLocationRequest.setInterval(getInterval());
+                mLocationRequest.setFastestInterval(getFastInterval());
                 mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                 LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
                 builder.addLocationRequest(mLocationRequest);
@@ -179,6 +181,49 @@ public class LocationService extends Service implements UpdateInterService {
             e.printStackTrace();
         }
     }
+
+
+    private long getInterval()
+    {
+        try {
+            if(context != null)
+            {
+                String location_interval = SharedPref.getStringValue(context, Utility.AppData.location_interval);
+                if(Utility.isNotEmpty(location_interval))
+                {
+                    location_interval = location_interval.trim();
+                    long num = Long.parseLong(location_interval);
+                    return num * 1000;
+                }
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return UPDATE_INTERVAL_IN_MILLISECONDS;
+    }
+
+    private long getFastInterval()
+    {
+        try {
+            if(context != null)
+            {
+                String location_interval = SharedPref.getStringValue(context, Utility.AppData.location_interval);
+                if(Utility.isNotEmpty(location_interval))
+                {
+                    location_interval = location_interval.trim();
+                    long num = Long.parseLong(location_interval);
+                    num = num + 5;
+                    return num * 1000;
+                }
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
+    }
+
 
 
     private void startLocationUpdates() {
@@ -401,7 +446,7 @@ public class LocationService extends Service implements UpdateInterService {
             URL url = new URL(strUrl);
             // Creating an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(10000);//5Seconds.
+            urlConnection.setConnectTimeout(20000);//20Seconds.
             // Connecting to url
             urlConnection.connect();
             // Reading data from url
