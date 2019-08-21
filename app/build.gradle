@@ -25,10 +25,10 @@ android {
         applicationId "in.vendor.rides"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 126
+        versionCode 130
         multiDexEnabled true
         signingConfig signingConfigs.config
-        versionName "v1.5"
+        versionName "v1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
 
