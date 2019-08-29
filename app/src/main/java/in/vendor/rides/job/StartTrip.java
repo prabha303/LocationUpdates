@@ -897,6 +897,19 @@ public class StartTrip extends AppCompatActivity implements UpdateInterService{
         try {
             boolean cancelButtonFalg = false;
             boolean cancelDialog = true;
+
+            if(Utility.isNotEmpty(msg))
+            {
+                if(msg.contains("Invalid latitude logitude"))
+                {
+                    final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+                    if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
+                        msg = "Please Enable Your GPS Location";
+                    }else{
+                        msg = "Location Not Found. Please move slightly and try to get the location.";
+                    }
+                }
+            }
             //String message = getResources().getString(R.string.checkYourInternetConnection);;
             Utility.showCustomDialogWithHeaderNew(StartTrip.this, "BTR", msg, "OK", "Cancel",cancelButtonFalg, cancelDialog, new Utility.ConfirmCallBack() {
                 @Override                                                              //cancelButton yes r no flag

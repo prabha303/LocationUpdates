@@ -47,6 +47,7 @@
         android:supportsRtl="true"
         android:fitsSystemWindows="true"
         android:theme="@style/Full_Screen" >
+
         <activity android:name=".login.Login"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
