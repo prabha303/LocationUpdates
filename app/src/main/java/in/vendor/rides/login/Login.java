@@ -326,7 +326,7 @@ public class Login extends AppCompatActivity {
                             SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.location_interval, jsnobject.optString("location_interval"));
                         }else
                         {
-                            SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.location_interval, "20");
+                            SharedPref.getInstance().setSharedValue(Login.this, Utility.AppData.location_interval, "300");
                         }
 
 

@@ -79,8 +79,8 @@ public class LocationService extends Service implements UpdateInterService {
     private LocationSettingsRequest mLocationSettingsRequest;
     private LocationCallback mLocationCallback;
     private Location mCurrentLocation;
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 20000;
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 300000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 100000;
     public static DriverLocation driverLocation = new DriverLocation();
     // boolean flag to toggle the ui
     static String previousUpdates = "";
